@@ -1,0 +1,33 @@
+<form action="/register" method="POST">
+    <head>
+        <meta charset="utf-8">
+        <title>Rekisteröityminen</title>
+    </head>
+    <body>
+        <h2>Rekisteröidy käyttäjäksi</h2>
+        <p>
+            Luo käyttäjätili antamalla nimesi ja salasanasi. Valitse rooliksi opiskelija tai opettaja.
+        </p>
+        <p>
+            <label for="username">Käyttäjätunnus:</label>
+            <input type="text" id="username" name="username">
+        </p>
+        <p>
+            <label for="password">Salasana:</label>
+            <input type="text" id="password" name="password">
+        </p>
+        <p>
+            <label for="role">Oppilas</label>
+            <input type="radio" name="role" value="oppilas">
+        </p>
+        <p>
+            <label for="role">Opettaja</label>
+            <input type="radio" name="role" value="opettaja">
+        </p>
+        <p class="button">
+            <button type="submit">Login</button>
+        </p>
+        <a href="/">Takaisin etusivulle</a>
+        
+    </body>
+</form>
