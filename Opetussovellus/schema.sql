@@ -1,6 +1,8 @@
+\connect tsoha
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    name TEXT,
+    username TEXT UNIQUE,
     password TEXT,
     role TEXT
 );
