@@ -1,6 +1,7 @@
 from app import app
-from flask import render_template, request
+from flask import render_template, request, redirect
 import login_service
+import time
 
 @app.route("/")
 def index():
@@ -15,9 +16,9 @@ def register():
         password = request.form["password"]
         role = request.form["role"]
         if login_service.register(username, password, role):
-            return "Success!"
+            return render_template("success.html")
         else:
-            return "Something went wrong."
+            return render_template("error.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -27,7 +28,13 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         if login_service.login(username, password):
-            return "Success!"
+            return render_template("success.html")
         else:
-            return "Something went wrong."
-        
+            return render_template("error.html")
+    
+@app.route("/logout")
+def logout():
+    if login_service.logout():
+        return render_template("success.html")
+    else:
+        return render_template("error.html")

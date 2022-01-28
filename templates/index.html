@@ -7,7 +7,12 @@
     <body>
         <h1>Opetussovellus</h1>
         <p>Tervetuloa opetussovellukseen!</p>
+        {% if session.user_name %}
+        <p>Olet kirjautunut nimellä {{ session.user_name }}</p>
+        <a href="/logout">Kirjaudu ulos</a>
+        {% else %}
         <a href="/register">Rekisteröidy</a>
         <a href="/login">Kirjaudu</a>
+        {% endif %}
     </body>
 </html>
