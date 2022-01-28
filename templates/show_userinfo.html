@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Opetussovellus</title>
+    </head>
+    <body>
+        <h1>Käyttäjätiedot</h1>
+        {% for line in list %}
+        <p>Nimi: {{ line[0] }} {{ line[1] }}</p>
+        {% if session.user_role == 'student' %}
+        <p>Opiskelijanumero: {{ line[2] }}</p>
+        {% endif %}
+        {% endfor %}
+    </body>
+    <a href="/">Takaisin etusivulle</a>
+</html>

@@ -11,6 +11,24 @@ def index():
 def homepage():
     return render_template("homepage.html")
 
+@app.route("/userinfo", methods=["GET", "POST"])
+def user_info():
+    if request.method == "GET":
+        if login_service.find_userinfo():
+            info = login_service.get_userinfo()
+            return render_template("show_userinfo.html", list=info)
+        return render_template("userinfo.html")
+    if request.method == "POST":
+        firstname = request.form["firstname"]
+        lastname = request.form["lastname"]
+        student_number = 0
+        if login_service.check_user_role() == 'student':
+            student_number = request.form["student_number"]
+        if login_service.save_user_info(firstname, lastname, student_number):
+            return render_template("success.html")
+        else:
+            return render_template("error.html")
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":

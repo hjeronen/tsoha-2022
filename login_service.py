@@ -49,3 +49,39 @@ def delete_account():
         return True
     except:
         return False
+    
+def save_user_info(firstname, lastname, student_number):
+    id = session["user_id"]
+    if session["user_role"] == 'student':
+        if student_number == '':
+            return False
+        sql = "INSERT INTO students (user_id, firstname, lastname, student_number) VALUES (:user_id, :firstname, :lastname, :student_number)"
+        db.session.execute(sql, {"user_id":id, "firstname":firstname, "lastname":lastname, "student_number":student_number})
+        db.session.commit()
+        return True
+    else:
+        sql = "INSERT INTO teachers (user_id, firstname, lastname) VALUES (:user_id, :firstname, :lastname)"
+        db.session.execute(sql, {"user_id":id, "firstname":firstname, "lastname":lastname})
+        db.session.commit()
+        return True
+
+def find_userinfo():
+    id = session["user_id"]
+    if session["user_role"] == 'student':
+        sql = "SELECT S.id FROM students S WHERE S.user_id=:user_id"
+        return db.session.execute(sql, {"user_id":id}).fetchone()
+    if session["user_role"] == 'teacher':
+        sql = "SELECT T.id FROM teachers T WHERE T.user_id=:user_id"
+        return db.session.execute(sql, {"user_id":id}).fetchone()
+
+def get_userinfo():
+    id = session["user_id"]
+    if session["user_role"] == 'student':
+        sql = "SELECT S.firstname, S.lastname, S.student_number FROM students S WHERE S.user_id=:user_id"
+        return db.session.execute(sql, {"user_id":id}).fetchall()
+    if session["user_role"] == 'teacher':
+        sql = "SELECT T.firstname, T.lastname FROM teachers T WHERE T.user_id=:user_id"
+        return db.session.execute(sql, {"user_id":id}).fetchall()
+
+def check_user_role():
+    return session["user_role"]

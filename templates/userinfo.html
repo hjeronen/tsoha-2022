@@ -1,0 +1,35 @@
+<form action="/userinfo" method="POST">
+    <head>
+        <meta charset="utf-8">
+        <title>Opetussovellus</title>
+    </head>
+    <body>
+        <h2>Käyttäjätiedot</h2>
+        {% if session.user_role == 'student' %}
+        <p>
+            Täydennä tietosi, jotta voit ilmoittautua kursseille:
+        </p>
+        {% else %}
+        <p> Täydennä tietosi, jotta voit kirjata kursseja järjestelmään:</p>
+        {% endif %}
+        <p>
+            <label for="firstname">Etunimi:</label>
+            <input type="text" id="firstname" name="firstname">
+        </p>
+        <p>
+            <label for="lastname">Sukunimi:</label>
+            <input type="text" id="lastname" name="lastname">
+        </p>
+        {% if session.user_role == 'student' %}
+        <p>
+            <label for="student_number">Opiskelijanumero:</label>
+            <input type="text" id="student_number" name="student_number">
+        </p>
+        {% endif %}
+        <p class="button">
+            <button type="submit">Tallenna</button>
+        </p>
+        <a href="/">Takaisin etusivulle</a>
+        
+    </body>
+</form>
