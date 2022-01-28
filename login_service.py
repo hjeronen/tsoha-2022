@@ -2,18 +2,17 @@ import os
 from db import db
 from flask import abort, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
-import traceback
 
 
 def register(username, password, role):
     hash_value = generate_password_hash(password)
-    try:
-        sql = "INSERT INTO users (username, password, role) VALUES (:name, :password, :role)"
-        db.session.execute(sql, {"name":username, "password":hash_value, "role":role})
-        db.session.commit()
-    except:
-        traceback.print_exception()
-        return False
+
+    sql = "INSERT INTO users (username, password, role) VALUES (:name, :password, :role)"
+    db.session.execute(sql, {"name":username, "password":hash_value, "role":role})
+    db.session.commit()
+
+
+
     return True
 
 def login(username, password):
