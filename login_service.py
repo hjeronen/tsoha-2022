@@ -6,14 +6,13 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 def register(username, password, role):
     hash_value = generate_password_hash(password)
-
-    sql = "INSERT INTO users (username, password, role) VALUES (:name, :password, :role)"
-    db.session.execute(sql, {"name":username, "password":hash_value, "role":role})
-    db.session.commit()
-
-
-
-    return True
+    try:
+        sql = "INSERT INTO users (username, password, role) VALUES (:name, :password, :role)"
+        db.session.execute(sql, {"name":username, "password":hash_value, "role":role})
+        db.session.commit()
+        return True
+    except:
+        return False
 
 def login(username, password):
     try:
