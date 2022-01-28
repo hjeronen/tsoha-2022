@@ -7,6 +7,10 @@ import time
 def index():
     return render_template("index.html")
 
+@app.route("/homepage")
+def homepage():
+    return render_template("homepage.html")
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
