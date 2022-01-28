@@ -38,3 +38,10 @@ def logout():
         return render_template("success.html")
     else:
         return render_template("error.html")
+    
+@app.route("/delete_account")
+def delete_account():
+    if login_service.delete_account():
+        return render_template("success.html")
+    else:
+        return render_template("error.html")

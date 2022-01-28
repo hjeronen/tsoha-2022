@@ -38,3 +38,14 @@ def logout():
     del session["user_role"]
     del session["csrf_token"]
     return True
+
+def delete_account():
+    id = session["user_id"]
+    try:
+        sql = "DELETE FROM users WHERE id=:userid"
+        db.session.execute(sql, {"userid":id})
+        db.session.commit()
+        logout()
+        return True
+    except:
+        return False
