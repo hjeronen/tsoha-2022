@@ -10,6 +10,8 @@ def index():
 
 @app.route("/homepage")
 def homepage():
+    # if not login_service.check_csrf():
+    #     return render_template("error.html")
     user_id = login_service.get_userID()
     users_courses = []
     if user_id:
@@ -53,6 +55,25 @@ def add_course():
         else:
             return render_template("error.html")
 
+@app.route("/update_course/<int:course_id>", methods=["GET", "POST"])
+def update_course(course_id):
+    if request.method == "GET":
+        info = courses.get_course(course_id)
+        if info:
+            course_name = info[1]
+            description = info[2]
+            return render_template("update_course.html", course_id = course_id, course_name = course_name, description = description)
+        else:
+            return render_template("error.html")
+    if request.method == "POST":
+        course_name = request.form["course_name"]
+        description = request.form["description"]
+        user_id = login_service.get_userID()[0]
+        user_role = login_service.get_user_role()
+        if courses.update_course(user_id, user_role, course_id, course_name, description):
+            return render_template("success.html")
+        else:
+            return render_template("error.html")
 
 @app.route("/userinfo", methods=["GET", "POST"])
 def user_info():

@@ -14,5 +14,9 @@
         {% if session.user_role == 'student' %}
         <a href="/enroll/{{ id }}">Ilmoittaudu kurssille</a>
         {% endif %}
+
+        {% if session.user_role == 'teacher' %}
+        <a href="/update_course/{{ id }}">Muokkaa kurssin tietoja</a>
+        {% endif %}
     </body>
 </html>

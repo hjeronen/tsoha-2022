@@ -19,7 +19,8 @@
         {% if session.user_role == 'student' %}
         <h2>Kurssit, joille olet ilmoittautunut</h2>
         {% for line in list %}
-        <p>{{ line[0] }} {{ line[1] }}</p>
+        <a href="/course_page/{{ line[0] }}">{{ line.course_name }}</a>
+        <br></br>
         {% endfor %}
         {% endif %}
 
@@ -31,7 +32,8 @@
         <p>Sinulla ei ole kursseja.</p>
         {% else %}
         {% for line in list %}
-        <p>{{ line[0] }} {{ line[1] }}</p>
+        <a href="/course_page/{{ line[0] }}">{{ line.course_name }}</a>
+        <br></br>
         {% endfor %}
         {% endif %}
         <br></br>

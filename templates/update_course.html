@@ -1,0 +1,25 @@
+<form action="/update_course/{{ course_id }}" method="POST">
+    <head>
+        <meta charset="utf-8">
+        <title>Opetussovellus</title>
+    </head>
+    <body>
+        <h2>Päivitä kurssitietoja</h2>
+        <p>
+            Muokkaa kurssisi tietoja:
+        </p>
+        <input type="hidden" id="course_id" name="course_id" value="{{ course_id }}">
+        <p>
+            <label for="course_name">Kurssin nimi:</label>
+            <input type="text" id="course_name" name="course_name" value="{{ course_name }}">
+        </p>
+        <p>
+            <label for="description">Kurssikuvaus:</label>
+            <textarea id="description" name="description">{{ description }}</textarea>
+        </p>
+        <p class="button">
+            <button type="submit">Päivitä</button>
+        </p>
+        <a href="/">Takaisin etusivulle</a>
+    </body>
+</form>

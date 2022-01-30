@@ -85,3 +85,8 @@ def get_userinfo():
 
 def get_user_role():
     return session["user_role"]
+
+# def check_csrf():
+#     if session["csrf_token"] != request.form["csrf_token"]:
+#         return False
+#     return True

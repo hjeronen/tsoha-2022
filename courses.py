@@ -13,6 +13,17 @@ def add_course(user_id, user_role, course_name, description):
     except:
         return False
 
+def update_course(user_id, user_role, course_id, course_name, description):
+    if user_role == 'student':
+        return False
+    try:
+        sql = "UPDATE courses SET (course_name, description) = (:course_name, :description) WHERE id=:course_id AND teacher_id=:user_id"
+        db.session.execute(sql, {"course_name":course_name, "description":description, "course_id":course_id, "user_id":user_id})
+        db.session.commit()
+        return True
+    except:
+        return False
+
 def check_if_student_is_enrolled(course_id, student_id):
     sql = "SELECT course_id, student_id FROM course_attendances WHERE course_id=:course_id AND student_id=:student_id"
     result = db.session.execute(sql, {"course_id":course_id, "student_id":student_id}).fetchone()
