@@ -22,18 +22,18 @@ CREATE TABLE teachers (
     lastname TEXT
 );
 
--- CREATE TABLE courses (
---     id SERIAL PRIMARY KEY,
---     course_name TEXT,
---     teacher_id INTEGER REFERENCES teachers ON DELETE SET NULL,
---     description TEXT
--- );
+CREATE TABLE courses (
+    id SERIAL PRIMARY KEY,
+    course_name TEXT,
+    teacher_id INTEGER REFERENCES teachers ON DELETE SET NULL,
+    description TEXT
+);
 
--- CREATE TABLE course_attendances (
---     id SERIAL PRIMARY KEY,
---     course_id INTEGER REFERENCES courses ON DELETE RESTRICT,
---     student_id INTEGER REFERENCES students
--- );
+CREATE TABLE course_attendances (
+    id SERIAL PRIMARY KEY,
+    course_id INTEGER REFERENCES courses ON DELETE RESTRICT,
+    student_id INTEGER REFERENCES students ON DELETE CASCADE
+);
 
 -- CREATE TABLE exercises (
 --     id SERIAL PRIMARY KEY,

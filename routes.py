@@ -1,20 +1,40 @@
 from app import app
 from flask import render_template, request, redirect
 import login_service
-import time
+import courses
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    all_courses = courses.get_all_courses()
+    return render_template("index.html", list = all_courses)
 
 @app.route("/homepage")
 def homepage():
-    return render_template("homepage.html")
+    user_id = login_service.get_userID()
+    users_courses = []
+    if user_id:
+        users_courses = courses.get_users_courses(user_id.id, login_service.get_user_role())
+    return render_template("homepage.html", list=users_courses)
+
+@app.route("/add_course", methods=["GET", "POST"])
+def add_course():
+    if request.method == "GET":
+        return render_template("add_course.html")
+    if request.method == "POST":
+        course_name = request.form["course_name"]
+        description = request.form["description"]
+        user_id = login_service.get_userID()
+        user_role = login_service.get_user_role()
+        if courses.add_course(user_id, user_role, course_name, description):
+            return render_template("success.html")
+        else:
+            return render_template("error.html")
+
 
 @app.route("/userinfo", methods=["GET", "POST"])
 def user_info():
     if request.method == "GET":
-        if login_service.find_userinfo():
+        if login_service.get_userID():
             info = login_service.get_userinfo()
             return render_template("show_userinfo.html", list=info)
         return render_template("userinfo.html")
@@ -22,7 +42,7 @@ def user_info():
         firstname = request.form["firstname"]
         lastname = request.form["lastname"]
         student_number = 0
-        if login_service.check_user_role() == 'student':
+        if login_service.get_user_role() == 'student':
             student_number = request.form["student_number"]
         if login_service.save_user_info(firstname, lastname, student_number):
             return render_template("success.html")

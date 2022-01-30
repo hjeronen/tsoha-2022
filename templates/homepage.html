@@ -7,9 +7,34 @@
     <body>
         <h1>Käyttäjän {{ session.user_name }} kotisivu</h1>
         <a href="/userinfo">Käyttäjätiedot</a>
+        <br></br>
         <a href="/logout">Kirjaudu ulos</a>
+        <br></br>
         <a href="/">Takaisin etusivulle</a>
         <br></br>
+        <br></br>
         <a href="/delete_account">Poista käyttäjätili</a>
+        <br></br>
+
+        {% if session.user_role == 'student' %}
+        <h2>Kurssit, joille olet ilmoittautunut</h2>
+        {% for line in list %}
+        <p>{{ line[0] }} {{ line[1] }}</p>
+        {% endfor %}
+        {% endif %}
+
+        {% if session.user_role == 'teacher' %}
+        <h2>Kurssisi</h2>
+        <a href="/add_course">Lisää uusi kurssi</a>
+        <br></br>
+        {% if not list %}
+        <p>Sinulla ei ole kursseja.</p>
+        {% else %}
+        {% for line in list %}
+        <p>{{ line[0] }} {{ line[1] }}</p>
+        {% endfor %}
+        {% endif %}
+        <br></br>
+        {% endif %}
     </body>
 </html>

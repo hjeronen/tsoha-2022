@@ -65,7 +65,7 @@ def save_user_info(firstname, lastname, student_number):
         db.session.commit()
         return True
 
-def find_userinfo():
+def get_userID():
     id = session["user_id"]
     if session["user_role"] == 'student':
         sql = "SELECT S.id FROM students S WHERE S.user_id=:user_id"
@@ -83,5 +83,5 @@ def get_userinfo():
         sql = "SELECT T.firstname, T.lastname FROM teachers T WHERE T.user_id=:user_id"
         return db.session.execute(sql, {"user_id":id}).fetchall()
 
-def check_user_role():
+def get_user_role():
     return session["user_role"]

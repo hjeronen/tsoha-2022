@@ -15,5 +15,13 @@
         <a href="/register">Rekisteröidy</a>
         <a href="/login">Kirjaudu</a>
         {% endif %}
+        <h2>Kaikki kurssit</h2>
+        {% if not list %}
+        <p>Järjestelmässä ei ole vielä yhtään kurssia.</p>
+        {% else %}
+        {% for line in list %}
+        <p>{{ line.course_name }}</p>
+        {% endfor %}
+        {% endif %}
     </body>
 </html>
