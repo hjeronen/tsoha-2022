@@ -16,6 +16,29 @@ def homepage():
         users_courses = courses.get_users_courses(user_id.id, login_service.get_user_role())
     return render_template("homepage.html", list=users_courses)
 
+@app.route("/enroll/<int:course_id>")
+def enroll(course_id):
+    user_role = login_service.get_user_role()
+    student_id = login_service.get_userID().id
+    if courses.check_if_student_is_enrolled(course_id, student_id):
+        return render_template("error.html")
+    if courses.enroll_on_course(course_id, student_id, user_role):
+        return render_template("success.html")
+    else:
+        return render_template("error.html")
+
+@app.route("/course_page/<int:course_id>")
+def show_coursepage(course_id):
+    info = courses.get_course(course_id)
+    if info:
+        id = info[0]
+        course_name = info[1]
+        description = info[2]
+        teacher = info[3] + ' ' + info[4]
+        return render_template("course_page.html", id = id, course_name = course_name, description = description, teacher=teacher)
+    else:
+        return render_template("error.html")
+
 @app.route("/add_course", methods=["GET", "POST"])
 def add_course():
     if request.method == "GET":

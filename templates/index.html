@@ -20,7 +20,8 @@
         <p>Järjestelmässä ei ole vielä yhtään kurssia.</p>
         {% else %}
         {% for line in list %}
-        <p>{{ line.course_name }}</p>
+        <a href="/course_page/{{ line[0] }}">{{ line.course_name }}</a>
+        <br></br>
         {% endfor %}
         {% endif %}
     </body>

@@ -13,6 +13,11 @@ def add_course(user_id, user_role, course_name, description):
     except:
         return False
 
+def check_if_student_is_enrolled(course_id, student_id):
+    sql = "SELECT course_id, student_id FROM course_attendances WHERE course_id=:course_id AND student_id=:student_id"
+    result = db.session.execute(sql, {"course_id":course_id, "student_id":student_id}).fetchone()
+    return result
+
 def enroll_on_course(course_id, student_id, user_role):
     if user_role == 'teacher':
         return False
@@ -34,7 +39,12 @@ def get_users_courses(user_id, user_role):
         result = db.session.execute(sql, {"id":user_id}).fetchall()
         return result
 
+def get_course(course_id):
+    sql = "SELECT C.id, C.course_name, C.description, T.firstname, T.lastname FROM courses C, teachers T WHERE C.id=:course_id AND C.teacher_id=T.id"
+    result = db.session.execute(sql, {"course_id":course_id}).fetchone()
+    return result
+
 def get_all_courses():
-    sql = "SELECT course_name FROM courses"
+    sql = "SELECT id, course_name FROM courses"
     result = db.session.execute(sql)
     return result.fetchall()
