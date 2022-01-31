@@ -6,8 +6,8 @@ def add_course(user_id, user_role, course_name, description):
     elif not user_id:
         return False
     try:
-        sql = "INSERT INTO courses (course_name, teacher_id, description) VALUES (:course_name, :teacher_id, :description)"
-        db.session.execute(sql, {"course_name":course_name, "teacher_id":user_id.id, "description":description})
+        sql = "INSERT INTO courses (course_name, teacher_id, description, visible) VALUES (:course_name, :teacher_id, :description, TRUE)"
+        db.session.execute(sql, {"course_name":course_name, "teacher_id":user_id, "description":description})
         db.session.commit()
         return True
     except:
@@ -19,6 +19,17 @@ def update_course(user_id, user_role, course_id, course_name, description):
     try:
         sql = "UPDATE courses SET (course_name, description) = (:course_name, :description) WHERE id=:course_id AND teacher_id=:user_id"
         db.session.execute(sql, {"course_name":course_name, "description":description, "course_id":course_id, "user_id":user_id})
+        db.session.commit()
+        return True
+    except:
+        return False
+
+def delete_course(user_id, user_role, course_id):
+    if user_role == 'student':
+        return False
+    try:
+        sql = "UPDATE courses SET visible=FALSE WHERE id=:course_id AND teacher_id=:user_id"
+        db.session.execute(sql, {"course_id":course_id, "user_id":user_id})
         db.session.commit()
         return True
     except:
@@ -42,20 +53,20 @@ def enroll_on_course(course_id, student_id, user_role):
 
 def get_users_courses(user_id, user_role):
     if user_role == 'student':
-        sql = "SELECT C.course_name FROM courses C, course_attendances A WHERE A.student_id=:id AND A.course_id=C.id"
+        sql = "SELECT C.id, C.course_name FROM courses C, course_attendances A WHERE A.student_id=:id AND A.course_id=C.id AND C.visible=TRUE"
         result = db.session.execute(sql, {"id":user_id}).fetchall()
         return result
     if user_role == 'teacher':
-        sql = "SELECT id, course_name FROM courses WHERE teacher_id=:id"
+        sql = "SELECT id, course_name FROM courses WHERE teacher_id=:id AND visible=TRUE"
         result = db.session.execute(sql, {"id":user_id}).fetchall()
         return result
 
 def get_course(course_id):
-    sql = "SELECT C.id, C.course_name, C.description, T.firstname, T.lastname FROM courses C, teachers T WHERE C.id=:course_id AND C.teacher_id=T.id"
+    sql = "SELECT C.id, C.course_name, C.description, C.teacher_id, T.firstname, T.lastname FROM courses C, teachers T WHERE C.id=:course_id AND C.teacher_id=T.user_id"
     result = db.session.execute(sql, {"course_id":course_id}).fetchone()
     return result
 
 def get_all_courses():
-    sql = "SELECT id, course_name FROM courses"
+    sql = "SELECT id, course_name FROM courses WHERE visible=true"
     result = db.session.execute(sql)
     return result.fetchall()

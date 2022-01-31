@@ -25,29 +25,31 @@ CREATE TABLE teachers (
 CREATE TABLE courses (
     id SERIAL PRIMARY KEY,
     course_name TEXT,
-    teacher_id INTEGER REFERENCES teachers ON DELETE SET NULL,
-    description TEXT
+    teacher_id INTEGER REFERENCES users ON DELETE SET NULL,
+    description TEXT,
+    visible BOOLEAN
 );
 
 CREATE TABLE course_attendances (
     id SERIAL PRIMARY KEY,
-    course_id INTEGER REFERENCES courses ON DELETE RESTRICT,
-    student_id INTEGER REFERENCES students ON DELETE CASCADE
+    course_id INTEGER REFERENCES courses,
+    student_id INTEGER REFERENCES users ON DELETE CASCADE
 );
 
 -- CREATE TABLE exercises (
 --     id SERIAL PRIMARY KEY,
---     course_id INTEGER REFERENCES courses ON DELETE CASCADE,
+--     course_id INTEGER REFERENCES courses,
 --     question TEXT,
 --     type TEXT,
 --     right_answer TEXT,
---     points INTEGER
+--     points INTEGER,
+--     visible BOOLEAN
 -- );
 
 -- CREATE TABLE answers (
 --     id SERIAL PRIMARY KEY,
 --     student_id INTEGER REFERENCES students ON DELETE CASCADE,
---     exercise_id INTEGER REFERENCES exercises ON DELETE RESTRICT,
+--     exercise_id INTEGER REFERENCES exercises,
 --     answer TEXT,
 --     status BOOLEAN
 -- );

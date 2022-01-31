@@ -13,15 +13,15 @@ def homepage():
     # if not login_service.check_csrf():
     #     return render_template("error.html")
     user_id = login_service.get_userID()
-    users_courses = []
-    if user_id:
-        users_courses = courses.get_users_courses(user_id.id, login_service.get_user_role())
+    users_courses = courses.get_users_courses(user_id, login_service.get_user_role())
     return render_template("homepage.html", list=users_courses)
 
 @app.route("/enroll/<int:course_id>")
 def enroll(course_id):
     user_role = login_service.get_user_role()
-    student_id = login_service.get_userID().id
+    student_id = login_service.get_userID()
+    if not login_service.has_userinfo():
+        return "Täydennä ensin käyttäjätietosi!"
     if courses.check_if_student_is_enrolled(course_id, student_id):
         return render_template("error.html")
     if courses.enroll_on_course(course_id, student_id, user_role):
@@ -36,14 +36,25 @@ def show_coursepage(course_id):
         id = info[0]
         course_name = info[1]
         description = info[2]
-        teacher = info[3] + ' ' + info[4]
-        return render_template("course_page.html", id = id, course_name = course_name, description = description, teacher=teacher)
+        teacher_id = info[3]
+        teacher = info[4] + ' ' + info[5]
+        enrolled = False
+        owner = False
+        if login_service.has_userinfo():
+            user_id = login_service.get_userID()
+            if teacher_id == user_id:
+                owner = True
+            if login_service.get_user_role() == 'student':
+                enrolled = courses.check_if_student_is_enrolled(course_id, user_id)
+        return render_template("course_page.html", id = course_id, course_name = course_name, description = description, teacher=teacher, enrolled=enrolled, owner=owner)
     else:
         return render_template("error.html")
 
 @app.route("/add_course", methods=["GET", "POST"])
 def add_course():
     if request.method == "GET":
+        if not login_service.has_userinfo():
+            return "Täytä ensin käyttäjätietosi!"
         return render_template("add_course.html")
     if request.method == "POST":
         course_name = request.form["course_name"]
@@ -68,20 +79,31 @@ def update_course(course_id):
     if request.method == "POST":
         course_name = request.form["course_name"]
         description = request.form["description"]
-        user_id = login_service.get_userID()[0]
+        user_id = login_service.get_userID()
         user_role = login_service.get_user_role()
         if courses.update_course(user_id, user_role, course_id, course_name, description):
             return render_template("success.html")
         else:
             return render_template("error.html")
 
+@app.route("/delete_course/<int:course_id>")
+def delete_course(course_id):
+    user_id = login_service.get_userID()
+    user_role = login_service.get_user_role()
+    if courses.delete_course(user_id, user_role, course_id):
+        return render_template("success.html")
+    else:
+        return render_template("error.html")
+
 @app.route("/userinfo", methods=["GET", "POST"])
 def user_info():
     if request.method == "GET":
         if login_service.get_userID():
             info = login_service.get_userinfo()
-            return render_template("show_userinfo.html", list=info)
-        return render_template("userinfo.html")
+            if info:
+                return render_template("show_userinfo.html", list=info)
+            else:
+                return render_template("userinfo.html")
     if request.method == "POST":
         firstname = request.form["firstname"]
         lastname = request.form["lastname"]

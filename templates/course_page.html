@@ -12,11 +12,16 @@
         <p>{{ teacher }}</p>
 
         {% if session.user_role == 'student' %}
+        {% if not enrolled %}
         <a href="/enroll/{{ id }}">Ilmoittaudu kurssille</a>
+        {% else %}
+        <p>Olet ilmoittautunut kurssille.</p>
+        {% endif %}
         {% endif %}
 
-        {% if session.user_role == 'teacher' %}
+        {% if owner %}
         <a href="/update_course/{{ id }}">Muokkaa kurssin tietoja</a>
+        <a href="/delete_course/{{ id }}">Poista kurssi</a>
         {% endif %}
     </body>
 </html>
