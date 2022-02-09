@@ -1,42 +1,41 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Opetussovellus</title>
-    </head>
-    <body>
-        <h1>Käyttäjän {{ session.user_name }} kotisivu</h1>
-        <a href="/userinfo">Käyttäjätiedot</a>
-        <br></br>
-        <a href="/logout">Kirjaudu ulos</a>
-        <br></br>
-        <a href="/">Takaisin etusivulle</a>
-        <br></br>
-        <br></br>
-        <a href="/delete_account">Poista käyttäjätili</a>
-        <br></br>
+{% extends "layout.html" %}
+{% block content %}
 
-        {% if session.user_role == 'student' %}
-        <h2>Kurssit, joille olet ilmoittautunut</h2>
-        {% for line in list %}
-        <a href="/course_page/{{ line[0] }}">{{ line.course_name }}</a>
-        <br></br>
-        {% endfor %}
-        {% endif %}
+<body>
+    <h1>Käyttäjän {{ session.user_name }} kotisivu</h1>
+    {% if info %}
+    {% for line in info %}
+    <p>{{ line }}</p>
+    <br></br>
+    {% endfor %}
+    {% else %}
+    <a href="/userinfo">Täydennä käyttäjätietosi!</a>
+    {% endif %}
+    <br></br>
+    <a href="/logout">Kirjaudu ulos</a>
+    <br></br>
+    <a href="/">Takaisin etusivulle</a>
+    <br></br>
+    <br></br>
+    <a href="/delete_account">Poista käyttäjätili</a>
+    <br></br>
 
-        {% if session.user_role == 'teacher' %}
-        <h2>Kurssisi</h2>
-        <a href="/add_course">Lisää uusi kurssi</a>
-        <br></br>
-        {% if not list %}
-        <p>Sinulla ei ole kursseja.</p>
-        {% else %}
-        {% for line in list %}
-        <a href="/course_page/{{ line[0] }}">{{ line.course_name }}</a>
-        <br></br>
-        {% endfor %}
-        {% endif %}
-        <br></br>
-        {% endif %}
-    </body>
-</html>
+    {% if session.user_role == 'student' %}
+    <h2>Kurssit, joille olet ilmoittautunut</h2>
+    {% elif session.user_role == 'teacher' %}
+    <h2>Kurssisi</h2>
+    <a href="/add_course">Lisää uusi kurssi</a>
+    <br></br>
+    {% endif %}
+    {% if not courses %}
+    <p>Sinulla ei ole kursseja.</p>
+    {% else %}
+    {% for line in courses %}
+    <a href="/course_page/{{ line[0] }}">{{ line.course_name }}</a>
+    <br></br>
+    {% endfor %}
+    {% endif %}
+    <br></br>
+</body>
+
+{% endblock %}

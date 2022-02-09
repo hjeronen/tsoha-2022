@@ -14,7 +14,8 @@ def homepage():
     #     return render_template("error.html")
     user_id = login_service.get_userID()
     users_courses = courses.get_users_courses(user_id, login_service.get_user_role())
-    return render_template("homepage.html", list=users_courses)
+    user_info = login_service.get_userinfo()
+    return render_template("homepage.html", courses=users_courses, info=user_info)
 
 @app.route("/enroll/<int:course_id>")
 def enroll(course_id):
@@ -98,12 +99,7 @@ def delete_course(course_id):
 @app.route("/userinfo", methods=["GET", "POST"])
 def user_info():
     if request.method == "GET":
-        if login_service.get_userID():
-            info = login_service.get_userinfo()
-            if info:
-                return render_template("show_userinfo.html", list=info)
-            else:
-                return render_template("userinfo.html")
+        return render_template("userinfo.html")
     if request.method == "POST":
         firstname = request.form["firstname"]
         lastname = request.form["lastname"]
@@ -124,9 +120,9 @@ def register():
         password = request.form["password"]
         role = request.form["role"]
         if login_service.register(username, password, role):
-            return render_template("success.html")
-        else:
-            return render_template("error.html")
+            if login_service.login(username, password):
+                return redirect("/homepage")
+        return render_template("error.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -136,7 +132,7 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         if login_service.login(username, password):
-            return render_template("success.html")
+            return redirect("/homepage")
         else:
             return render_template("error.html")
     
