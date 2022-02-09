@@ -5,9 +5,11 @@
     <h1>Käyttäjän {{ session.user_name }} kotisivu</h1>
     {% if info %}
     {% for line in info %}
-    <p>{{ line }}</p>
-    <br></br>
-    {% endfor %}
+        <p>Nimi: {{ line[0] }} {{ line[1] }}</p>
+        {% if session.user_role == 'student' %}
+        <p>Opiskelijanumero: {{ line[2] }}</p>
+        {% endif %}
+        {% endfor %}
     {% else %}
     <a href="/userinfo">Täydennä käyttäjätietosi!</a>
     {% endif %}

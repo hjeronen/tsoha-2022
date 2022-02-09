@@ -8,6 +8,9 @@
         <p>
             Muokkaa kurssisi tietoja:
         </p>
+        {% for message in errorMessages %}
+        <p>{{ message }}</p>
+        {% endfor %}
         <input type="hidden" id="course_id" name="course_id" value="{{ course_id }}">
         <p>
             <label for="course_name">Kurssin nimi:</label>

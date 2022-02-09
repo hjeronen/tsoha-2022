@@ -54,18 +54,29 @@ def show_coursepage(course_id):
 @app.route("/add_course", methods=["GET", "POST"])
 def add_course():
     if request.method == "GET":
+        message = ""
         if not login_service.has_userinfo():
-            return "Täytä ensin käyttäjätietosi!"
+            message = "Täytä ensin käyttäjätietosi!"
+            return render_template("error.html", message = message)
         return render_template("add_course.html")
     if request.method == "POST":
         course_name = request.form["course_name"]
         description = request.form["description"]
         user_id = login_service.get_userID()
         user_role = login_service.get_user_role()
-        if courses.add_course(user_id, user_role, course_name, description):
-            return render_template("success.html")
+        errorMessages = []
+        if len(course_name) < 3:
+            errorMessages.append("Kurssin nimen on oltava vähintään 3 kirjainta!")
+        if len(description) == 0:
+            errorMessages.append("Kurssilla on oltava kuvaus!")
+        if len(errorMessages) == 0:
+            if courses.add_course(user_id, user_role, course_name, description):
+                return redirect("/homepage")
+            else:
+                return render_template("error.html", message = "Kurssin lisäys ei onnistunut.")
         else:
-            return render_template("error.html")
+            return render_template("add_course.html", errorMessages = errorMessages, defaultName = course_name, defaultDescription = description)
+            
 
 @app.route("/update_course/<int:course_id>", methods=["GET", "POST"])
 def update_course(course_id):
@@ -76,16 +87,24 @@ def update_course(course_id):
             description = info[2]
             return render_template("update_course.html", course_id = course_id, course_name = course_name, description = description)
         else:
-            return render_template("error.html")
+            return render_template("error.html", message = "Kurssia ei {{ course_id }} löytynyt tietokannasta")
     if request.method == "POST":
         course_name = request.form["course_name"]
         description = request.form["description"]
         user_id = login_service.get_userID()
         user_role = login_service.get_user_role()
-        if courses.update_course(user_id, user_role, course_id, course_name, description):
-            return render_template("success.html")
+        errorMessages = []
+        if len(course_name) < 3:
+            errorMessages.append("Kurssin nimen on oltava vähintään 3 kirjainta!")
+        if len(description) == 0:
+            errorMessages.append("Kurssilla on oltava kuvaus!")
+        if len(errorMessages) == 0:
+            if courses.update_course(user_id, user_role, course_id, course_name, description):
+                return redirect("/course_page/<int:course_id>")
+            else:
+                return render_template("error.html", message = "Kurssin päivitys ei onnistunut.")
         else:
-            return render_template("error.html")
+            return render_template("update_course.html", course_id = course_id, course_name = course_name, description = description, errorMessages = errorMessages)
 
 @app.route("/delete_course/<int:course_id>")
 def delete_course(course_id):
@@ -148,9 +167,9 @@ def login():
 @app.route("/logout")
 def logout():
     if login_service.logout():
-        return render_template("success.html")
+        return redirect("/")
     else:
-        return render_template("error.html")
+        return render_template("error.html", message = "Uloskirjautuminen epäonnistui.")
     
 @app.route("/delete_account")
 def delete_account():

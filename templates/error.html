@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Opetussovellus</title>
-    </head>
-    <body>
-        <p>Jotain meni pieleen...</p>
-        <a href="/">Takaisin etusivulle</a>
-    </body>
-</html>
+{% extends "layout.html" %}
+{% block content %}
+
+<body>
+    <p>Jotain meni pieleen...</p>
+    <p>{{ message }}</p>
+    <a href="/">Takaisin etusivulle</a>
+</body>
+
+{% endblock %}
