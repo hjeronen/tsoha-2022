@@ -8,9 +8,12 @@
         <p>
             Luo käyttäjätili antamalla nimesi ja salasanasi. Valitse rooliksi opiskelija tai opettaja.
         </p>
+        {% for message in errorMessages %}
+        <p>VIRHE: {{ message }}</p>
+        {% endfor %}
         <p>
             <label for="username">Käyttäjätunnus:</label>
-            <input type="text" id="username" name="username">
+            <input type="text" id="username" name="username" value="{{ defaultName }}">
         </p>
         <p>
             <label for="password">Salasana:</label>
@@ -18,7 +21,7 @@
         </p>
         <p>
             <label for="role">Oppilas</label>
-            <input type="radio" name="role" value="student">
+            <input type="radio" checked=true name="role" value="student">
         </p>
         <p>
             <label for="role">Opettaja</label>

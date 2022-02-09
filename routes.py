@@ -119,10 +119,19 @@ def register():
         username = request.form["username"]
         password = request.form["password"]
         role = request.form["role"]
-        if login_service.register(username, password, role):
-            if login_service.login(username, password):
+        errorMessages = []
+        if len(username) < 3 or len(username) > 10:
+            errorMessages.append("Käyttäjätunnuksen on oltava 3-10 merkkiä pitkä.")
+        if len(password) < 8:
+            errorMessages.append("Salasanan on oltava vähintään 8 merkkiä pitkä.")
+        if len(errorMessages) == 0:
+            register_success = login_service.register(username, password, role)
+            login_success = login_service.login(username, password)
+            if register_success and login_success:
                 return redirect("/homepage")
-        return render_template("error.html")
+            else:
+                return render_template("error.html")
+        return render_template("register.html", errorMessages=errorMessages, defaultName=username)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -134,7 +143,7 @@ def login():
         if login_service.login(username, password):
             return redirect("/homepage")
         else:
-            return render_template("error.html")
+            return render_template("login.html", errorMessage="Väärä käyttäjänimi tai salasana!", defaultName = username, defaultPassword = password)
     
 @app.route("/logout")
 def logout():
