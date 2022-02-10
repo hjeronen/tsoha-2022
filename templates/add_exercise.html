@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<form action="/add_exercise/{{ course_id }}" method="POST">
+    <body>
+        <div class="subbar">
+            <div class="subheadlineBox">
+                <h2>Lisää harjoitustehtävä</h2>
+            </div>
+        </div>
+        <div class="container">
+            <div class="errorbox">
+                {% for message in errorMessages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+            </div>
+            <p>
+                Valitse harjoitustehtävän tyyppi:
+            </p>
+            <p>
+                <label for="exercise_type">Tekstikenttä</label>
+                <input type="radio" name="exercise_type" value="0">
+            </p>
+            <p>
+                <label for="exercise_type">Monivalinta</label>
+                <input type="radio" checked=true name="exercise_type" value="1">
+            </p>
+            <p>
+                Lisää kysymys ja vastausvaihtoehdot. Jos tehtävätyyppinä on tekstikenttä, jätä monivalintavaihtoehdot tyhjiksi. Jos tehtävän tyyppi on monivalinta, kirjoita oikeaksi vastaukseksi ainoastaan vastausvaihtoehdon kirjain.
+            </p>
+            <p>
+                <label for="question">Tehtäväkysymys:</label>
+                <input type="text" id="question" name="question" value="{{ defaultQuestion }}">
+            </p>
+            <p>
+                <label for="answer">Oikea vastaus:</label>
+                <input type="text" id="answer" name="answer" value="{{ defaultAnswer }}">
+            </p>
+            <p>
+                <label for="option_a">a:</label>
+                <input type="text" id="option_a" name="option_a" value="{{ defaultA }}">
+            </p>
+            <p>
+                <label for="option_b">b:</label>
+                <input type="text" id="option_b" name="option_b" value="{{ defaultB }}">
+            </p>
+            <p>
+                <label for="option_c">c:</label>
+                <input type="text" id="option_c" name="option_c" value="{{ defaultC }}">
+            </p>
+            <p class="button">
+                <button type="submit">Lisää tehtävä</button>
+            </p>
+        </div>
+        <div class="extraLinkBar">
+            <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
+        </div>
+    </body>
+</form>
+
+{% endblock %}

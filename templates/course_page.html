@@ -16,14 +16,6 @@
     <br></br>
     <div class="extraLinkBar">
             {% if session.user_role == 'student' %}
-            <div class="errorbox">
-                {% for message in errorMessages %}
-                <p><strong>VIRHE:</strong> {{ message }}</p>
-                {% endfor %}
-            </div>
-            <div class="successbox">
-                <p>{{ successMessage }}</p>
-            </div>
             {% if not enrolled %}
             <a href="/enroll/{{ id }}">Ilmoittaudu kurssille</a>
             {% else %}
@@ -32,6 +24,7 @@
             {% endif %}
 
             {% if owner %}
+            <a href="/add_exercise/{{ id }}">Lisää kurssille harjoitustehtäviä</a>
             <a href="/update_course/{{ id }}">Muokkaa kurssin tietoja</a>
             <a href="/delete_course/{{ id }}">Poista kurssi</a>
         {% endif %}

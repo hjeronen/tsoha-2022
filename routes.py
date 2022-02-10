@@ -2,6 +2,7 @@ from app import app
 from flask import render_template, request, redirect
 import login_service
 import courses
+import exercises
 
 @app.route("/")
 def index():
@@ -16,6 +17,57 @@ def homepage():
     users_courses = courses.get_users_courses(user_id, login_service.get_user_role())
     user_info = login_service.get_userinfo()
     return render_template("homepage.html", courses=users_courses, info=user_info)
+
+@app.route("/add_exercise/<int:course_id>", methods=["GET", "POST"])
+def add_exercise(course_id):
+    if request.method == "GET":
+        user_id = login_service.get_userID()
+        course_teacher_id = courses.get_course(course_id)[3]
+        if user_id != course_teacher_id:
+            return render_template("error.html", message = "Vain kurssin opettaja voi lisätä harjoitustehtäviä.")
+        return render_template("add_exercise.html", course_id = course_id)
+    if request.method == "POST":
+        exercise_type = int(request.form["exercise_type"])
+        question = request.form["question"]
+        answer = request.form["answer"]
+        errorMessages = []
+
+        if not exercise_type:
+            errorMessages.append("Valitse tehtävätyyppi!")
+        if len(question) == 0:
+            errorMessages.append("Kysymys ei voi olla tyhjä!")
+        if len(answer) == 0:
+            errorMessages.append("Vastaus ei voi olla tyhjä!")
+
+        if exercise_type == 0:
+            if len(errorMessages) == 0:
+                exercise = (exercise_type, question, answer)
+                if exercises.add_exercise(course_id, exercise):
+                    return redirect("/course_page/" + str(course_id))
+                else:
+                    return render_template("error.html", message = "Tehtävän tallennus ei onnistunut.")
+            return render_template("add_exercise.html", course_id = course_id, errorMessages = errorMessages, defaultQuestion = question, defaultAnswer = answer)
+
+        elif exercise_type == 1:
+            answer = answer.lower()
+            if len(answer) > 1:
+                errorMessages.append("Kirjoita vastaukseksi oikean kohdan kirjain!")
+
+            a = request.form["option_a"]
+            b = request.form["option_b"]
+            c = request.form["option_c"]
+            if len(a) == 0 or len(b) == 0 or len(c) == 0:
+                errorMessages.append("Monivalintatehtävässä mikään vastausvaihtoehto ei voi olla tyhjä!")
+
+            if len(errorMessages) == 0:
+                exercise = (exercise_type, question, answer, a, b, c)
+                if exercises.add_exercise(course_id, exercise):
+                    return redirect("/course_page/" + str(course_id))
+                return render_template("error.html", message = "Tehtävän tallennus ei onnistunut.")
+
+            return render_template("add_exercise.html", course_id = course_id, errorMessages = errorMessages, defaultQuestion = question, defaultAnswer = answer, defaultA = a, defaultB = b, defaultC = c)
+
+    
 
 @app.route("/enroll/<int:course_id>", methods=["GET", "POST"])
 def enroll(course_id):
