@@ -123,12 +123,21 @@ def user_info():
         firstname = request.form["firstname"]
         lastname = request.form["lastname"]
         student_number = 0
+        errorMessages = []
         if login_service.get_user_role() == 'student':
             student_number = request.form["student_number"]
-        if login_service.save_user_info(firstname, lastname, student_number):
-            return render_template("success.html")
+            if len(student_number) == 0 or student_number == 0:
+                errorMessages.append("Anna opiskelijanumero!")
+        if len(firstname) == 0:
+            errorMessages.append("Etunimi ei voi olla tyhjä!")
+        if len(lastname) == 0:
+            errorMessages.append("Sukunimi ei voi olla tyhjä!")
+        if len(errorMessages) == 0:
+            if login_service.save_user_info(firstname, lastname, student_number):
+                return redirect("/homepage")
+            return render_template("error.html", message = "Käyttäjätietojen tallennus ei onnistunut")
         else:
-            return render_template("error.html")
+            return render_template("userinfo.html", errorMessages = errorMessages)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -149,7 +158,12 @@ def register():
             if register_success and login_success:
                 return redirect("/homepage")
             else:
-                return render_template("error.html")
+                message = ""
+                if not register_success:
+                    message = "Käyttäjän rekisteröinti epäonnistui."
+                elif not login_success:
+                    message = "Sisäänkirjautuminen epäonnistui."
+                return render_template("error.html", message = message)
         return render_template("register.html", errorMessages=errorMessages, defaultName=username)
 
 @app.route("/login", methods=["GET", "POST"])
@@ -162,7 +176,7 @@ def login():
         if login_service.login(username, password):
             return redirect("/homepage")
         else:
-            return render_template("login.html", errorMessage="Väärä käyttäjänimi tai salasana!", defaultName = username, defaultPassword = password)
+            return render_template("login.html", errorMessages=["Väärä käyttäjänimi tai salasana!"], defaultName = username, defaultPassword = password)
     
 @app.route("/logout")
 def logout():

@@ -2,27 +2,24 @@
 {% block content %}
 
 <body>
-    <h1>Opetussovellus</h1>
-    <p>Tervetuloa opetussovellukseen!</p>
+    <div class="subbar">
+        <div class="subheadlineBox">
+            <h2>Kaikki kurssit</h2>
+        </div>
+    </div>
+    <div class="container">
+        <ul>
+            {% if not list %}
+            <li>Järjestelmässä ei ole vielä yhtään kurssia.</li>
+            {% else %}
+            {% for line in list %}
+            <li><a href="/course_page/{{ line[0] }}">{{ line.course_name }}</a></li>
+            {% endfor %}
+            {% endif %}
+        </ul>
 
-    {% if session.user_name %}
-    <p>Olet kirjautunut nimellä {{ session.user_name }}</p>
-    <a href="/logout">Kirjaudu ulos</a>
-    <a href="/homepage">Kotisivulle</a>
-    {% else %}
-    <a href="/register">Rekisteröidy</a>
-    <a href="/login">Kirjaudu</a>
-    {% endif %}
+    </div>
 
-    <h2>Kaikki kurssit</h2>
-    {% if not list %}
-    <p>Järjestelmässä ei ole vielä yhtään kurssia.</p>
-    {% else %}
-    {% for line in list %}
-    <a href="/course_page/{{ line[0] }}">{{ line.course_name }}</a>
-    <br></br>
-    {% endfor %}
-    {% endif %}
 </body>
 
 {% endblock %}

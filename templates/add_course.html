@@ -1,27 +1,36 @@
+{% extends "layout.html" %}
+{% block content %}
+
 <form action="/add_course" method="POST">
-    <head>
-        <meta charset="utf-8">
-        <title>Opetussovellus</title>
-    </head>
     <body>
-        <h2>Lisää kurssi</h2>
-        <p>
-            Lisää uusi kurssi järjestelmään:
-        </p>
-        {% for message in errorMessages %}
-        <p>{{ message }}</p>
-        {% endfor %}
-        <p>
-            <label for="course_name">Kurssin nimi:</label>
-            <input type="text" id="course_name" name="course_name" value="{{ defaultName }}">
-        </p>
-        <p>
-            <label for="description">Kurssikuvaus:</label>
-            <textarea id="description" name="description" rows="3" cols="40">{{ defaultDescription }}</textarea>
-        </p>
-        <p class="button">
-            <button type="submit">Lisää kurssi</button>
-        </p>
-        <a href="/">Takaisin etusivulle</a>
+        <div class="subbar">
+            <div class="subheadlineBox">
+                <h2>Lisää kurssi</h2>
+            </div>
+        </div>
+        <div class="container">
+            <p>
+                Lisää uusi kurssi järjestelmään:
+            </p>
+            {% for message in errorMessages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+            <p>
+                <label for="course_name">Kurssin nimi:</label>
+                <input type="text" id="course_name" name="course_name" value="{{ defaultName }}">
+            </p>
+            <p>
+                <label for="description">Kurssikuvaus:</label>
+                <textarea id="description" name="description" rows="3" cols="40">{{ defaultDescription }}</textarea>
+            </p>
+            <p class="button">
+                <button type="submit">Lisää kurssi</button>
+            </p>
+        </div>
+        <div class="extraLinkBar">
+            <a href="/homepage">Takaisin kotisivulle</a>
+        </div>
     </body>
 </form>
+
+{% endblock %}

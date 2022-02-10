@@ -1,22 +1,41 @@
+
+{% extends "layout.html" %}
+{% block content %}
+
 <form action="/login" method="POST">
-    <head></head>
     <body>
-        <h2>Kirjaudu sisään</h2>
-        <p>
-            Jos sinulla on käyttäjätunnus ja salasana, voit kirjautua sisään.
-        </p>
-        <p>{{ errorMessage }}</p>
-        <p>
-            <label for="username">Käyttäjätunnus:</label>
-            <input type="text" id="username" name="username" value="{{ defaultName }}">
-        </p>
-        <p>
-            <label for="password">Salasana:</label>
-            <input type="text" id="password" name="password" value="{{ defaultPassword }}">
-        </p>
-        <p class="button">
-            <button type="submit">Login</button>
-        </p>
-        <a href="/">Takaisin etusivulle</a>
+        <div class="subbar">
+            <div class="subheadlineBox">
+                <h2>Kirjaudu sisään</h2>
+            </div>
+        </div>
+        <div class="container">
+            <p>
+                Jos sinulla on käyttäjätunnus ja salasana, voit kirjautua sisään.
+            </p>
+            <div class="errorbox">
+                {% for message in errorMessages %}
+                <p><strong>VIRHE:</strong> {{ message }}</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="container">
+            <p>
+                <label for="username">Käyttäjätunnus:</label>
+                <input type="text" id="username" name="username" value="{{ defaultName }}">
+            </p>
+            <p>
+                <label for="password">Salasana:</label>
+                <input type="text" id="password" name="password" value="{{ defaultPassword }}">
+            </p>
+            <p class="button">
+                <button type="submit">Login</button>
+            </p>
+        </div>
+        <div class="container">
+            <a href="/">Takaisin etusivulle</a>
+        </div>
     </body>
 </form>
+
+{% endblock %}

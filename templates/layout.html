@@ -1,7 +1,25 @@
 <!doctype html>
-<!-- <link rel="stylesheet" href="/static/main.css"> -->
 <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="/static/styles.css">
     <title>Opetussovellus</title>
 </head>
+<body>
+    <div class="headlineBox">
+        <h1>Kurssikanta</h1>
+        <h4>Opetussovellus</h4>
+    </div>
+    <div class="topbar">
+        <div class="navbar">
+            <a href="/">Etusivu</a>
+            {% if session.user_name %}
+            <a href="/homepage">{{ session.user_name }}</a>
+            <a href="/logout">Kirjaudu ulos</a>
+            {% else %}
+            <a href="/register">Rekisteröidy</a>
+            <a href="/login">Kirjaudu</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
 {% block content %}{% endblock %}

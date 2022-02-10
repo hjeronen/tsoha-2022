@@ -1,28 +1,40 @@
+{% extends "layout.html" %}
+{% block content %}
+
 <form action="/update_course/{{ course_id }}" method="POST">
-    <head>
-        <meta charset="utf-8">
-        <title>Opetussovellus</title>
-    </head>
+
     <body>
-        <h2>Päivitä kurssitietoja</h2>
-        <p>
-            Muokkaa kurssisi tietoja:
-        </p>
-        {% for message in errorMessages %}
-        <p>{{ message }}</p>
-        {% endfor %}
-        <input type="hidden" id="course_id" name="course_id" value="{{ course_id }}">
-        <p>
-            <label for="course_name">Kurssin nimi:</label>
-            <input type="text" id="course_name" name="course_name" value="{{ course_name }}">
-        </p>
-        <p>
-            <label for="description">Kurssikuvaus:</label>
-            <textarea id="description" name="description">{{ description }}</textarea>
-        </p>
-        <p class="button">
-            <button type="submit">Päivitä</button>
-        </p>
-        <a href="/">Takaisin etusivulle</a>
+        <div class="subbar">
+            <div class="subheadlineBox">
+                <h2>Päivitä kurssitietoja</h2>
+            </div>
+        </div>
+        <div class="container">
+            <p>
+                Muokkaa kurssisi tietoja:
+            </p>
+            <div class="errorbox">
+                {% for message in errorMessages %}
+                <p><strong>VIRHE:</strong> {{ message }}</p>
+                {% endfor %}
+            </div>
+            <input type="hidden" id="course_id" name="course_id" value="{{ course_id }}">
+            <p>
+                <label for="course_name">Kurssin nimi:</label>
+                <input type="text" id="course_name" name="course_name" value="{{ course_name }}">
+            </p>
+            <p>
+                <label for="description">Kurssikuvaus:</label>
+                <textarea id="description" name="description">{{ description }}</textarea>
+            </p>
+            <p class="button">
+                <button type="submit">Päivitä</button>
+            </p>
+        </div>
+        <div class="container">
+            <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
+        </div>
     </body>
 </form>
+
+{% endblock %}

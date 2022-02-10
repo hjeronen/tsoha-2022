@@ -1,27 +1,33 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Opetussovellus</title>
-    </head>
-    <body>
-        <h2>{{ course_name }}</h2>
+{% extends "layout.html" %}
+{% block content %}
+
+<body>
+    <div class="subbar">
+        <div class="subheadlineBox">
+            <h2>{{ course_name }}</h2>
+        </div>
+    </div>
+    <div class="container">
         <h3>Kurssikuvaus:</h3>
         <p>{{ description }}</p>
         <h3>Kurssin opettaja:</h3>
         <p>{{ teacher }}</p>
+    </div>
+    <br></br>
+    <div class="extraLinkBar">
+            {% if session.user_role == 'student' %}
+            {% if not enrolled %}
+            <a href="/enroll/{{ id }}">Ilmoittaudu kurssille</a>
+            {% else %}
+            <p>Olet ilmoittautunut kurssille.</p>
+            {% endif %}
+            {% endif %}
 
-        {% if session.user_role == 'student' %}
-        {% if not enrolled %}
-        <a href="/enroll/{{ id }}">Ilmoittaudu kurssille</a>
-        {% else %}
-        <p>Olet ilmoittautunut kurssille.</p>
+            {% if owner %}
+            <a href="/update_course/{{ id }}">Muokkaa kurssin tietoja</a>
+            <a href="/delete_course/{{ id }}">Poista kurssi</a>
         {% endif %}
-        {% endif %}
+    </div>
+</body>
 
-        {% if owner %}
-        <a href="/update_course/{{ id }}">Muokkaa kurssin tietoja</a>
-        <a href="/delete_course/{{ id }}">Poista kurssi</a>
-        {% endif %}
-    </body>
-</html>
+{% endblock %}

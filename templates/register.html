@@ -1,36 +1,51 @@
+{% extends "layout.html" %}
+{% block content %}
+
 <form action="/register" method="POST">
-    <head>
-        <meta charset="utf-8">
-        <title>Rekisteröityminen</title>
-    </head>
+
     <body>
-        <h2>Rekisteröidy käyttäjäksi</h2>
-        <p>
-            Luo käyttäjätili antamalla nimesi ja salasanasi. Valitse rooliksi opiskelija tai opettaja.
-        </p>
-        {% for message in errorMessages %}
-        <p>VIRHE: {{ message }}</p>
-        {% endfor %}
-        <p>
-            <label for="username">Käyttäjätunnus:</label>
-            <input type="text" id="username" name="username" value="{{ defaultName }}">
-        </p>
-        <p>
-            <label for="password">Salasana:</label>
-            <input type="text" id="password" name="password">
-        </p>
-        <p>
-            <label for="role">Oppilas</label>
-            <input type="radio" checked=true name="role" value="student">
-        </p>
-        <p>
-            <label for="role">Opettaja</label>
-            <input type="radio" name="role" value="teacher">
-        </p>
-        <p class="button">
-            <button type="submit">Login</button>
-        </p>
-        <a href="/">Takaisin etusivulle</a>
-        
+        <div class="subbar">
+            <div class="subheadlineBox">
+                <h2>Rekisteröidy käyttäjäksi</h2>
+            </div>
+        </div>
+        <div class="container">
+            <p>
+                Luo käyttäjätili antamalla nimesi ja salasanasi. Valitse rooliksi opiskelija tai opettaja.
+            </p>
+            <div class="errorbox">
+                <ul>
+                    {% for message in errorMessages %}
+                    <p><strong>VIRHE:</strong> {{ message }}</p>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="container">
+            <p>
+                <label for="username">Käyttäjätunnus:</label>
+                <input type="text" id="username" name="username" value="{{ defaultName }}">
+            </p>
+            <p>
+                <label for="password">Salasana:</label>
+                <input type="text" id="password" name="password">
+            </p>
+            <p>
+                <label for="role">Oppilas</label>
+                <input type="radio" checked=true name="role" value="student">
+            </p>
+            <p>
+                <label for="role">Opettaja</label>
+                <input type="radio" name="role" value="teacher">
+            </p>
+            <p class="button">
+                <button type="submit">Login</button>
+            </p>
+        </div>
+        <div class="container">
+            <a href="/">Takaisin etusivulle</a>
+        </div>
     </body>
 </form>
+
+{% endblock %}

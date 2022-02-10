@@ -1,0 +1,145 @@
+
+:root {
+    --primary-color: #222831;
+    --secondary-color: #30475E;
+    --tertiary-color: #ECECEC;
+    --extra-color: #C1A57B;
+}
+
+body {
+    background-color: var(--tertiary-color);
+    margin: 0;
+    font-family: 'Arial';
+}
+
+h1, h1 + h4 {
+    color: var(--tertiary-color);
+    margin-top: 0;
+    text-align: center;
+    text-decoration: none;
+}
+
+.headlineBox {
+    background-color: var(--primary-color);
+    padding-top: 1em;
+    padding-bottom: .05em;
+}
+
+.subheadlineBox {
+    background-color: var(--primary-color);
+    display: table;
+    align: left;
+    padding-left: 1.5em;
+}
+
+.subheadlineBox h2 {
+    display: inline-block;
+    margin: .1em;
+    margin-left: 2em;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-weight: bold;
+    color: var(--tertiary-color);
+}
+
+.topbar {
+    background: var(--secondary-color);
+}
+
+.subbar {
+    background: var(--primary-color);
+}
+
+.navbar {
+    background: var(--secondary-color);
+    overflow: hidden;
+    display: table;
+    margin: 0 auto;
+}
+
+.navbar a {
+    display: inline-block;
+    vertical-align: baseline;
+    margin: 0 2px;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-weight: bold;
+    color: var(--tertiary-color);
+}
+
+.navbar a:hover {
+    background-color: var(--primary-color);
+}
+
+.navbar a:active {
+    background-color: var(--primary-color);
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.container {
+    background-color: var(--tertiary-color);
+    display: table;
+    margin-top: 0;
+    margin-left: 3.8em;
+}
+
+.container ul {
+    list-style-type: none;
+    text-align: center;
+    margin-top: 0;
+    padding-right: 1em;
+    padding-left: 1em;
+}
+
+.container ul li {
+    padding-top: .3em;
+    padding-bottom: .3em;
+}
+
+.container ul li a {
+    display: inline-block;
+    vertical-align: baseline;
+    text-align: center;
+    padding: .5em;
+    text-decoration: none;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.container ul li:hover, .extraLinkBar a:hover {
+    background-color: var(--secondary-color);
+}
+
+.container ul li a:hover, .extraLinkBar a:hover {
+    color: var(--tertiary-color);
+}
+
+.extraLinkBar {
+    background: var(--tertiary-color);
+    overflow: hidden;
+    margin-left: 3.2em;
+}
+
+.extraLinkBar a {
+    float: left;
+    color: var(--primary-color);
+    text-align: center;
+    padding: .5em;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.errorbox {
+    color: red;
+}
+
+.infobox {
+    background-color: var(--extra-color);
+}
+  
+  
