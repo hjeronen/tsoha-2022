@@ -16,6 +16,14 @@
     <br></br>
     <div class="extraLinkBar">
             {% if session.user_role == 'student' %}
+            <div class="errorbox">
+                {% for message in errorMessages %}
+                <p><strong>VIRHE:</strong> {{ message }}</p>
+                {% endfor %}
+            </div>
+            <div class="successbox">
+                <p>{{ successMessage }}</p>
+            </div>
             {% if not enrolled %}
             <a href="/enroll/{{ id }}">Ilmoittaudu kurssille</a>
             {% else %}

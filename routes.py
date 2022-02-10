@@ -17,18 +17,31 @@ def homepage():
     user_info = login_service.get_userinfo()
     return render_template("homepage.html", courses=users_courses, info=user_info)
 
-@app.route("/enroll/<int:course_id>")
+@app.route("/enroll/<int:course_id>", methods=["GET", "POST"])
 def enroll(course_id):
-    user_role = login_service.get_user_role()
-    student_id = login_service.get_userID()
-    if not login_service.has_userinfo():
-        return "Täydennä ensin käyttäjätietosi!"
-    if courses.check_if_student_is_enrolled(course_id, student_id):
-        return render_template("error.html")
-    if courses.enroll_on_course(course_id, student_id, user_role):
-        return render_template("success.html")
-    else:
-        return render_template("error.html")
+    course = courses.get_course(course_id)
+    if not course:
+        return render_template("error.html", message = "Kurssia ei löytynyt.")
+
+    if request.method == "GET":
+        return render_template("enroll.html", course_id = course_id, course_name=course[1])
+
+    if request.method == "POST":
+        student_id = login_service.get_userID()
+        errorMessages = []
+        user_role = login_service.get_user_role()
+        if user_role == "teacher":
+            errorMessages.append("Opettajat eivät voi ilmoittautua kursseille.")
+        if not login_service.has_userinfo():
+            errorMessages.append("Täydennä ensin käyttäjätietosi!")
+        if courses.check_if_student_is_enrolled(course_id, student_id):
+            errorMessages.append("Olet jo ilmoittautunut kurssille!")
+        if len(errorMessages) == 0:
+            if courses.enroll_on_course(course_id, student_id, user_role):
+                return redirect("/course_page/" + str(course_id))
+            else:
+                return render_template("error.html", message = "Ilmoittautuminen epäonnistui.")
+        return render_template("enroll.html", course_id = course_id, course_name=course[1], errorMessages = errorMessages)
 
 @app.route("/course_page/<int:course_id>")
 def show_coursepage(course_id):
@@ -87,7 +100,7 @@ def update_course(course_id):
             description = info[2]
             return render_template("update_course.html", course_id = course_id, course_name = course_name, description = description)
         else:
-            return render_template("error.html", message = "Kurssia ei {{ course_id }} löytynyt tietokannasta")
+            return render_template("error.html", message = "Kurssia {{ course_id }} ei löytynyt tietokannasta")
     if request.method == "POST":
         course_name = request.form["course_name"]
         description = request.form["description"]

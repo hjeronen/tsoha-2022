@@ -138,6 +138,10 @@ a:hover {
     color: red;
 }
 
+.successbox {
+    color: green;
+}
+
 .infobox {
     background-color: var(--extra-color);
 }
