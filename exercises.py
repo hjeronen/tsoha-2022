@@ -1,5 +1,18 @@
 from db import db
 
+def get_answer(user_id, exercise_id):
+    sql = "SELECT answer FROM answers WHERE student_id=:user_id AND exercise_id=:exercise_id"
+    return db.session.execute(sql, {"user_id":user_id, "exercise_id":exercise_id}).fetchone()
+
+def save_answer(user_id, exercise_id, answer):
+    try:
+        sql = "INSERT INTO answers (student_id, exercise_id, answer) VALUES (:user_id, :exercise_id, :answer)"
+        db.session.execute(sql, {"user_id":user_id, "exercise_id":exercise_id, "answer":answer})
+        db.session.commit()
+        return True
+    except:
+        return False
+
 def get_exercise(exercise_id, type):
     if type == 0:
         sql = "SELECT * FROM exercises_text WHERE exercise_id=:exercise_id"

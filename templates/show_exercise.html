@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<form action="/show_exercise/{{ exercise_id }}/{{ exercise_type }}/{{ headline }}" method="POST">
+<form action="/show_exercise/{{ course_id }}/{{ exercise_id }}/{{ exercise_type }}/{{ headline }}" method="POST">
     <body>
         <div class="subbar">
             <div class="subheadlineBox">
@@ -12,37 +12,41 @@
             <h3>Kysymys:</h3>
             <p>{{ exercise.question }}</p>
             <h3>Vastaus:</h3>
+            {% if not answered %}
             {% if exercise_type == 0 %}
-            <input type="text" id="answer" name="answer" value="{{ defaultAnswer }}">
+            <input type="text" id="answer" name="answer" value="{{ answer }}">
             {% else %}
             <p>
-                <input type="radio" checked=true name="answer" value="a">
+                <input type="radio" checked=true name="answer" value="{{ exercise.option_a }}">
                 <label for="answer">{{ exercise.option_a }}</label>
             </p>
             <p>
-                <input type="radio" name="answer" value="b">
+                <input type="radio" name="answer" value="{{ exercise.option_b }}">
                 <label for="answer">{{ exercise.option_b }}</label>
             </p>
             <p>
-                <input type="radio" name="answer" value="c">
+                <input type="radio" name="answer" value="{{ exercise.option_c }}">
                 <label for="answer">{{ exercise.option_c }}</label>
             </p>
             {% endif %}
-            {% if answered %}
+            <p class="button">
+                <button type="submit">Lähetä vastaus</button>
+            </p>
+            {% else %}
+            <p>Vastasit: {{ answer }}</p>
             {% if correct %}
             <div class="successbox">
                 <p>Oikein!</p>
             </div>
             {% else %}
             <div class="errorbox">
-                <p>Väärin, oikea vastaus: {{ correct_answer }}</p>
+                <p>Väärin, oikea vastaus: {{ exercise.correct_answer }}</p>
             </div>
             {% endif %}
-            {% else %}
-            <p class="button">
-                <button type="submit">Lähetä vastaus</button>
-            </p>
             {% endif %}
+        </div>
+        <div class="extraLinkBar">
+            <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
         </div>
     </body>
 </form>

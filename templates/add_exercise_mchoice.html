@@ -22,15 +22,11 @@
                 <input type="text" id="headline" name="headline" value="{{ defaultHeadline}}">
             </p>
             <p>
-                Lisää kysymys, oikea vastaus ja vastausvaihtoehdot. Kirjoita vastaukseksi oikean vastauskohdan kirjain.
+                Lisää kysymys, vastausvaihtoehdot ja oikea vastaus.
             </p>
             <p>
                 <label for="question">Tehtäväkysymys:</label>
                 <input type="text" id="question" name="question" value="{{ defaultQuestion }}">
-            </p>
-            <p>
-                <label for="answer">Oikea vastaus:</label>
-                <input type="text" id="answer" name="answer" value="{{ defaultAnswer }}">
             </p>
             <p>
                 <label for="option_a">a:</label>
@@ -43,6 +39,21 @@
             <p>
                 <label for="option_c">c:</label>
                 <input type="text" id="option_c" name="option_c" value="{{ defaultC }}">
+            </p>
+            <p>
+                Oikea vastaus:
+            </p>
+            <p>
+                <input type="radio" checked=true name="answer" value="a">
+                <label for="answer">a</label>
+            </p>
+            <p>
+                <input type="radio" name="answer" value="b">
+                <label for="answer">b</label>
+            </p>
+            <p>
+                <input type="radio" name="answer" value="c">
+                <label for="answer">c</label>
             </p>
             <p class="button">
                 <button type="submit">Lisää tehtävä</button>

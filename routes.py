@@ -18,17 +18,52 @@ def homepage():
     user_info = login_service.get_userinfo()
     return render_template("homepage.html", courses=users_courses, info=user_info)
 
-@app.route("/show_exercise/<int:exercise_id>/<int:exercise_type>/<headline>", methods=["GET", "POST"])
-def show_exercise(exercise_id, exercise_type, headline):
+@app.route("/show_exercise/<int:course_id>/<int:exercise_id>/<int:exercise_type>/<headline>", methods=["GET", "POST"])
+def show_exercise(course_id, exercise_id, exercise_type, headline):
     exercise = exercises.get_exercise(exercise_id, exercise_type)
+    user_id = login_service.get_userID()
+    answer = exercises.get_answer(user_id, exercise_id)
+
     if request.method == "GET":
-        return render_template("show_exercise.html", exercise_id = exercise_id, exercise_type = exercise_type, exercise = exercise, headline = headline, answered = False)
+        if answer:
+            answer = answer[0]
+            test_answer = answer.lower()
+            test_correct = exercise.correct_answer.lower()
+            answer_is_correct = (test_answer == test_correct)
+            return render_template("show_exercise.html", course_id = course_id,
+                                                        exercise_id = exercise_id,
+                                                        exercise_type = exercise_type, 
+                                                        exercise = exercise, 
+                                                        headline = headline, 
+                                                        answered = True, 
+                                                        answer = answer, 
+                                                        correct = answer_is_correct)
+
+        return render_template("show_exercise.html", course_id = course_id,
+                                                    exercise_id = exercise_id, 
+                                                    exercise_type = exercise_type, 
+                                                    exercise = exercise, 
+                                                    headline = headline, 
+                                                    answered = False)
+
     if request.method == "POST":
-        answer = request.form["answer"]
-        if len(answer) == 0:
-            answer = "--"
-        answer_is_correct = (answer == exercise.correct_answer)
-        return render_template("show_exercise.html", exercise_id = exercise_id, exercise_type = exercise_type, exercise = exercise, headline = headline, answered = True, defaultAnswer = answer, correct_answer = exercise.correct_answer, correct = answer_is_correct)
+        if not answer:
+            answer = request.form["answer"]
+            if len(answer) == 0:
+                answer = "ei vastausta"
+            exercises.save_answer(user_id, exercise_id, answer)
+        test_answer = answer.lower()
+        test_correct = exercise.correct_answer.lower()
+        answer_is_correct = (test_answer == test_correct)
+        return render_template("show_exercise.html", course_id = course_id,
+                                                    exercise_id = exercise_id, 
+                                                    exercise_type = exercise_type, 
+                                                    exercise = exercise, 
+                                                    headline = headline, 
+                                                    answered = True, 
+                                                    answer = answer, 
+                                                    correct_answer = exercise.correct_answer, 
+                                                    correct = answer_is_correct)
 
 @app.route("/add_exercise_mchoice/<int:course_id>", methods=["GET", "POST"])
 def add_exercise_mchoice(course_id):
@@ -44,19 +79,21 @@ def add_exercise_mchoice(course_id):
         headline = request.form["headline"]
         question = request.form["question"]
         answer = request.form["answer"]
-        answer = answer.lower()
         errorMessages = []
 
         if len(question) == 0:
             errorMessages.append("Kysymys ei voi olla tyhjä!")
-        if len(answer) == 0:
-            errorMessages.append("Vastaus ei voi olla tyhjä!")
-        if len(answer) > 1:
-            errorMessages.append("Kirjoita vastaukseksi oikean kohdan kirjain!")
 
         a = request.form["option_a"]
         b = request.form["option_b"]
         c = request.form["option_c"]
+
+        if answer == "a":
+            answer = a
+        elif answer == "b":
+            answer = b
+        elif answer == "c":
+            answer = c
 
         if len(headline) == 0:
             errorMessages.append("Otsikko ei voi olla tyhjä!")
