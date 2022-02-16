@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<form action="/show_exercise/{{ exercise_id }}/{{ exercise_type }}/{{ headline }}" method="POST">
+    <body>
+        <div class="subbar">
+            <div class="subheadlineBox">
+                <h2>{{ headline }}</h2>
+            </div>
+        </div>
+        <div class="container">
+            <h3>Kysymys:</h3>
+            <p>{{ exercise.question }}</p>
+            <h3>Vastaus:</h3>
+            {% if exercise_type == 0 %}
+            <input type="text" id="answer" name="answer" value="{{ defaultAnswer }}">
+            {% else %}
+            <p>
+                <input type="radio" checked=true name="answer" value="a">
+                <label for="answer">{{ exercise.option_a }}</label>
+            </p>
+            <p>
+                <input type="radio" name="answer" value="b">
+                <label for="answer">{{ exercise.option_b }}</label>
+            </p>
+            <p>
+                <input type="radio" name="answer" value="c">
+                <label for="answer">{{ exercise.option_c }}</label>
+            </p>
+            {% endif %}
+            {% if answered %}
+            {% if correct %}
+            <div class="successbox">
+                <p>Oikein!</p>
+            </div>
+            {% else %}
+            <div class="errorbox">
+                <p>Väärin, oikea vastaus: {{ correct_answer }}</p>
+            </div>
+            {% endif %}
+            {% else %}
+            <p class="button">
+                <button type="submit">Lähetä vastaus</button>
+            </p>
+            {% endif %}
+        </div>
+    </body>
+</form>
+
+{% endblock %}

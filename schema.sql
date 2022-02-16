@@ -1,3 +1,4 @@
+\connect tsoha
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -39,14 +40,23 @@ CREATE TABLE exercises (
     id SERIAL PRIMARY KEY,
     course_id INTEGER REFERENCES courses,
     type INTEGER,
+    headline TEXT,
+    visible BOOLEAN
+);
+
+CREATE TABLE exercises_text (
+    id SERIAL PRIMARY KEY,
+    exercise_id INTEGER REFERENCES exercises,
     question TEXT,
     correct_answer TEXT,
     visible BOOLEAN
 );
 
-CREATE TABLE exercise_options (
+CREATE TABLE exercises_mchoice (
     id SERIAL PRIMARY KEY,
     exercise_id INTEGER REFERENCES exercises,
+    question TEXT,
+    correct_answer TEXT,
     option_a TEXT,
     option_b TEXT,
     option_c TEXT,

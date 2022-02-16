@@ -24,10 +24,16 @@
             {% endif %}
 
             {% if owner %}
-            <a href="/add_exercise/{{ id }}">Lisää kurssille harjoitustehtäviä</a>
+            <a href="/choose_exercise_type/{{ id }}">Lisää kurssille harjoitustehtäviä</a>
             <a href="/update_course/{{ id }}">Muokkaa kurssin tietoja</a>
             <a href="/delete_course/{{ id }}">Poista kurssi</a>
         {% endif %}
+    </div>
+    <div class="container">
+        <h3>Tehtävät:</h3>
+        {% for exercise in exercise_list %}
+        <a href="/show_exercise/{{ exercise.id }}/{{ exercise.type }}/{{ exercise.headline }}">{{ exercise.headline }}</p>
+        {% endfor %}
     </div>
 </body>
 

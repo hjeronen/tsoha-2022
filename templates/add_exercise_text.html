@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<form action="/add_exercise_text/{{ course_id }}" method="POST">
+    <body>
+        <div class="subbar">
+            <div class="subheadlineBox">
+                <h2>Lisää harjoitustehtävä</h2>
+            </div>
+        </div>
+        <div class="container">
+            <div class="errorbox">
+                {% for message in errorMessages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+            <p>
+                Anna tehtävälle otsikko:
+            </p>
+            <p>
+                <label for="headline">Otsikko:</label>
+                <input type="text" id="headline" name="headline" value="{{ defaultHeadline }}">
+            </p>
+            <p>
+                Lisää kysymys ja oikea vastaus.
+            </p>
+            <p>
+                <label for="question">Tehtäväkysymys:</label>
+                <input type="text" id="question" name="question" value="{{ defaultQuestion }}">
+            </p>
+            <p>
+                <label for="answer">Oikea vastaus:</label>
+                <input type="text" id="answer" name="answer" value="{{ defaultAnswer }}">
+            </p>
+            <p class="button">
+                <button type="submit">Lisää tehtävä</button>
+            </p>
+        </div>
+        <div class="extraLinkBar">
+            <a href="/choose_exercise_type/{{ course_id }}">Takaisin</a>
+        </div>
+    </body>
+</form>
+
+{% endblock %}

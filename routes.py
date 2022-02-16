@@ -18,56 +18,108 @@ def homepage():
     user_info = login_service.get_userinfo()
     return render_template("homepage.html", courses=users_courses, info=user_info)
 
-@app.route("/add_exercise/<int:course_id>", methods=["GET", "POST"])
-def add_exercise(course_id):
+@app.route("/show_exercise/<int:exercise_id>/<int:exercise_type>/<headline>", methods=["GET", "POST"])
+def show_exercise(exercise_id, exercise_type, headline):
+    exercise = exercises.get_exercise(exercise_id, exercise_type)
+    if request.method == "GET":
+        return render_template("show_exercise.html", exercise_id = exercise_id, exercise_type = exercise_type, exercise = exercise, headline = headline, answered = False)
+    if request.method == "POST":
+        answer = request.form["answer"]
+        if len(answer) == 0:
+            answer = "--"
+        answer_is_correct = (answer == exercise.correct_answer)
+        return render_template("show_exercise.html", exercise_id = exercise_id, exercise_type = exercise_type, exercise = exercise, headline = headline, answered = True, defaultAnswer = answer, correct_answer = exercise.correct_answer, correct = answer_is_correct)
+
+@app.route("/add_exercise_mchoice/<int:course_id>", methods=["GET", "POST"])
+def add_exercise_mchoice(course_id):
     if request.method == "GET":
         user_id = login_service.get_userID()
         course_teacher_id = courses.get_course(course_id)[3]
         if user_id != course_teacher_id:
             return render_template("error.html", message = "Vain kurssin opettaja voi lisätä harjoitustehtäviä.")
-        return render_template("add_exercise.html", course_id = course_id)
+        return render_template("add_exercise_mchoice.html", course_id = course_id)
+
     if request.method == "POST":
-        exercise_type = int(request.form["exercise_type"])
+        exercise_type = 1
+        headline = request.form["headline"]
+        question = request.form["question"]
+        answer = request.form["answer"]
+        answer = answer.lower()
+        errorMessages = []
+
+        if len(question) == 0:
+            errorMessages.append("Kysymys ei voi olla tyhjä!")
+        if len(answer) == 0:
+            errorMessages.append("Vastaus ei voi olla tyhjä!")
+        if len(answer) > 1:
+            errorMessages.append("Kirjoita vastaukseksi oikean kohdan kirjain!")
+
+        a = request.form["option_a"]
+        b = request.form["option_b"]
+        c = request.form["option_c"]
+
+        if len(headline) == 0:
+            errorMessages.append("Otsikko ei voi olla tyhjä!")
+        if len(a) == 0 or len(b) == 0 or len(c) == 0:
+            errorMessages.append("Mikään vastausvaihtoehto ei voi olla tyhjä!")
+
+        if len(errorMessages) == 0:
+            exercise = (exercise_type, headline, question, answer, a, b, c)
+            if exercises.add_exercise(course_id, exercise):
+                return redirect("/course_page/" + str(course_id))
+            return render_template("error.html", message = "Tehtävän tallennus ei onnistunut.")
+
+        return render_template("add_exercise_mchoice.html", course_id = course_id, errorMessages = errorMessages, defaultQuestion = question, defaultAnswer = answer, defaultA = a, defaultB = b, defaultC = c)
+
+@app.route("/add_exercise_text/<int:course_id>", methods=["GET", "POST"])
+def add_exercise_text(course_id):
+    if request.method == "GET":
+        user_id = login_service.get_userID()
+        course_teacher_id = courses.get_course(course_id)[3]
+        if user_id != course_teacher_id:
+            return render_template("error.html", message = "Vain kurssin opettaja voi lisätä harjoitustehtäviä.")
+        return render_template("add_exercise_text.html", course_id = course_id)
+
+    if request.method == "POST":
+        exercise_type = 0
+        headline = request.form["headline"]
         question = request.form["question"]
         answer = request.form["answer"]
         errorMessages = []
 
-        if not exercise_type:
-            errorMessages.append("Valitse tehtävätyyppi!")
+        if len(headline) == 0:
+            errorMessages.append("Otsikko ei voi olla tyhjä!")
         if len(question) == 0:
             errorMessages.append("Kysymys ei voi olla tyhjä!")
         if len(answer) == 0:
             errorMessages.append("Vastaus ei voi olla tyhjä!")
 
-        if exercise_type == 0:
-            if len(errorMessages) == 0:
-                exercise = (exercise_type, question, answer)
-                if exercises.add_exercise(course_id, exercise):
-                    return redirect("/course_page/" + str(course_id))
-                else:
-                    return render_template("error.html", message = "Tehtävän tallennus ei onnistunut.")
-            return render_template("add_exercise.html", course_id = course_id, errorMessages = errorMessages, defaultQuestion = question, defaultAnswer = answer)
-
-        elif exercise_type == 1:
-            answer = answer.lower()
-            if len(answer) > 1:
-                errorMessages.append("Kirjoita vastaukseksi oikean kohdan kirjain!")
-
-            a = request.form["option_a"]
-            b = request.form["option_b"]
-            c = request.form["option_c"]
-            if len(a) == 0 or len(b) == 0 or len(c) == 0:
-                errorMessages.append("Monivalintatehtävässä mikään vastausvaihtoehto ei voi olla tyhjä!")
-
-            if len(errorMessages) == 0:
-                exercise = (exercise_type, question, answer, a, b, c)
-                if exercises.add_exercise(course_id, exercise):
-                    return redirect("/course_page/" + str(course_id))
+        if len(errorMessages) == 0:
+            exercise = (exercise_type, headline, question, answer)
+            if exercises.add_exercise(course_id, exercise):
+                return redirect("/course_page/" + str(course_id))
+            else:
                 return render_template("error.html", message = "Tehtävän tallennus ei onnistunut.")
 
-            return render_template("add_exercise.html", course_id = course_id, errorMessages = errorMessages, defaultQuestion = question, defaultAnswer = answer, defaultA = a, defaultB = b, defaultC = c)
+        return render_template("add_exercise_text.html", course_id = course_id, errorMessages = errorMessages, defaultHeadline = headline, defaultQuestion = question, defaultAnswer = answer)
 
+@app.route("/choose_exercise_type/<int:course_id>", methods=["GET", "POST"])
+def choose_exercise_type(course_id):
+    if request.method == "GET":
+        user_id = login_service.get_userID()
+        course_teacher_id = courses.get_course(course_id)[3]
+        if user_id != course_teacher_id:
+            return render_template("error.html", message = "Vain kurssin opettaja voi lisätä harjoitustehtäviä.")
+        return render_template("choose_exercise_type.html", course_id = course_id)
     
+    if request.method == "POST":
+        exercise_type = int(request.form["exercise_type"])
+        if exercise_type == 0:
+            return redirect("/add_exercise_text/" + str(course_id))
+        elif exercise_type == 1:
+            return redirect("/add_exercise_mchoice/" + str(course_id))
+        else:
+            return render_template("error.html", message = "Jotain meni pieleen.")
 
 @app.route("/enroll/<int:course_id>", methods=["GET", "POST"])
 def enroll(course_id):
@@ -106,13 +158,14 @@ def show_coursepage(course_id):
         teacher = info[4] + ' ' + info[5]
         enrolled = False
         owner = False
+        course_exercises = exercises.get_exercises(course_id)
         if login_service.has_userinfo():
             user_id = login_service.get_userID()
             if teacher_id == user_id:
                 owner = True
             if login_service.get_user_role() == 'student':
                 enrolled = courses.check_if_student_is_enrolled(course_id, user_id)
-        return render_template("course_page.html", id = course_id, course_name = course_name, description = description, teacher=teacher, enrolled=enrolled, owner=owner)
+        return render_template("course_page.html", id = course_id, course_name = course_name, description = description, teacher=teacher, enrolled=enrolled, owner=owner, exercise_list = course_exercises)
     else:
         return render_template("error.html")
 

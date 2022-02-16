@@ -90,7 +90,7 @@ a:hover {
 
 .container ul {
     list-style-type: none;
-    text-align: center;
+    text-align: left;
     margin-top: 0;
     padding-right: 1em;
     padding-left: 1em;

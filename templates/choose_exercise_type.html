@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<form action="/choose_exercise_type/{{ course_id }}" method="POST">
+    <body>
+        <div class="subbar">
+            <div class="subheadlineBox">
+                <h2>Lisää harjoitustehtävä</h2>
+            </div>
+        </div>
+        <div class="container">
+            <p>
+                Valitse harjoitustehtävän tyyppi:
+            </p>
+            <p>
+                <label for="exercise_type">Tekstikenttä</label>
+                <input type="radio" name="exercise_type" value="0">
+            </p>
+            <p>
+                <label for="exercise_type">Monivalinta</label>
+                <input type="radio" checked=true name="exercise_type" value="1">
+            </p>
+            <p class="button">
+                <button type="submit">Seuraava</button>
+            </p>
+        </div>
+        <div class="extraLinkBar">
+            <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
+        </div>
+    </body>
+</form>
+{% endblock %}

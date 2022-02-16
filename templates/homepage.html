@@ -32,10 +32,8 @@
         <h2>Kurssit, joille olet ilmoittautunut:</h2>
         {% elif session.user_role == 'teacher' %}
         <h2>Opettamasi kurssit:</h2>
-        <a href="/add_course">Lisää uusi kurssi</a>
         {% endif %}
     </div>
-    <br></br>
     <div class="container">
         <ul>
             {% if not courses %}
@@ -47,6 +45,11 @@
             {% endif %}
         </ul>
     </div>
+    {% if session.user_role == 'teacher' %}
+    <div class="extraLinkBar">
+        <a href="/add_course">Lisää uusi kurssi</a>
+    </div>
+    {% endif %}
 </body>
 
 {% endblock %}
