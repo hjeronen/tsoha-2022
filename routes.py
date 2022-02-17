@@ -3,6 +3,7 @@ from flask import render_template, request, redirect
 import login_service
 import courses
 import exercises
+import materials
 
 @app.route("/")
 def index():
@@ -17,6 +18,86 @@ def homepage():
     users_courses = courses.get_users_courses(user_id, login_service.get_user_role())
     user_info = login_service.get_userinfo()
     return render_template("homepage.html", courses=users_courses, info=user_info)
+
+@app.route("/update_material/<int:course_id>/<int:material_id>", methods=["GET", "POST"])
+def update_material(course_id, material_id):
+    owner = courses.get_course_teacher_id(course_id)
+    if owner:
+        owner = owner[0]
+        user_id = login_service.get_userID()
+        if owner != user_id:
+            return render_template("error.html", message = "Vain kurssin opettaja voi muokata materiaalia.")
+    
+    if request.method == "GET":
+        content = materials.get_material(material_id)
+        return render_template("update_material.html", course_id = course_id, material_id = material_id, defaultHeadline = content.headline, defaultText = content.body)
+
+    if request.method == "POST":
+        headline = request.form["headline"]
+        text = request.form["body"]
+        errorMessages = []
+
+        if len(headline) == 0:
+            errorMessages.append("Otsikko ei voi olla tyhjä!")
+        if len(text) == 0:
+            errorMessages.append("Tekstikenttä ei voi olla tyhjä!")
+        
+        if len(errorMessages) == 0:
+            if materials.update_material(material_id, headline, text):
+                return redirect("/course_page/" + str(course_id))
+            else:
+                return render_template("error.html", message = "Materiaalin päivitys ei onnistunut.")
+        return render_template("update_material.html", course_id = course_id, material_id = material_id, errorMessages = errorMessages, defaultHeadline = headline, defaultText = text)
+    
+
+@app.route("/delete_material/<int:course_id>/<int:material_id>")
+def delete_material(course_id, material_id):
+    owner = courses.get_course_teacher_id(course_id)
+    if owner:
+        owner = owner[0]
+        user_id = login_service.get_userID()
+        if owner == user_id:
+            materials.delete_material(material_id)
+            return redirect("/course_page/" + str(course_id))
+    return render_template("error.html", message = "Materiaalin poistaminen ei onnistunut.")
+
+@app.route("/course_material/<int:course_id>/<int:material_id>")
+def course_material(course_id, material_id):
+    course_teacher = courses.get_course_teacher_id(course_id)
+    user_id = login_service.get_userID()
+    owner = False
+    enrolled = courses.check_if_student_is_enrolled(course_id, user_id)
+    if course_teacher:
+        course_teacher = course_teacher[0]
+        if course_teacher == user_id:
+            owner = True
+    material = materials.get_material(material_id)
+    if owner or enrolled:
+        return render_template("course_material.html", course_id = course_id, material_id = material_id, owner = owner, headline = material.headline, body = material.body)
+    else:
+        return render_template("error.html", message = "Vain kurssin oppilaat tai opettajat voivat tarkastella materiaalia.")
+
+@app.route("/add_material/<int:course_id>", methods=["GET", "POST"])
+def add_method(course_id):
+    if request.method == "GET":
+        return render_template("add_material.html", course_id = course_id)
+    
+    if request.method == "POST":
+        headline = request.form["headline"]
+        text = request.form["body"]
+        errorMessages = []
+
+        if len(headline) == 0:
+            errorMessages.append("Otsikko ei voi olla tyhjä!")
+        if len(text) == 0:
+            errorMessages.append("Olematonta tekstiä ei lisätä.")
+        
+        if len(errorMessages) == 0:
+            if materials.save_material(course_id, headline, text):
+                return redirect("/course_page/" + str(course_id))
+            else:
+                return render_template("error.html", message = "Materiaalin tallennus ei onnistunut.")
+        return render_template("add_material.html", course_id = course_id, errorMessages = errorMessages, defaultHeadline = headline, defaultBody = text)
 
 @app.route("/show_exercise/<int:course_id>/<int:exercise_id>/<int:exercise_type>/<headline>", methods=["GET", "POST"])
 def show_exercise(course_id, exercise_id, exercise_type, headline):
@@ -200,15 +281,16 @@ def show_coursepage(course_id):
         owner = False
         course_exercises = exercises.get_exercises(course_id)
         exercise_answers = []
-        if login_service.has_userinfo():
-            user_id = login_service.get_userID()
-            if teacher_id == user_id:
-                owner = True
-                exercise_answers = exercises.get_all_course_exercise_answers(course_id)
-            if login_service.get_user_role() == 'student':
-                enrolled = courses.check_if_student_is_enrolled(course_id, user_id)
-                if enrolled:
-                    exercise_answers = exercises.get_students_course_exercise_answers(user_id, course_id)
+        course_materials = materials.get_course_materials(course_id)
+        
+        user_id = login_service.get_userID()
+        if teacher_id == user_id:
+            owner = True
+            exercise_answers = exercises.get_all_course_exercise_answers(course_id)
+        if login_service.get_user_role() == 'student':
+            enrolled = courses.check_if_student_is_enrolled(course_id, user_id)
+            if enrolled:
+                exercise_answers = exercises.get_students_course_exercise_answers(user_id, course_id)
         return render_template("course_page.html", id = course_id, 
                                                 course_name = course_name, 
                                                 description = description, 
@@ -216,9 +298,10 @@ def show_coursepage(course_id):
                                                 enrolled=enrolled, 
                                                 owner=owner, 
                                                 exercise_list = course_exercises, 
-                                                answers = exercise_answers)
+                                                answers = exercise_answers,
+                                                materials = course_materials)
     else:
-        return render_template("error.html")
+        return render_template("error.html", message = "Kurssitietoja ei löytynyt.")
 
 @app.route("/add_course", methods=["GET", "POST"])
 def add_course():
@@ -357,6 +440,6 @@ def logout():
 @app.route("/delete_account")
 def delete_account():
     if login_service.delete_account():
-        return render_template("success.html")
+        return redirect("/")
     else:
         return render_template("error.html")

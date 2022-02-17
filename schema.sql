@@ -1,4 +1,3 @@
-\connect tsoha
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -71,8 +70,9 @@ CREATE TABLE answers (
     correct BOOLEAN
 );
 
--- CREATE TABLE materials (
---     id SERIAL PRIMARY KEY,
---     course_id INTEGER REFERENCES courses ON DELETE CASCADE,
---     link TEXT,
--- );
+CREATE TABLE materials (
+    id SERIAL PRIMARY KEY,
+    course_id INTEGER REFERENCES courses ON DELETE CASCADE,
+    headline TEXT,
+    body TEXT
+);

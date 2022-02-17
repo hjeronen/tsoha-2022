@@ -1,5 +1,9 @@
 from db import db
 
+def get_course_teacher_id(course_id):
+    sql = "SELECT teacher_id FROM courses WHERE id=:course_id"
+    return db.session.execute(sql, {"course_id":course_id}).fetchone()
+
 def add_course(user_id, user_role, course_name, description):
     if user_role == 'student':
         return False

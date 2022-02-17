@@ -24,7 +24,8 @@
             {% endif %}
 
             {% if owner %}
-            <a href="/choose_exercise_type/{{ id }}">Lisää kurssille harjoitustehtäviä</a>
+            <a href="/choose_exercise_type/{{ id }}">Lisää harjoitustehtäviä</a>
+            <a href="/add_material/{{ id }}">Lisää tekstimateriaalia</a>
             <a href="/update_course/{{ id }}">Muokkaa kurssin tietoja</a>
             <a href="/delete_course/{{ id }}">Poista kurssi</a>
         {% endif %}
@@ -32,6 +33,14 @@
     {% if not enrolled and not owner %}
     <p>Ilmoittaudu kurssille tarkastellaksesi kurssin tehtäviä.</p>
     {% elif enrolled or owner %}
+    <div class="container">
+        <h3>Kurssimateriaali</h3>
+        <ul>
+            {% for item in materials %}
+            <li><a href="/course_material/{{ id }}/{{ item.id }}">{{ item.headline }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
     <div class="container">
         <h3>Tehtävät:</h3>
         <ul>

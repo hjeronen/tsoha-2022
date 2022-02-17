@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}
+<body>
+    <div class="subbar">
+        <div class="subheadlineBox">
+            <h2>{{ headline }}</h2>
+        </div>
+    </div>
+    {% if owner %}
+    <div class="extraLinkBar">
+        <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
+        <a href="/update_material/{{ course_id }}/{{ material_id }}">Muokkaa materiaalia</a>
+        <a href="/delete_material/{{ course_id }}/{{ material_id }}">Poista materiaali</a>
+    </div>
+    {% else %}
+    <div class="extraLinkBar">
+        <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
+    </div>
+    {% endif %}
+    <div class="container">
+        <p>
+            {{ body }}
+        </p>
+    </div>
+</body>
+{% endblock %}
