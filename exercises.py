@@ -1,4 +1,13 @@
+from unittest import result
 from db import db
+
+def get_students_course_exercise_answers(user_id, course_id):
+    sql = "SELECT exercises.id, headline, correct FROM exercises, answers WHERE course_id=:course_id AND user_id=:user_id AND exercises.id=answers.exercise_id"
+    result = db.session.execute(sql, {"course_id":course_id, "user_id":user_id}).fetchall()
+    answers = {}
+    for line in result:
+        answers[line.id] = line.correct
+    return answers
 
 def get_all_course_exercise_answers(course_id):
     sql = "SELECT student_number, exercises.id, headline, correct FROM (SELECT * FROM course_attendances c, students s WHERE c.student_id=s.user_id AND course_id=:course_id) AS attendees LEFT OUTER JOIN (SELECT exercises.id, headline, user_id, answer, correct FROM exercises LEFT OUTER JOIN answers ON exercises.id=answers.exercise_id WHERE course_id=:course_id) AS exercises ON exercises.user_id=attendees.user_id"
@@ -7,7 +16,7 @@ def get_all_course_exercise_answers(course_id):
     for line in result:
         if not line.student_number in answers:
             answers[line.student_number] = {}
-        answers[line.student_number][line.headline] = line.correct
+        answers[line.student_number][line.id] = line.correct
     return answers
 
 def get_correct_answers(user_id, course_id):

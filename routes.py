@@ -199,14 +199,24 @@ def show_coursepage(course_id):
         enrolled = False
         owner = False
         course_exercises = exercises.get_exercises(course_id)
-        student_answers = exercises.get_all_course_exercise_answers(course_id)
+        exercise_answers = []
         if login_service.has_userinfo():
             user_id = login_service.get_userID()
             if teacher_id == user_id:
                 owner = True
+                exercise_answers = exercises.get_all_course_exercise_answers(course_id)
             if login_service.get_user_role() == 'student':
                 enrolled = courses.check_if_student_is_enrolled(course_id, user_id)
-        return render_template("course_page.html", id = course_id, course_name = course_name, description = description, teacher=teacher, enrolled=enrolled, owner=owner, exercise_list = course_exercises, answers = student_answers)
+                if enrolled:
+                    exercise_answers = exercises.get_students_course_exercise_answers(user_id, course_id)
+        return render_template("course_page.html", id = course_id, 
+                                                course_name = course_name, 
+                                                description = description, 
+                                                teacher=teacher, 
+                                                enrolled=enrolled, 
+                                                owner=owner, 
+                                                exercise_list = course_exercises, 
+                                                answers = exercise_answers)
     else:
         return render_template("error.html")
 
