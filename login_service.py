@@ -75,7 +75,7 @@ def save_user_info(firstname, lastname, student_number):
         return True
 
 def get_userID():
-    return session["user_id"]
+    return session.get("user_id", 0)
     # if session["user_role"] == 'student':
     #     sql = "SELECT S.id FROM students S WHERE S.user_id=:user_id"
     #     return db.session.execute(sql, {"user_id":id}).fetchone()

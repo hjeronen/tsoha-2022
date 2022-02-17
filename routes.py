@@ -282,15 +282,15 @@ def show_coursepage(course_id):
         course_exercises = exercises.get_exercises(course_id)
         exercise_answers = []
         course_materials = materials.get_course_materials(course_id)
-        
         user_id = login_service.get_userID()
-        if teacher_id == user_id:
-            owner = True
-            exercise_answers = exercises.get_all_course_exercise_answers(course_id)
-        if login_service.get_user_role() == 'student':
-            enrolled = courses.check_if_student_is_enrolled(course_id, user_id)
-            if enrolled:
-                exercise_answers = exercises.get_students_course_exercise_answers(user_id, course_id)
+        if user_id != 0:
+            if teacher_id == user_id:
+                owner = True
+                exercise_answers = exercises.get_all_course_exercise_answers(course_id)
+            if login_service.get_user_role() == 'student':
+                enrolled = courses.check_if_student_is_enrolled(course_id, user_id)
+                if enrolled:
+                    exercise_answers = exercises.get_students_course_exercise_answers(user_id, course_id)
         return render_template("course_page.html", id = course_id, 
                                                 course_name = course_name, 
                                                 description = description, 
