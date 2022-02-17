@@ -1,13 +1,31 @@
 from db import db
 
+def get_all_course_exercise_answers(course_id):
+    sql = "SELECT student_number, exercises.id, headline, correct FROM (SELECT * FROM course_attendances c, students s WHERE c.student_id=s.user_id AND course_id=:course_id) AS attendees LEFT OUTER JOIN (SELECT exercises.id, headline, user_id, answer, correct FROM exercises LEFT OUTER JOIN answers ON exercises.id=answers.exercise_id WHERE course_id=:course_id) AS exercises ON exercises.user_id=attendees.user_id"
+    result = db.session.execute(sql, {"course_id":course_id}).fetchall()
+    answers = {}
+    for line in result:
+        if not line.student_number in answers:
+            answers[line.student_number] = {}
+        answers[line.student_number][line.headline] = line.correct
+    return answers
+
+def get_correct_answers(user_id, course_id):
+    sql = "SELECT COUNT(*) FROM answers a, exercises e WHERE e.course_id=:course_id AND a.exercise_id=e.id AND a.user_id=:user_id AND a.correct=TRUE"
+    return db.session.execute(sql, {"course_id":course_id, "user_id":user_id}).fetchall()
+
+def get_done_exercises(user_id, course_id):
+    sql = "SELECT COUNT(*) FROM answers a, exercises e WHERE e.course_id=:course_id AND a.exercise_id=e.id AND a.user_id=:user_id"
+    return db.session.execute(sql, {"course_id":course_id, "user_id":user_id}).fetchall()
+
 def get_answer(user_id, exercise_id):
-    sql = "SELECT answer FROM answers WHERE student_id=:user_id AND exercise_id=:exercise_id"
+    sql = "SELECT answer FROM answers WHERE user_id=:user_id AND exercise_id=:exercise_id"
     return db.session.execute(sql, {"user_id":user_id, "exercise_id":exercise_id}).fetchone()
 
-def save_answer(user_id, exercise_id, answer):
+def save_answer(user_id, exercise_id, answer, status):
     try:
-        sql = "INSERT INTO answers (student_id, exercise_id, answer) VALUES (:user_id, :exercise_id, :answer)"
-        db.session.execute(sql, {"user_id":user_id, "exercise_id":exercise_id, "answer":answer})
+        sql = "INSERT INTO answers (user_id, exercise_id, answer, correct) VALUES (:user_id, :exercise_id, :answer, :status)"
+        db.session.execute(sql, {"user_id":user_id, "exercise_id":exercise_id, "answer":answer, "status":status})
         db.session.commit()
         return True
     except:

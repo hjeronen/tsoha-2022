@@ -29,6 +29,9 @@
             <a href="/delete_course/{{ id }}">Poista kurssi</a>
         {% endif %}
     </div>
+    {% if not enrolled and not owner %}
+    <p>Ilmoittaudu kurssille tarkastellaksesi kurssin tehtäviä.</p>
+    {% elif enrolled or owner %}
     <div class="container">
         <h3>Tehtävät:</h3>
         <ul>
@@ -37,6 +40,34 @@
             {% endfor %}
         </ul>
     </div>
+    {% endif %}
+    {% if owner %}
+    <div class="container">
+        <h3>Tehtäväsuoritukset</h3>
+        <table>
+            <tr>
+                <th>StudentNumber</th>
+                {% for exercise in exercise_list %}
+                <th>{{ exercise.headline }}</th>
+                {% endfor %}
+                {% for student in answers %}
+                    <tr>
+                        <td>{{ student }}</td>
+                        {% for exercise in exercise_list %}
+                        {% if answers[student][exercise.headline] %}
+                            <td>1</td>
+                        {% elif exercise.headline not in answers[student] %}
+                            <td>-</td>
+                        {% else %}
+                            <td>0</td>
+                        {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tr>
+        </table>
+    </div>
+    {% endif %}
 </body>
 
 {% endblock %}

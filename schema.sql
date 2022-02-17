@@ -65,9 +65,10 @@ CREATE TABLE exercises_mchoice (
 
 CREATE TABLE answers (
     id SERIAL PRIMARY KEY,
-    student_id INTEGER REFERENCES students ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users ON DELETE CASCADE,
     exercise_id INTEGER REFERENCES exercises,
-    answer TEXT
+    answer TEXT,
+    correct BOOLEAN
 );
 
 -- CREATE TABLE materials (

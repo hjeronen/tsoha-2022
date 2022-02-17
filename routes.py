@@ -47,14 +47,17 @@ def show_exercise(course_id, exercise_id, exercise_type, headline):
                                                     answered = False)
 
     if request.method == "POST":
+        test_correct = exercise.correct_answer.lower()
         if not answer:
             answer = request.form["answer"]
             if len(answer) == 0:
                 answer = "ei vastausta"
-            exercises.save_answer(user_id, exercise_id, answer)
-        test_answer = answer.lower()
-        test_correct = exercise.correct_answer.lower()
-        answer_is_correct = (test_answer == test_correct)
+            test_answer = answer.lower()
+            answer_is_correct = (test_answer == test_correct)
+            exercises.save_answer(user_id, exercise_id, answer, answer_is_correct)
+        else:
+            test_answer = answer.lower()
+            answer_is_correct = (test_answer == test_correct)
         return render_template("show_exercise.html", course_id = course_id,
                                                     exercise_id = exercise_id, 
                                                     exercise_type = exercise_type, 
@@ -196,13 +199,14 @@ def show_coursepage(course_id):
         enrolled = False
         owner = False
         course_exercises = exercises.get_exercises(course_id)
+        student_answers = exercises.get_all_course_exercise_answers(course_id)
         if login_service.has_userinfo():
             user_id = login_service.get_userID()
             if teacher_id == user_id:
                 owner = True
             if login_service.get_user_role() == 'student':
                 enrolled = courses.check_if_student_is_enrolled(course_id, user_id)
-        return render_template("course_page.html", id = course_id, course_name = course_name, description = description, teacher=teacher, enrolled=enrolled, owner=owner, exercise_list = course_exercises)
+        return render_template("course_page.html", id = course_id, course_name = course_name, description = description, teacher=teacher, enrolled=enrolled, owner=owner, exercise_list = course_exercises, answers = student_answers)
     else:
         return render_template("error.html")
 
