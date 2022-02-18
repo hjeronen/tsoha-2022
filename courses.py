@@ -57,11 +57,11 @@ def enroll_on_course(course_id, student_id, user_role):
 
 def get_users_courses(user_id, user_role):
     if user_role == 'student':
-        sql = "SELECT C.id, C.course_name FROM courses C, course_attendances A WHERE A.student_id=:id AND A.course_id=C.id AND C.visible=TRUE"
+        sql = "SELECT C.id, C.course_name FROM courses C, course_attendances A WHERE A.student_id=:id AND A.course_id=C.id AND C.visible=TRUE ORDER BY C.id"
         result = db.session.execute(sql, {"id":user_id}).fetchall()
         return result
     if user_role == 'teacher':
-        sql = "SELECT id, course_name FROM courses WHERE teacher_id=:id AND visible=TRUE"
+        sql = "SELECT id, course_name FROM courses WHERE teacher_id=:id AND visible=TRUE ORDER BY id"
         result = db.session.execute(sql, {"id":user_id}).fetchall()
         return result
 
@@ -71,6 +71,6 @@ def get_course(course_id):
     return result
 
 def get_all_courses():
-    sql = "SELECT id, course_name FROM courses WHERE visible=true"
+    sql = "SELECT id, course_name FROM courses WHERE visible=true ORDER BY id"
     result = db.session.execute(sql)
     return result.fetchall()

@@ -78,7 +78,14 @@ def course_material(course_id, material_id):
         return render_template("error.html", message = "Vain kurssin oppilaat tai opettajat voivat tarkastella materiaalia.")
 
 @app.route("/add_material/<int:course_id>", methods=["GET", "POST"])
-def add_method(course_id):
+def add_material(course_id):
+    user_id = login_service.get_userID()
+    teacher = courses.get_course_teacher_id(course_id)
+    if teacher:
+        teacher = teacher[0]
+    if user_id != teacher:
+        return render_template("error.html", message = "Vain kurssin opettaja voi lisätä materiaalia.")
+
     if request.method == "GET":
         return render_template("add_material.html", course_id = course_id)
     
@@ -99,11 +106,117 @@ def add_method(course_id):
                 return render_template("error.html", message = "Materiaalin tallennus ei onnistunut.")
         return render_template("add_material.html", course_id = course_id, errorMessages = errorMessages, defaultHeadline = headline, defaultBody = text)
 
+@app.route("/delete_exercise/<int:course_id>/<int:exercise_id>")
+def delete_exercise(course_id, exercise_id):
+    user_id = login_service.get_userID()
+    teacher = courses.get_course_teacher_id(course_id)
+    if teacher:
+        teacher = teacher[0]
+    if user_id != teacher:
+        return render_template("error.html", message = "Vain kurssin opettaja voi poistaa tehtävän.")
+    if exercises.delete_exercise(exercise_id):
+        return redirect("/course_page/" + str(course_id))
+    return render_template("error.html", message = "Tehtävän poistaminen ei onnistunut.")
+
+@app.route("/update_exercise/<int:course_id>/<int:exercise_id>/<int:exercise_type>/<headline>", methods=["GET", "POST"])
+def update_exercise(course_id, exercise_id, exercise_type, headline):
+    user_id = login_service.get_userID()
+    teacher = courses.get_course_teacher_id(course_id)
+    if teacher:
+        teacher = teacher[0]
+    if user_id != teacher:
+        return render_template("error.html", message = "Vain kurssin opettaja voi muokata tehtäviä.")
+    exercise = exercises.get_exercise(exercise_id, exercise_type)
+
+    if request.method == "GET":
+        if exercise_type == 0:
+            return render_template("update_exercise_text.html", course_id = course_id, 
+                                                                exercise_id = exercise_id, 
+                                                                exercise_type = exercise_type, 
+                                                                exercise = exercise, 
+                                                                headline = headline,
+                                                                question = exercise.question,
+                                                                answer = exercise.correct_answer)
+        elif exercise_type == 1:
+            return render_template("update_exercise_mchoice.html", course_id = course_id, 
+                                                                    exercise_id = exercise_id, 
+                                                                    exercise_type = exercise_type, 
+                                                                    exercise = exercise, 
+                                                                    headline = headline, 
+                                                                    question = exercise.question,
+                                                                    answer = exercise.correct_answer,
+                                                                    a = exercise.option_a, 
+                                                                    b = exercise.option_b, 
+                                                                    c = exercise.option_c)
+
+    if request.method == "POST":
+        new_headline = request.form["headline"]
+        question = request.form["question"]
+        answer = request.form["answer"]
+        errorMessages = []
+
+        if len(new_headline) == 0:
+            errorMessages.append("Otsikko ei voi olla tyhjä!")
+        if len(question) == 0:
+            errorMessages.append("Kysymys ei voi olla tyhjä!")
+        if len(answer) == 0:
+            errorMessages.append("Vastaus ei voi olla tyhjä!")
+
+        if exercise_type == 0:
+            if len(errorMessages) != 0:
+                return render_template("update_exercise_text.html", course_id = course_id, 
+                                                                    exercise_id = exercise_id, 
+                                                                    exercise_type = exercise_type, 
+                                                                    exercise = exercise, 
+                                                                    headline = new_headline, 
+                                                                    question = question,
+                                                                    answer = answer,
+                                                                    errorMessages = errorMessages)
+            if exercises.update_exercise_text(exercise_id, new_headline, question, answer):
+                return redirect("/show_exercise/" + str(course_id) + "/" + str(exercise_id) + "/" + str(exercise_type) + "/" + headline)
+
+        if exercise_type == 1:
+            a = request.form["option_a"]
+            b = request.form["option_b"]
+            c = request.form["option_c"]
+
+            if answer == "a":
+                answer = a
+            elif answer == "b":
+                answer = b
+            elif answer == "c":
+                answer = c
+            
+            if len(a) == 0 or len(b) == 0 or len(c) == 0:
+                errorMessages.append("Mikään vastausvaihtoehto ei voi olla tyhjä!")
+            
+            if len(errorMessages) != 0:
+                return render_template("update_exercise_mchoice.html", course_id = course_id, 
+                                                                    exercise_id = exercise_id, 
+                                                                    exercise_type = exercise_type, 
+                                                                    exercise = exercise, 
+                                                                    headline = headline, 
+                                                                    errorMessages = errorMessages,
+                                                                    a = a,
+                                                                    b = b,
+                                                                    c = c)
+            if exercises.update_exercise_mchoice(exercise_id, headline, question, answer, a, b, c):
+                return redirect("/show_exercise/" + str(course_id) + "/" + str(exercise_id) + "/" + str(exercise_type) + "/" + headline)
+        
+        return render_template("error.html", message = "Tehtävän muokkaus ei onnistunut.")
+
+            
+
 @app.route("/show_exercise/<int:course_id>/<int:exercise_id>/<int:exercise_type>/<headline>", methods=["GET", "POST"])
 def show_exercise(course_id, exercise_id, exercise_type, headline):
     exercise = exercises.get_exercise(exercise_id, exercise_type)
     user_id = login_service.get_userID()
     answer = exercises.get_answer(user_id, exercise_id)
+    owner = False
+    if login_service.get_user_role() == "teacher":
+        teacher = courses.get_course_teacher_id(course_id)[0]
+        if teacher == user_id:
+            owner = True
 
     if request.method == "GET":
         if answer:
@@ -118,14 +231,16 @@ def show_exercise(course_id, exercise_id, exercise_type, headline):
                                                         headline = headline, 
                                                         answered = True, 
                                                         answer = answer, 
-                                                        correct = answer_is_correct)
-
+                                                        correct = answer_is_correct,
+                                                        owner = owner)
+        
         return render_template("show_exercise.html", course_id = course_id,
                                                     exercise_id = exercise_id, 
                                                     exercise_type = exercise_type, 
                                                     exercise = exercise, 
                                                     headline = headline, 
-                                                    answered = False)
+                                                    answered = False,
+                                                    owner = owner)
 
     if request.method == "POST":
         test_correct = exercise.correct_answer.lower()
@@ -352,7 +467,7 @@ def update_course(course_id):
             errorMessages.append("Kurssilla on oltava kuvaus!")
         if len(errorMessages) == 0:
             if courses.update_course(user_id, user_role, course_id, course_name, description):
-                return redirect("/course_page/<int:course_id>")
+                return redirect("/course_page/" + str(course_id))
             else:
                 return render_template("error.html", message = "Kurssin päivitys ei onnistunut.")
         else:

@@ -1,5 +1,49 @@
-from unittest import result
 from db import db
+
+def delete_exercise(exercise_id):
+    try:
+        sql = "UPDATE exercises SET visible=FALSE WHERE id=:exercise_id"
+        db.session.execute(sql, {"exercise_id":exercise_id})
+        db.session.commit()
+        return True
+    except:
+        return False
+
+def update_exercise_mchoice(exercise_id, headline, question, correct_answer, a, b, c):
+    try:
+        sql = "UPDATE exercises_mchoice SET (question, correct_answer, option_a, option_b, option_c) = (:question, :correct_answer, :a, :b, :c) WHERE exercise_id=:exercise_id"
+        db.session.execute(sql, {"question":question, "correct_answer":correct_answer, "a":a, "b":b, "c":c, "exercise_id":exercise_id})
+        db.session.commit()
+        return update_exercise(exercise_id, headline)
+    except:
+        return False
+
+def update_exercise_text(exercise_id, headline, question, correct_answer):
+    try:
+        sql = "UPDATE exercises_text SET (question, correct_answer) = (:question, :correct_answer) WHERE exercise_id=:exercise_id"
+        db.session.execute(sql, {"question":question, "correct_answer":correct_answer, "exercise_id":exercise_id})
+        db.session.commit()
+        return update_exercise(exercise_id, headline)
+    except:
+        return False
+
+def update_exercise(exercise_id, headline):
+    try:
+        sql = "UPDATE exercises SET headline=:headline WHERE id=:exercise_id"
+        db.session.execute(sql, {"headline":headline, "exercise_id":exercise_id})
+        db.session.commit()
+        return True
+    except:
+        return False
+
+def delete_exercise(exercise_id):
+    try:
+        sql = "UPDATE exercises SET visible=FALSE WHERE id=:exercise_id"
+        db.session.execute(sql, {"exercise_id":exercise_id})
+        db.session.commit()
+        return True
+    except:
+        return False
 
 def get_students_course_exercise_answers(user_id, course_id):
     sql = "SELECT exercises.id, headline, correct FROM exercises, answers WHERE course_id=:course_id AND user_id=:user_id AND exercises.id=answers.exercise_id"
@@ -49,7 +93,7 @@ def get_exercise(exercise_id, type):
         return db.session.execute(sql, {"exercise_id": exercise_id}).fetchone()
 
 def get_exercises(course_id):
-    sql = "SELECT * FROM exercises WHERE course_id=:course_id"
+    sql = "SELECT * FROM exercises WHERE course_id=:course_id AND visible=TRUE ORDER BY id"
     return db.session.execute(sql, {"course_id": course_id}).fetchall()
 
 def add_exercise(course_id, exercise):

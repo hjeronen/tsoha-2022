@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<form action="/update_exercise/{{ course_id }}/{{ exercise_id }}/{{ exercise_type }}/{{ headline }}" method="POST">
+    <body>
+        <div class="subbar">
+            <div class="subheadlineBox">
+                <h2>Muokkaa tehtävää</h2>
+            </div>
+        </div>
+        <div class="container">
+            <div class="errorbox">
+                {% for message in errorMessages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+            <p>
+                <label for="headline">Otsikko:</label>
+                <input type="text" id="headline" name="headline" value="{{ headline }}">
+            </p>
+            <p>
+                <label for="question">Tehtäväkysymys:</label>
+                <input type="text" id="question" name="question" value="{{ question }}">
+            </p>
+            <p>
+                <label for="answer">Oikea vastaus:</label>
+                <input type="text" id="answer" name="answer" value="{{ answer }}">
+            </p>
+            <p class="button">
+                <button type="submit">Tallenna muutokset</button>
+            </p>
+        </div>
+        <div class="extraLinkBar">
+            <a href="/show_exercise/{{ course_id }}/{{ exercise_id }}/{{ exercise_type }}/{{ headline }}">Takaisin</a>
+        </div>
+    </body>
+</form>
+
+{% endblock %}

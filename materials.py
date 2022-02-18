@@ -23,7 +23,7 @@ def get_material(id):
     return db.session.execute(sql, {"id":id}).fetchone()
 
 def get_course_materials(course_id):
-    sql = "SELECT id, headline FROM materials WHERE course_id=:course_id"
+    sql = "SELECT id, headline FROM materials WHERE course_id=:course_id ORDER BY id"
     return db.session.execute(sql, {"course_id":course_id}).fetchall()
 
 def save_material(course_id, headline, body):

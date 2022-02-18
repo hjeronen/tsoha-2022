@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<form action="/update_exercise/{{ course_id }}/{{ exercise_id }}/{{ exercise_type }}/{{ headline }}" method="POST">
+    <body>
+        <div class="subbar">
+            <div class="subheadlineBox">
+                <h2>Muokkaa tehtävää</h2>
+            </div>
+        </div>
+        <div class="container">
+            <div class="errorbox">
+                {% for message in errorMessages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+            <p>
+                <label for="headline">Otsikko:</label>
+                <input type="text" id="headline" name="headline" value="{{ headline }}">
+            </p>
+            <p>
+                <label for="question">Tehtäväkysymys:</label>
+                <input type="text" id="question" name="question" value="{{ question }}">
+            </p>
+            <p>
+                <label for="option_a">a:</label>
+                <input type="text" id="option_a" name="option_a" value="{{ a }}">
+            </p>
+            <p>
+                <label for="option_b">b:</label>
+                <input type="text" id="option_b" name="option_b" value="{{ b }}">
+            </p>
+            <p>
+                <label for="option_c">c:</label>
+                <input type="text" id="option_c" name="option_c" value="{{ c }}">
+            </p>
+            <p>
+                Oikea vastaus:
+            </p>
+            <p>
+                <input type="radio" checked=true name="answer" value="a">
+                <label for="answer">a</label>
+            </p>
+            <p>
+                <input type="radio" name="answer" value="b">
+                <label for="answer">b</label>
+            </p>
+            <p>
+                <input type="radio" name="answer" value="c">
+                <label for="answer">c</label>
+            </p>
+            <p class="button">
+                <button type="submit">Tallenna muutokset</button>
+            </p>
+        </div>
+        <div class="extraLinkBar">
+            <a href="/show_exercise/{{ course_id }}/{{ exercise_id }}/{{ exercise_type }}/{{ headline }}">Takaisin</a>
+        </div>
+    </body>
+</form>
+
+{% endblock %}

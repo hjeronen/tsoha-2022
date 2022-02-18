@@ -12,7 +12,6 @@
             <h3>Kysymys:</h3>
             <p>{{ exercise.question }}</p>
             <h3>Vastaus:</h3>
-            {% if not answered %}
             {% if exercise_type == 0 %}
             <input type="text" id="answer" name="answer" value="{{ answer }}">
             {% else %}
@@ -29,6 +28,9 @@
                 <label for="answer">{{ exercise.option_c }}</label>
             </p>
             {% endif %}
+            {% if owner %}
+            <p>Oikea vastaus: {{ exercise.correct_answer }}</p>
+            {% elif not answered %}
             <p class="button">
                 <button type="submit">Lähetä vastaus</button>
             </p>
@@ -47,6 +49,10 @@
         </div>
         <div class="extraLinkBar">
             <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
+            {% if owner %}
+            <a href="/update_exercise/{{ course_id }}/{{ exercise_id }}/{{ exercise_type }}/{{ headline }}">Muokkaa tehtävää</a>
+            <a href="/delete_exercise/{{ course_id }}/{{ exercise_id }}">Poista tehtävä</a>
+            {% endif %}
         </div>
     </body>
 </form>
