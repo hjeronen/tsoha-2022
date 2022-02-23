@@ -243,6 +243,8 @@ def show_exercise(course_id, exercise_id, exercise_type, headline):
                                                     owner = owner)
 
     if request.method == "POST":
+        if login_service.get_user_role() == "teacher":
+            return render_template("error.html", message = "Vain opiskelijat voivat vastata tehtäviin.")
         test_correct = exercise.correct_answer.lower()
         if not answer:
             answer = request.form["answer"]
@@ -478,7 +480,7 @@ def delete_course(course_id):
     user_id = login_service.get_userID()
     user_role = login_service.get_user_role()
     if courses.delete_course(user_id, user_role, course_id):
-        return render_template("success.html")
+        return redirect("/homepage")
     else:
         return render_template("error.html")
 

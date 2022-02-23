@@ -31,7 +31,9 @@
         {% endif %}
     </div>
     {% if not enrolled and not owner %}
-    <p>Ilmoittaudu kurssille tarkastellaksesi kurssin tehtäviä.</p>
+    <div class="container">
+        <p>Ilmoittaudu kurssille tarkastellaksesi kurssin tehtäviä.</p>
+    </div>
     {% elif enrolled or owner %}
     <div class="container">
         <h3>Kurssimateriaali</h3>
@@ -55,7 +57,7 @@
         <h3>Tehtäväsuoritukset:</h3>
         <table>
             <tr>
-                <th>StudentNumber</th>
+                <th>Opiskelijanumero</th>
                 {% for exercise in exercise_list %}
                 <th>{{ exercise.headline }}</th>
                 {% endfor %}

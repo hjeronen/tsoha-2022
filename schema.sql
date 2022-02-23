@@ -47,8 +47,7 @@ CREATE TABLE exercises_text (
     id SERIAL PRIMARY KEY,
     exercise_id INTEGER REFERENCES exercises,
     question TEXT,
-    correct_answer TEXT,
-    visible BOOLEAN
+    correct_answer TEXT
 );
 
 CREATE TABLE exercises_mchoice (
@@ -58,8 +57,7 @@ CREATE TABLE exercises_mchoice (
     correct_answer TEXT,
     option_a TEXT,
     option_b TEXT,
-    option_c TEXT,
-    visible BOOLEAN
+    option_c TEXT
 );
 
 CREATE TABLE answers (
@@ -72,7 +70,7 @@ CREATE TABLE answers (
 
 CREATE TABLE materials (
     id SERIAL PRIMARY KEY,
-    course_id INTEGER REFERENCES courses ON DELETE CASCADE,
+    course_id INTEGER REFERENCES courses,
     headline TEXT,
     body TEXT
 );
