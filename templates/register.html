@@ -24,11 +24,21 @@
         <div class="container">
             <p>
                 <label for="username">Käyttäjätunnus:</label>
+            </p>
+            <p>
                 <input type="text" id="username" name="username" value="{{ defaultName }}">
             </p>
             <p>
                 <label for="password">Salasana:</label>
-                <input type="text" id="password" name="password">
+            </p>
+            <p>
+                <input type="password" id="password" name="password">
+            </p>
+            <p>
+                <label for="password_2">Salasana uudelleen:</label>
+            </p>
+            <p>
+                <input type="password" id="password_2" name="password_2">
             </p>
             <p>
                 <label for="role">Oppilas</label>
@@ -39,10 +49,10 @@
                 <input type="radio" name="role" value="teacher">
             </p>
             <p class="button">
-                <button type="submit">Login</button>
+                <button type="submit">Rekisteröidy</button>
             </p>
         </div>
-        <div class="container">
+        <div class="extraLinkBar">
             <a href="/">Takaisin etusivulle</a>
         </div>
     </body>

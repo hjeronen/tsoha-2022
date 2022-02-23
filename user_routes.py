@@ -1,3 +1,4 @@
+from distutils.log import error
 from app import app
 from flask import render_template, request, redirect
 import login_service
@@ -40,15 +41,21 @@ def user_info():
 def register():
     if request.method == "GET":
         return render_template("register.html")
+
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+        password_2 = request.form["password_2"]
         role = request.form["role"]
         errorMessages = []
+
         if len(username) < 3 or len(username) > 10:
             errorMessages.append("Käyttäjätunnuksen on oltava 3-10 merkkiä pitkä.")
         if len(password) < 8:
             errorMessages.append("Salasanan on oltava vähintään 8 merkkiä pitkä.")
+        if password != password_2:
+            errorMessages.append("Salasanat eivät ole samat!")
+
         if len(errorMessages) == 0:
             register_success = login_service.register(username, password, role)
             login_success = login_service.login(username, password)
@@ -61,6 +68,7 @@ def register():
                 elif not login_success:
                     message = "Sisäänkirjautuminen epäonnistui."
                 return render_template("error.html", message = message)
+                
         return render_template("register.html", errorMessages=errorMessages, defaultName=username)
 
 @app.route("/login", methods=["GET", "POST"])
