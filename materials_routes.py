@@ -18,6 +18,7 @@ def update_material(course_id, material_id):
         return render_template("update_material.html", course_id = course_id, material_id = material_id, defaultHeadline = content.headline, defaultText = content.body)
 
     if request.method == "POST":
+        login_service.check_csrf()
         headline = request.form["headline"]
         text = request.form["body"]
         errorMessages = []
@@ -75,6 +76,7 @@ def add_material(course_id):
         return render_template("add_material.html", course_id = course_id)
     
     if request.method == "POST":
+        login_service.check_csrf()
         headline = request.form["headline"]
         text = request.form["body"]
         errorMessages = []

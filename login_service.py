@@ -36,7 +36,6 @@ def logout():
     del session["user_id"]
     del session["user_name"]
     del session["user_role"]
-    del session["csrf_token"]
     return True
 
 def logged_in():
@@ -76,12 +75,6 @@ def save_user_info(firstname, lastname, student_number):
 
 def get_userID():
     return session.get("user_id", 0)
-    # if session["user_role"] == 'student':
-    #     sql = "SELECT S.id FROM students S WHERE S.user_id=:user_id"
-    #     return db.session.execute(sql, {"user_id":id}).fetchone()
-    # if session["user_role"] == 'teacher':
-    #     sql = "SELECT T.id FROM teachers T WHERE T.user_id=:user_id"
-    #     return db.session.execute(sql, {"user_id":id}).fetchone()
 
 def get_userinfo():
     id = session["user_id"]
@@ -93,9 +86,8 @@ def get_userinfo():
         return db.session.execute(sql, {"user_id":id}).fetchall()
 
 def get_user_role():
-    return session["user_role"]
+    return session.get("user_role", "no role")
 
-# def check_csrf():
-#     if session["csrf_token"] != request.form["csrf_token"]:
-#         return False
-#     return True
+def check_csrf():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)

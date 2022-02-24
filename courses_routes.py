@@ -15,6 +15,7 @@ def enroll(course_id):
         return render_template("enroll.html", course_id = course_id, course_name=course[1])
 
     if request.method == "POST":
+        login_service.check_csrf()
         student_id = login_service.get_userID()
         errorMessages = []
         user_role = login_service.get_user_role()
@@ -74,16 +75,20 @@ def add_course():
             message = "Täytä ensin käyttäjätietosi!"
             return render_template("error.html", message = message)
         return render_template("add_course.html")
+
     if request.method == "POST":
+        login_service.check_csrf()
         course_name = request.form["course_name"]
         description = request.form["description"]
         user_id = login_service.get_userID()
         user_role = login_service.get_user_role()
         errorMessages = []
+
         if len(course_name) < 3:
             errorMessages.append("Kurssin nimen on oltava vähintään 3 kirjainta!")
         if len(description) == 0:
             errorMessages.append("Kurssilla on oltava kuvaus!")
+
         if len(errorMessages) == 0:
             if courses.add_course(user_id, user_role, course_name, description):
                 return redirect("/homepage")
@@ -103,16 +108,20 @@ def update_course(course_id):
             return render_template("update_course.html", course_id = course_id, course_name = course_name, description = description)
         else:
             return render_template("error.html", message = "Kurssia {{ course_id }} ei löytynyt tietokannasta")
+
     if request.method == "POST":
+        login_service.check_csrf()
         course_name = request.form["course_name"]
         description = request.form["description"]
         user_id = login_service.get_userID()
         user_role = login_service.get_user_role()
         errorMessages = []
+
         if len(course_name) < 3:
             errorMessages.append("Kurssin nimen on oltava vähintään 3 kirjainta!")
         if len(description) == 0:
             errorMessages.append("Kurssilla on oltava kuvaus!")
+
         if len(errorMessages) == 0:
             if courses.update_course(user_id, user_role, course_id, course_name, description):
                 return redirect("/course_page/" + str(course_id))

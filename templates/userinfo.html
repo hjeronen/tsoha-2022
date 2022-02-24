@@ -2,6 +2,7 @@
 {% block title %}Käyttäjätiedot{% endblock %}
 {% block content %}
 <form action="/userinfo" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <body>
         <div class="container">
             {% if session.user_role == 'student' %}

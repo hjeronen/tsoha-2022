@@ -2,6 +2,7 @@
 {% block title %}Lisää harjoitustehtävä{% endblock %}
 {% block content %}
 <form action="/add_exercise_text/{{ course_id }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <body>
         <div class="container">
             <p>

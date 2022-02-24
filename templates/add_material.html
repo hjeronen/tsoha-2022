@@ -2,6 +2,7 @@
 {% block title %}Lisää kurssimateriaalia{% endblock %}
 {% block content %}
 <form action="/add_material/{{ course_id }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <body>
         <div class="container">
             <p>

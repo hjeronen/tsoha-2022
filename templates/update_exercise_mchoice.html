@@ -2,6 +2,7 @@
 {% block title %}Muokkaa tehtävää{% endblock %}
 {% block content %}
 <form action="/update_exercise/{{ course_id }}/{{ exercise_id }}/{{ exercise_type }}/{{ headline }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <body>
         <div class="container">
             <p>

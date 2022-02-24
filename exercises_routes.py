@@ -48,6 +48,7 @@ def update_exercise(course_id, exercise_id, exercise_type, headline):
                                                                     c = exercise.option_c)
 
     if request.method == "POST":
+        login_service.check_csrf()
         new_headline = request.form["headline"]
         question = request.form["question"]
         answer = request.form["answer"]
@@ -117,6 +118,8 @@ def show_exercise(course_id, exercise_id, exercise_type, headline):
             owner = True
 
     if request.method == "GET":
+        if not owner and login_service.get_user_role() != "student":
+            return render_template("error.html", message = "Vain opiskelijat voivat vastata tehtäviin.")
         if answer:
             answer = answer[0]
             test_answer = answer.lower()
@@ -141,7 +144,8 @@ def show_exercise(course_id, exercise_id, exercise_type, headline):
                                                     owner = owner)
 
     if request.method == "POST":
-        if login_service.get_user_role() == "teacher":
+        login_service.check_csrf()
+        if login_service.get_user_role() != "student":
             return render_template("error.html", message = "Vain opiskelijat voivat vastata tehtäviin.")
         test_correct = exercise.correct_answer.lower()
         if not answer:
@@ -174,6 +178,7 @@ def add_exercise_mchoice(course_id):
         return render_template("add_exercise_mchoice.html", course_id = course_id)
 
     if request.method == "POST":
+        login_service.check_csrf()
         exercise_type = 1
         headline = request.form["headline"]
         question = request.form["question"]
@@ -217,6 +222,7 @@ def add_exercise_text(course_id):
         return render_template("add_exercise_text.html", course_id = course_id)
 
     if request.method == "POST":
+        login_service.check_csrf()
         exercise_type = 0
         headline = request.form["headline"]
         question = request.form["question"]
@@ -249,6 +255,7 @@ def choose_exercise_type(course_id):
         return render_template("choose_exercise_type.html", course_id = course_id)
     
     if request.method == "POST":
+        login_service.check_csrf()
         exercise_type = int(request.form["exercise_type"])
         if exercise_type == 0:
             return redirect("/add_exercise_text/" + str(course_id))

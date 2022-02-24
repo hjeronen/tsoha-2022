@@ -2,6 +2,7 @@
 {% block title %}Muokkaa kurssimateriaalia{% endblock %}
 {% block content %}
 <form action="/update_material/{{ course_id }}/{{ material_id }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <body>
         <div class="extraLinkBar">
             <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>

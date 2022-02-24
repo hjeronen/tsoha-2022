@@ -2,6 +2,7 @@
 {% block title %}Kurssi-ilmoittautuminen{% endblock %}
 {% block content %}
 <form action="/enroll/{{ course_id }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <body>
         <div class="container">
             <p>Ilmoittaudu kurssille {{ course_name }}?</p>
@@ -9,7 +10,7 @@
                 <button type="submit">Ilmoittaudu</button>
             </p>
         </div>
-        <div class="container">
+        <div class="extraLinkBar">
             <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
         </div>
     </body>

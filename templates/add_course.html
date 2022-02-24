@@ -2,6 +2,7 @@
 {% block title %}Lisää kurssi{% endblock %}
 {% block content %}
 <form action="/add_course" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <body>
         <div class="container">
             <p>

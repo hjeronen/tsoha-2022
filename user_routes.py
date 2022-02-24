@@ -1,4 +1,4 @@
-from distutils.log import error
+# from distutils.log import error
 from app import app
 from flask import render_template, request, redirect
 import login_service
@@ -6,8 +6,6 @@ import courses
 
 @app.route("/homepage")
 def homepage():
-    # if not login_service.check_csrf():
-    #     return render_template("error.html")
     user_id = login_service.get_userID()
     users_courses = courses.get_users_courses(user_id, login_service.get_user_role())
     user_info = login_service.get_userinfo()
@@ -18,6 +16,7 @@ def user_info():
     if request.method == "GET":
         return render_template("userinfo.html")
     if request.method == "POST":
+        login_service.check_csrf()
         firstname = request.form["firstname"]
         lastname = request.form["lastname"]
         student_number = 0
