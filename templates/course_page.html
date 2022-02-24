@@ -1,13 +1,9 @@
 {% extends "layout.html" %}
+{% block title %}Kurssisivu{% endblock %}
 {% block content %}
-
 <body>
-    <div class="subbar">
-        <div class="subheadlineBox">
-            <h2>{{ course_name }}</h2>
-        </div>
-    </div>
     <div class="container">
+        <h2>{{ course_name }}</h2>
         <h3>Kurssikuvaus:</h3>
         <p>{{ description }}</p>
         <h3>Kurssin opettaja:</h3>

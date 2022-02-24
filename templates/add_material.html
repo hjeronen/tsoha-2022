@@ -1,19 +1,9 @@
 {% extends "layout.html" %}
+{% block title %}Lisää kurssimateriaalia{% endblock %}
 {% block content %}
-
 <form action="/add_material/{{ course_id }}" method="POST">
     <body>
-        <div class="subbar">
-            <div class="subheadlineBox">
-                <h2>Lisää kurssimateriaalia</h2>
-            </div>
-        </div>
         <div class="container">
-            <div class="errorbox">
-                {% for message in errorMessages %}
-                <p>{{ message }}</p>
-                {% endfor %}
-            </div>
             <p>
                 <label for="headline">Otsikko:</label>
                 <input type="text" id="headline" name="headline" value="{{ defaultHeadline }}">
@@ -27,6 +17,9 @@
             <p class="button">
                 <button type="submit">Tallenna</button>
             </p>
+        </div>
+        <div class="extraLinkBar">
+            <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
         </div>
     </body>
 </form>

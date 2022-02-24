@@ -1,21 +1,10 @@
 {% extends "layout.html" %}
+{% block title %}Kurssi-ilmoittautuminen{% endblock %}
 {% block content %}
-
 <form action="/enroll/{{ course_id }}" method="POST">
-
     <body>
-        <div class="subbar">
-            <div class="subheadlineBox">
-                <h2>Kurssi-ilmoittautuminen</h2>
-            </div>
-        </div>
         <div class="container">
             <p>Ilmoittaudu kurssille {{ course_name }}?</p>
-            <div class="errorbox">
-                {% for message in errorMessages %}
-                <p><strong>VIRHE:</strong> {{ message }}</p>
-                {% endfor %}
-            </div>
             <p class="button">
                 <button type="submit">Ilmoittaudu</button>
             </p>
@@ -24,7 +13,6 @@
             <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
         </div>
     </body>
-
 </form>
 
 {% endblock %}

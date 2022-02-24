@@ -1,13 +1,8 @@
 {% extends "layout.html" %}
+{% block title %}Lisää harjoitustehtävä{% endblock %}
 {% block content %}
-
 <form action="/choose_exercise_type/{{ course_id }}" method="POST">
     <body>
-        <div class="subbar">
-            <div class="subheadlineBox">
-                <h2>Lisää harjoitustehtävä</h2>
-            </div>
-        </div>
         <div class="container">
             <p>
                 Valitse harjoitustehtävän tyyppi:

@@ -1,12 +1,7 @@
 {% extends "layout.html" %}
+{% block title %}Käyttäjän {{ session.user_name }} kotisivu{% endblock %}
 {% block content %}
-
 <body>
-    <div class="subbar">
-        <div class="subheadlineBox">
-            <h2>Käyttäjän {{ session.user_name }} kotisivu</h2>
-        </div>
-    </div>
     <div class="container">
         <h2>Käyttäjätiedot:</h2>
         {% if info %}

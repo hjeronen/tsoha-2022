@@ -19,6 +19,19 @@ h1, h1 + h4 {
     text-decoration: none;
 }
 
+title {
+    display: inherit;
+    background-color: var(--primary-color);
+    align: left;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    color: var(--tertiary-color);
+    font-size: 160%;
+    font-weight: bold;
+}
+
 .headlineBox {
     background-color: var(--primary-color);
     padding-top: 1em;

@@ -1,23 +1,13 @@
 
 {% extends "layout.html" %}
+{% block title %}Kirjaudu sisään{% endblock %}
 {% block content %}
-
 <form action="/login" method="POST">
     <body>
-        <div class="subbar">
-            <div class="subheadlineBox">
-                <h2>Kirjaudu sisään</h2>
-            </div>
-        </div>
         <div class="container">
             <p>
                 Jos sinulla on käyttäjätunnus ja salasana, voit kirjautua sisään.
             </p>
-            <div class="errorbox">
-                {% for message in errorMessages %}
-                <p><strong>VIRHE:</strong> {{ message }}</p>
-                {% endfor %}
-            </div>
         </div>
         <div class="container">
             <p>
@@ -32,7 +22,7 @@
                 <button type="submit">Login</button>
             </p>
         </div>
-        <div class="container">
+        <div class="extraLinkBar">
             <a href="/">Takaisin etusivulle</a>
         </div>
     </body>

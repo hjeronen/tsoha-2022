@@ -1,11 +1,7 @@
 {% extends "layout.html" %}
+{% block title %}Kurssimateriaali{% endblock %}
 {% block content %}
 <body>
-    <div class="subbar">
-        <div class="subheadlineBox">
-            <h2>Kurssimateriaali</h2>
-        </div>
-    </div>
     {% if owner %}
     <div class="extraLinkBar">
         <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>

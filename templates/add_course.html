@@ -1,20 +1,12 @@
 {% extends "layout.html" %}
+{% block title %}Lisää kurssi{% endblock %}
 {% block content %}
-
 <form action="/add_course" method="POST">
     <body>
-        <div class="subbar">
-            <div class="subheadlineBox">
-                <h2>Lisää kurssi</h2>
-            </div>
-        </div>
         <div class="container">
             <p>
                 Lisää uusi kurssi järjestelmään:
             </p>
-            {% for message in errorMessages %}
-            <p>{{ message }}</p>
-            {% endfor %}
             <p>
                 <label for="course_name">Kurssin nimi:</label>
                 <input type="text" id="course_name" name="course_name" value="{{ defaultName }}">

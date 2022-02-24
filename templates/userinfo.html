@@ -1,14 +1,8 @@
 {% extends "layout.html" %}
+{% block title %}Käyttäjätiedot{% endblock %}
 {% block content %}
-
 <form action="/userinfo" method="POST">
-
     <body>
-        <div class="subbar">
-            <div class="subheadlineBox">
-                <h2>Käyttäjätiedot</h2>
-            </div>
-        </div>
         <div class="container">
             {% if session.user_role == 'student' %}
             <p>

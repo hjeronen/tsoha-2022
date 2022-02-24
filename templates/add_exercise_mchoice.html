@@ -1,19 +1,9 @@
 {% extends "layout.html" %}
+{% block title %}Lisää harjoitustehtävä{% endblock %}
 {% block content %}
-
 <form action="/add_exercise_mchoice/{{ course_id }}" method="POST">
     <body>
-        <div class="subbar">
-            <div class="subheadlineBox">
-                <h2>Lisää harjoitustehtävä</h2>
-            </div>
-        </div>
         <div class="container">
-            <div class="errorbox">
-                {% for message in errorMessages %}
-                <p>{{ message }}</p>
-                {% endfor %}
-            </div>
             <p>
                 Anna tehtävälle otsikko:
             </p>

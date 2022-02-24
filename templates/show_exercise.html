@@ -1,14 +1,10 @@
 {% extends "layout.html" %}
+{% block title %}Tehtäväsivu{% endblock %}
 {% block content %}
-
 <form action="/show_exercise/{{ course_id }}/{{ exercise_id }}/{{ exercise_type }}/{{ headline }}" method="POST">
     <body>
-        <div class="subbar">
-            <div class="subheadlineBox">
-                <h2>{{ headline }}</h2>
-            </div>
-        </div>
         <div class="container">
+            <h2>{{ headline }}</h2>
             <h3>Kysymys:</h3>
             <p>{{ exercise.question }}</p>
             <h3>Vastaus:</h3>

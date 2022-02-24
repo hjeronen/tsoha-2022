@@ -1,23 +1,12 @@
 {% extends "layout.html" %}
+{% block title %}Päivitä kurssitietoja{% endblock %}
 {% block content %}
-
 <form action="/update_course/{{ course_id }}" method="POST">
-
     <body>
-        <div class="subbar">
-            <div class="subheadlineBox">
-                <h2>Päivitä kurssitietoja</h2>
-            </div>
-        </div>
         <div class="container">
             <p>
                 Muokkaa kurssisi tietoja:
             </p>
-            <div class="errorbox">
-                {% for message in errorMessages %}
-                <p><strong>VIRHE:</strong> {{ message }}</p>
-                {% endfor %}
-            </div>
             <input type="hidden" id="course_id" name="course_id" value="{{ course_id }}">
             <p>
                 <label for="course_name">Kurssin nimi:</label>

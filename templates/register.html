@@ -1,25 +1,12 @@
 {% extends "layout.html" %}
+{% block title %}Rekisteröidy käyttäjäksi{% endblock %}
 {% block content %}
-
 <form action="/register" method="POST">
-
     <body>
-        <div class="subbar">
-            <div class="subheadlineBox">
-                <h2>Rekisteröidy käyttäjäksi</h2>
-            </div>
-        </div>
         <div class="container">
             <p>
                 Luo käyttäjätili antamalla nimesi ja salasanasi. Valitse rooliksi opiskelija tai opettaja.
             </p>
-            <div class="errorbox">
-                <ul>
-                    {% for message in errorMessages %}
-                    <p><strong>VIRHE:</strong> {{ message }}</p>
-                    {% endfor %}
-                </ul>
-            </div>
         </div>
         <div class="container">
             <p>
