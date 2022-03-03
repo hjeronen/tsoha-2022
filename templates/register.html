@@ -1,8 +1,9 @@
 {% extends "layout.html" %}
 {% block title %}Rekisteröidy käyttäjäksi{% endblock %}
 {% block content %}
-<form action="/register" method="POST">
-    <body>
+
+<body>
+    <form action="/register" method="POST">
         <div class="container">
             <p>
                 Luo käyttäjätili antamalla nimesi ja salasanasi. Valitse rooliksi opiskelija tai opettaja.
@@ -13,19 +14,19 @@
                 <label for="username">Käyttäjätunnus:</label>
             </p>
             <p>
-                <input type="text" id="username" name="username" value="{{ defaultName }}">
+                <input type="text" id="username" name="username" maxlength="10" value="{{ defaultName }}">
             </p>
             <p>
                 <label for="password">Salasana:</label>
             </p>
             <p>
-                <input type="password" id="password" name="password">
+                <input type="password" id="password" name="password" maxlength="10">
             </p>
             <p>
                 <label for="password_2">Salasana uudelleen:</label>
             </p>
             <p>
-                <input type="password" id="password_2" name="password_2">
+                <input type="password" id="password_2" name="password_2" maxlength="15">
             </p>
             <p>
                 <label for="role">Oppilas</label>
@@ -42,7 +43,7 @@
         <div class="extraLinkBar">
             <a href="/">Takaisin etusivulle</a>
         </div>
-    </body>
-</form>
+    </form>
+</body>
 
 {% endblock %}

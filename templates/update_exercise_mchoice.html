@@ -1,29 +1,38 @@
 {% extends "layout.html" %}
 {% block title %}Muokkaa tehtävää{% endblock %}
 {% block content %}
-<form action="/update_exercise/{{ course_id }}/{{ exercise_id }}/{{ exercise_type }}/{{ headline }}" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <body>
+
+<body>
+    <form action="/update_exercise_mchoice/{{ course_id }}/{{ exercise_id }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <div class="container">
             <p>
                 <label for="headline">Otsikko:</label>
-                <input type="text" id="headline" name="headline" value="{{ headline }}">
+                <input type="text" id="headline" name="headline" maxlength="20" value="{{ headline }}">
             </p>
             <p>
                 <label for="question">Tehtäväkysymys:</label>
-                <input type="text" id="question" name="question" value="{{ question }}">
+            </p>
+            <p>
+                <textarea type="text" id="question" name="question" maxlength="500" rows="10"
+                    cols="50">{{ question }}</textarea>
             </p>
             <p>
                 <label for="option_a">a:</label>
-                <input type="text" id="option_a" name="option_a" value="{{ a }}">
+            </p>
+            <p>
+                <textarea type="text" id="option_a" name="option_a" maxlength="200" rows="5"
+                    cols="30">{{ a }}</textarea>
             </p>
             <p>
                 <label for="option_b">b:</label>
-                <input type="text" id="option_b" name="option_b" value="{{ b }}">
+                <textarea type="text" id="option_b" name="option_b" maxlength="200" rows="5"
+                    cols="30">{{ b }}</textarea>
             </p>
             <p>
                 <label for="option_c">c:</label>
-                <input type="text" id="option_c" name="option_c" value="{{ c }}">
+                <textarea type="text" id="option_c" name="option_c" maxlength="200" rows="5"
+                    cols="30">{{ c }}</textarea>
             </p>
             <p>
                 Oikea vastaus:
@@ -45,9 +54,9 @@
             </p>
         </div>
         <div class="extraLinkBar">
-            <a href="/show_exercise/{{ course_id }}/{{ exercise_id }}/{{ exercise_type }}/{{ headline }}">Takaisin</a>
+            <a href="/show_exercise/{{ course_id }}/{{ exercise_id }}">Takaisin</a>
         </div>
-    </body>
-</form>
+    </form>
+</body>
 
 {% endblock %}

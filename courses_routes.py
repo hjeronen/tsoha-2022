@@ -34,27 +34,27 @@ def enroll(course_id):
 
 @app.route("/course_page/<int:course_id>")
 def show_coursepage(course_id):
-    info = courses.get_course(course_id)
-    if info:
-        id = info[0]
-        course_name = info[1]
-        description = info[2]
-        teacher_id = info[3]
-        teacher = info[4] + ' ' + info[5]
+    course = courses.get_course(course_id)
+    if course:
+        course_name = course[1]
+        description = course[2]
+        teacher = course[4] + ' ' + course[5]
         enrolled = False
         owner = False
         course_exercises = exercises.get_exercises(course_id)
         exercise_answers = []
         course_materials = materials.get_course_materials(course_id)
         user_id = login_service.get_userID()
+        
         if user_id != 0:
-            if teacher_id == user_id:
-                owner = True
+            owner = courses.check_if_owner(user_id, course_id)
+            if owner:
                 exercise_answers = exercises.get_all_course_exercise_answers(course_id)
-            if login_service.get_user_role() == 'student':
-                enrolled = courses.check_if_student_is_enrolled(course_id, user_id)
-                if enrolled:
-                    exercise_answers = exercises.get_students_course_exercise_answers(user_id, course_id)
+
+            enrolled = courses.check_if_student_is_enrolled(course_id, user_id)
+            if enrolled:
+                exercise_answers = exercises.get_students_course_exercise_answers(user_id, course_id)
+        
         return render_template("course_page.html", id = course_id, 
                                                 course_name = course_name, 
                                                 description = description, 
@@ -70,7 +70,6 @@ def show_coursepage(course_id):
 @app.route("/add_course", methods=["GET", "POST"])
 def add_course():
     if request.method == "GET":
-        message = ""
         if not login_service.has_userinfo():
             message = "Täytä ensin käyttäjätietosi!"
             return render_template("error.html", message = message)
@@ -82,20 +81,20 @@ def add_course():
         description = request.form["description"]
         user_id = login_service.get_userID()
         user_role = login_service.get_user_role()
-        errorMessages = []
+        error_messages = []
 
-        if len(course_name) < 3:
-            errorMessages.append("Kurssin nimen on oltava vähintään 3 kirjainta!")
-        if len(description) == 0:
-            errorMessages.append("Kurssilla on oltava kuvaus!")
+        if len(course_name) < 3 or len(course_name) > 100:
+            error_messages.append("Kurssin nimen on oltava vähintään 3-100 merkkiä.")
+        if len(description) < 1 or len(description) > 2000:
+            error_messages.append("Kurssikuvauksen on oltava 1-2000 merkkiä.")
 
-        if len(errorMessages) == 0:
+        if len(error_messages) == 0:
             if courses.add_course(user_id, user_role, course_name, description):
                 return redirect("/homepage")
             else:
                 return render_template("error.html", message = "Kurssin lisäys ei onnistunut.")
         else:
-            return render_template("add_course.html", errorMessages = errorMessages, defaultName = course_name, defaultDescription = description)
+            return render_template("add_course.html", errorMessages = error_messages, defaultName = course_name, defaultDescription = description)
             
 
 @app.route("/update_course/<int:course_id>", methods=["GET", "POST"])
@@ -115,20 +114,20 @@ def update_course(course_id):
         description = request.form["description"]
         user_id = login_service.get_userID()
         user_role = login_service.get_user_role()
-        errorMessages = []
+        error_messages = []
 
-        if len(course_name) < 3:
-            errorMessages.append("Kurssin nimen on oltava vähintään 3 kirjainta!")
-        if len(description) == 0:
-            errorMessages.append("Kurssilla on oltava kuvaus!")
+        if len(course_name) < 3 or len(course_name) > 100:
+            error_messages.append("Kurssin nimen on oltava vähintään 3-100 merkkiä.")
+        if len(description) < 1 or len(description) > 2000:
+            error_messages.append("Kurssikuvauksen on oltava 1-2000 merkkiä.")
 
-        if len(errorMessages) == 0:
+        if len(error_messages) == 0:
             if courses.update_course(user_id, user_role, course_id, course_name, description):
                 return redirect("/course_page/" + str(course_id))
             else:
                 return render_template("error.html", message = "Kurssin päivitys ei onnistunut.")
         else:
-            return render_template("update_course.html", course_id = course_id, course_name = course_name, description = description, errorMessages = errorMessages)
+            return render_template("update_course.html", course_id = course_id, course_name = course_name, description = description, errorMessages = error_messages)
 
 @app.route("/delete_course/<int:course_id>")
 def delete_course(course_id):

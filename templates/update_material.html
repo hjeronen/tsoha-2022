@@ -1,28 +1,29 @@
 {% extends "layout.html" %}
 {% block title %}Muokkaa kurssimateriaalia{% endblock %}
 {% block content %}
-<form action="/update_material/{{ course_id }}/{{ material_id }}" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <body>
+
+<body>
+    <form action="/update_material/{{ course_id }}/{{ material_id }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <div class="extraLinkBar">
             <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
         </div>
         <div class="container">
             <p>
                 <label for="headline">Otsikko:</label>
-                <input type="text" id="headline" name="headline" value="{{ defaultHeadline }}">
+                <input type="text" id="headline" name="headline" maxlength="20" value="{{ default_headline }}">
             </p>
             <p>
                 <label for="body">Kirjoita tai kopioi tekstisi tänne:</label>
             </p>
             <p>
-                <textarea id="body" name="body">{{ defaultText }}</textarea>
+                <textarea id="body" name="body" rows="40" cols="60" maxlength="50000" >{{ default_body }}</textarea>
             </p>
             <p class="button">
                 <button type="submit">Tallenna</button>
             </p>
         </div>
-    </body>
-</form>
-   
+    </form>
+</body>
+
 {% endblock %}

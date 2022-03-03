@@ -1,5 +1,11 @@
 from db import db
 
+def check_if_owner(user_id, course_id):
+    course_teacher_id = get_course_teacher_id(course_id)
+    if not course_teacher_id:
+        return False
+    return user_id == course_teacher_id[0]
+
 def get_course_teacher_id(course_id):
     sql = "SELECT teacher_id FROM courses WHERE id=:course_id"
     return db.session.execute(sql, {"course_id":course_id}).fetchone()

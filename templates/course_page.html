@@ -43,7 +43,7 @@
         <h3>Tehtävät:</h3>
         <ul>
             {% for exercise in exercise_list %}
-            <li><a href="/show_exercise/{{ id }}/{{ exercise.id }}/{{ exercise.type }}/{{ exercise.headline }}">{{ exercise.headline }}</a></li>
+            <li><a href="/show_exercise/{{ id }}/{{ exercise.id }}">{{ exercise.headline }}</a></li>
             {% endfor %}
         </ul>
     </div>

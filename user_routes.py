@@ -15,26 +15,30 @@ def homepage():
 def user_info():
     if request.method == "GET":
         return render_template("userinfo.html")
+
     if request.method == "POST":
         login_service.check_csrf()
         firstname = request.form["firstname"]
         lastname = request.form["lastname"]
         student_number = 0
         errorMessages = []
+
         if login_service.get_user_role() == 'student':
             student_number = request.form["student_number"]
             if len(student_number) == 0 or student_number == 0:
                 errorMessages.append("Anna opiskelijanumero!")
-        if len(firstname) == 0:
-            errorMessages.append("Etunimi ei voi olla tyhjä!")
-        if len(lastname) == 0:
-            errorMessages.append("Sukunimi ei voi olla tyhjä!")
+
+        if len(firstname) < 1 or len(firstname) > 20:
+            errorMessages.append("Etunimen on oltava 1-20 merkkiä pitkä.")
+        if len(lastname) < 1 or len(lastname) > 20:
+            errorMessages.append("Sukunimen on oltava 1-20 merkkiä pitkä.")
+
         if len(errorMessages) == 0:
             if login_service.save_user_info(firstname, lastname, student_number):
                 return redirect("/homepage")
             return render_template("error.html", message = "Käyttäjätietojen tallennus ei onnistunut")
         else:
-            return render_template("userinfo.html", errorMessages = errorMessages)
+            return render_template("userinfo.html", errorMessages = errorMessages, default_firstname = firstname, default_lastname = lastname, default_studentnr = student_number)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -50,8 +54,8 @@ def register():
 
         if len(username) < 3 or len(username) > 10:
             errorMessages.append("Käyttäjätunnuksen on oltava 3-10 merkkiä pitkä.")
-        if len(password) < 8:
-            errorMessages.append("Salasanan on oltava vähintään 8 merkkiä pitkä.")
+        if len(password) < 8 or len(password) > 15:
+            errorMessages.append("Salasanan on oltava 8-15 merkkiä pitkä.")
         if password != password_2:
             errorMessages.append("Salasanat eivät ole samat!")
 
@@ -74,13 +78,24 @@ def register():
 def login():
     if request.method == "GET":
         return render_template("login.html")
+
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        if login_service.login(username, password):
-            return redirect("/homepage")
-        else:
-            return render_template("login.html", errorMessages=["Väärä käyttäjänimi tai salasana!"], defaultName = username, defaultPassword = password)
+        error_messages = []
+
+        if len(username) < 3 or len(username) > 10:
+            error_messages.append("Käyttäjätunnuksen on oltava 3-10 merkkiä pitkä.")
+        if len(password) > 15:
+            error_messages.append("Salasanan on oltava 8-15 merkkiä pitkä.")
+
+        if len(error_messages) == 0:
+            if login_service.login(username, password):
+                return redirect("/homepage")
+            else:
+                error_messages.append("Väärä käyttäjänimi tai salasana!")
+
+        return render_template("login.html", errorMessages=error_messages, default_name = username, default_password = password)
     
 @app.route("/logout")
 def logout():

@@ -1,15 +1,15 @@
 {% extends "layout.html" %}
 {% block title %}Tehtäväsivu{% endblock %}
 {% block content %}
-<form action="/show_exercise/{{ course_id }}/{{ exercise_id }}/{{ exercise_type }}/{{ headline }}" method="POST">
+<form action="/show_exercise/{{ course_id }}/{{ exercise_id }}" method="POST">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <body>
         <div class="container">
-            <h2>{{ headline }}</h2>
+            <h2>{{ exercise.headline }}</h2>
             <h3>Kysymys:</h3>
             <p>{{ exercise.question }}</p>
             <h3>Vastaus:</h3>
-            {% if exercise_type == 0 %}
+            {% if exercise.type == 0 %}
             <input type="text" id="answer" name="answer" value="{{ answer }}">
             {% else %}
             <p>
@@ -47,7 +47,11 @@
         <div class="extraLinkBar">
             <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
             {% if owner %}
-            <a href="/update_exercise/{{ course_id }}/{{ exercise_id }}/{{ exercise_type }}/{{ headline }}">Muokkaa tehtävää</a>
+            {% if exercise.type == 0 %}
+            <a href="/update_exercise_text/{{ course_id }}/{{ exercise_id }}">Muokkaa tehtävää</a>
+            {% else %}
+            <a href="/update_exercise_mchoice/{{ course_id }}/{{ exercise_id }}">Muokkaa tehtävää</a>
+            {% endif %}
             <a href="/delete_exercise/{{ course_id }}/{{ exercise_id }}">Poista tehtävä</a>
             {% endif %}
         </div>

@@ -1,35 +1,48 @@
 {% extends "layout.html" %}
 {% block title %}Lisää harjoitustehtävä{% endblock %}
 {% block content %}
-<form action="/add_exercise_mchoice/{{ course_id }}" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <body>
+
+<body>
+    <form action="/add_exercise_mchoice/{{ course_id }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <div class="container">
             <p>
                 Anna tehtävälle otsikko:
             </p>
             <p>
                 <label for="headline">Otsikko:</label>
-                <input type="text" id="headline" name="headline" value="{{ defaultHeadline}}">
+                <input type="text" id="headline" name="headline" maxlength="20" value="{{ defaultHeadline}}">
             </p>
             <p>
                 Lisää kysymys, vastausvaihtoehdot ja oikea vastaus.
             </p>
             <p>
                 <label for="question">Tehtäväkysymys:</label>
-                <input type="text" id="question" name="question" value="{{ defaultQuestion }}">
+            </p>
+            <p>
+                <textarea type="text" id="question" name="question" maxlength="500" rows="5"
+                    cols="50">{{ defaultQuestion }}</textarea>
             </p>
             <p>
                 <label for="option_a">a:</label>
-                <input type="text" id="option_a" name="option_a" value="{{ defaultA }}">
+            </p>
+            <p>
+                <textarea type="text" id="option_a" name="option_a" maxlength="200" rows="3"
+                    cols="30">{{ defaultA }}</textarea>
             </p>
             <p>
                 <label for="option_b">b:</label>
-                <input type="text" id="option_b" name="option_b" value="{{ defaultB }}">
+            </p>
+            <p>
+                <textarea type="text" id="option_a" name="option_a" maxlength="200" rows="3"
+                    cols="30">{{ defaultB }}</textarea>
             </p>
             <p>
                 <label for="option_c">c:</label>
-                <input type="text" id="option_c" name="option_c" value="{{ defaultC }}">
+            </p>
+            <p>
+                <textarea type="text" id="option_a" name="option_a" maxlength="200" rows="3"
+                    cols="30">{{ defaultC }}</textarea>
             </p>
             <p>
                 Oikea vastaus:
@@ -53,7 +66,7 @@
         <div class="extraLinkBar">
             <a href="/choose_exercise_type/{{ course_id }}">Takaisin</a>
         </div>
-    </body>
-</form>
+    </form>
+</body>
 
 {% endblock %}

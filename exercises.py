@@ -84,12 +84,19 @@ def save_answer(user_id, exercise_id, answer, status):
     except:
         return False
 
-def get_exercise(exercise_id, type):
+def get_exercise(exercise_id):
+    sql = "SELECT type FROM exercises WHERE id=:exercise_id"
+    result = db.session.execute(sql, {"exercise_id": exercise_id}).fetchone()
+    if not result:
+        return False
+
+    type = result[0]
+
     if type == 0:
-        sql = "SELECT * FROM exercises_text WHERE exercise_id=:exercise_id"
+        sql = "SELECT headline, type, question, correct_answer FROM exercises E, exercises_text T WHERE E.id=:exercise_id AND T.exercise_id=E.id AND E.visible=TRUE"
         return db.session.execute(sql, {"exercise_id": exercise_id}).fetchone()
     elif type == 1:
-        sql = "SELECT * FROM exercises_mchoice WHERE exercise_id=:exercise_id"
+        sql = "SELECT headline, type, question, correct_answer, option_a, option_b, option_c FROM exercises E, exercises_mchoice M WHERE E.id=:exercise_id AND M.exercise_id=E.id AND E.visible=TRUE"
         return db.session.execute(sql, {"exercise_id": exercise_id}).fetchone()
 
 def get_exercises(course_id):

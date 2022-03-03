@@ -1,9 +1,10 @@
 {% extends "layout.html" %}
 {% block title %}Käyttäjätiedot{% endblock %}
 {% block content %}
-<form action="/userinfo" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <body>
+
+<body>
+    <form action="/userinfo" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <div class="container">
             {% if session.user_role == 'student' %}
             <p>
@@ -12,23 +13,19 @@
             {% else %}
             <p> Täydennä tietosi, jotta voit kirjata kursseja järjestelmään:</p>
             {% endif %}
-            <div class="errorbox">
-                {% for message in errorMessages %}
-                <p><strong>VIRHE:</strong> {{ message }}</p>
-                {% endfor %}
-            </div>
             <p>
                 <label for="firstname">Etunimi:</label>
-                <input type="text" id="firstname" name="firstname">
+                <input type="text" id="firstname" name="firstname" maxlength="20" value="{{ default_firstname }}">
             </p>
             <p>
                 <label for="lastname">Sukunimi:</label>
-                <input type="text" id="lastname" name="lastname">
+                <input type="text" id="lastname" name="lastname" maxlength="20" value="{{ default_lastname}}">
             </p>
             {% if session.user_role == 'student' %}
             <p>
                 <label for="student_number">Opiskelijanumero:</label>
-                <input type="text" id="student_number" name="student_number">
+                <input type="text" id="student_number" name="student_number" maxlength="15"
+                    value="{{ default_studentnr }}">
             </p>
             {% endif %}
             <p class="button">
@@ -36,9 +33,9 @@
             </p>
         </div>
         <div class="extraLinkBar">
-            <a href="/">Takaisin etusivulle</a>
+            <a href="/homepage">Takaisin kotisivulle</a>
         </div>
-    </body>
-</form>
+    </form>
+</body>
 
 {% endblock %}

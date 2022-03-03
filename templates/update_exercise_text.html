@@ -1,28 +1,35 @@
 {% extends "layout.html" %}
 {% block title %}Muokkaa tehtävää{% endblock %}
 {% block content %}
-<form action="/update_exercise/{{ course_id }}/{{ exercise_id }}/{{ exercise_type }}/{{ headline }}" method="POST">
+<form action="/update_exercise_text/{{ course_id }}/{{ exercise_id }}" method="POST">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <body>
         <div class="container">
             <p>
                 <label for="headline">Otsikko:</label>
-                <input type="text" id="headline" name="headline" value="{{ headline }}">
+            </p>
+            <p>
+                <input type="text" id="headline" name="headline" maxlength="20" value="{{ headline }}">
             </p>
             <p>
                 <label for="question">Tehtäväkysymys:</label>
-                <input type="text" id="question" name="question" value="{{ question }}">
+            </p>
+            <p>
+                <textarea type="text" id="question" name="question" maxlength="500" rows="10"
+                    cols="50">{{ question }}</textarea>
             </p>
             <p>
                 <label for="answer">Oikea vastaus:</label>
-                <input type="text" id="answer" name="answer" value="{{ answer }}">
+            </p>
+            <p>
+                <input type="text" id="answer" name="answer" maxlength="40" value="{{ answer }}">
             </p>
             <p class="button">
                 <button type="submit">Tallenna muutokset</button>
             </p>
         </div>
         <div class="extraLinkBar">
-            <a href="/show_exercise/{{ course_id }}/{{ exercise_id }}/{{ exercise_type }}/{{ headline }}">Takaisin</a>
+            <a href="/show_exercise/{{ course_id }}/{{ exercise_id }}">Takaisin</a>
         </div>
     </body>
 </form>
