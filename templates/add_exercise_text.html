@@ -13,7 +13,7 @@
                 <label for="headline">Otsikko:</label>
             </p>
             <p>
-                <input type="text" id="headline" name="headline" maxlength="20" value="{{ defaultHeadline }}">
+                <input type="text" id="headline" name="headline" maxlength="20" value="{{ headline }}">
             </p>
             <h4>
                 Lisää kysymys ja oikea vastaus.
@@ -23,13 +23,13 @@
             </p>
             <p>
                 <textarea type="text" id="question" name="question" maxlength="500" rows="5"
-                    cols="50">{{ defaultQuestion }}</textarea>
+                    cols="50">{{ question }}</textarea>
             </p>
             <p>
                 <label for="answer">Oikea vastaus:</label>
             </p>
             <p>
-                <input type="text" id="answer" name="answer" maxlength="40" value="{{ defaultAnswer }}">
+                <input type="text" id="answer" name="answer" maxlength="40" value="{{ answer }}">
             </p>
             <p class="button">
                 <button type="submit">Lisää tehtävä</button>

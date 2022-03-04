@@ -31,7 +31,7 @@ def login(username, password):
         return True
     except:
         return False
-    
+
 def logout():
     del session["user_id"]
     del session["user_name"]
@@ -44,46 +44,58 @@ def logged_in():
 def has_userinfo():
     if not logged_in():
         return False
-    if get_userinfo():
-        return True
+    return get_userinfo()
 
 def delete_account():
-    id = session["user_id"]
+    user_id = session["user_id"]
     try:
         sql = "DELETE FROM users WHERE id=:userid"
-        db.session.execute(sql, {"userid":id})
+        db.session.execute(sql, {"userid":user_id})
         db.session.commit()
         logout()
         return True
     except:
         return False
-    
-def save_user_info(firstname, lastname, student_number):
-    id = session["user_id"]
-    if session["user_role"] == 'student':
-        if student_number == '':
-            return False
-        sql = "INSERT INTO students (user_id, firstname, lastname, student_number) VALUES (:user_id, :firstname, :lastname, :student_number)"
-        db.session.execute(sql, {"user_id":id, "firstname":firstname, "lastname":lastname, "student_number":student_number})
-        db.session.commit()
-        return True
-    else:
-        sql = "INSERT INTO teachers (user_id, firstname, lastname) VALUES (:user_id, :firstname, :lastname)"
-        db.session.execute(sql, {"user_id":id, "firstname":firstname, "lastname":lastname})
-        db.session.commit()
-        return True
 
-def get_userID():
+def save_user_info(firstname, lastname, student_number):
+    user_id = session["user_id"]
+    if session["user_role"] == 'student':
+        try:
+            sql = "INSERT INTO students (user_id, firstname, lastname, student_number) " \
+                  "VALUES (:user_id, :firstname, :lastname, :student_number)"
+            db.session.execute(sql, {"user_id":user_id,
+                                     "firstname":firstname,
+                                     "lastname":lastname,
+                                     "student_number":student_number})
+            db.session.commit()
+            return True
+        except:
+            return False
+    else:
+        try:
+            sql = "INSERT INTO teachers (user_id, firstname, lastname) " \
+              "VALUES (:user_id, :firstname, :lastname)"
+            db.session.execute(sql, {"user_id":user_id,
+                                 "firstname":firstname,
+                                 "lastname":lastname})
+            db.session.commit()
+            return True
+        except:
+            return False
+
+def get_user_id():
     return session.get("user_id", 0)
 
 def get_userinfo():
-    id = session["user_id"]
+    user_id = session["user_id"]
     if session["user_role"] == 'student':
-        sql = "SELECT S.firstname, S.lastname, S.student_number FROM students S WHERE S.user_id=:user_id"
-        return db.session.execute(sql, {"user_id":id}).fetchall()
+        sql = "SELECT S.firstname, S.lastname, S.student_number " \
+              "FROM students S WHERE S.user_id=:user_id"
+        return db.session.execute(sql, {"user_id":user_id}).fetchall()
     if session["user_role"] == 'teacher':
         sql = "SELECT T.firstname, T.lastname FROM teachers T WHERE T.user_id=:user_id"
-        return db.session.execute(sql, {"user_id":id}).fetchall()
+        return db.session.execute(sql, {"user_id":user_id}).fetchall()
+    return False
 
 def get_user_role():
     return session.get("user_role", "no role")

@@ -77,12 +77,13 @@
     </div>
     {% elif enrolled %}
     <div class="container">
-        <h3>Tekemäsi tehtävät:</h3>
         <table>
-            <tr>
+            <caption>Tekemäsi tehtävät:</caption>
+            <thead>
                 {% for exercise in exercise_list %}
                 <th>{{ exercise.headline }}</th>
                 {% endfor %}
+            </thead>
             <tr>
                 {% for exercise in exercise_list %}
                 {% if answers[exercise.id] %}
@@ -93,7 +94,6 @@
                 <td>0</td>
                 {% endif %}
                 {% endfor %}
-            </tr>
             </tr>
         </table>
     </div>
