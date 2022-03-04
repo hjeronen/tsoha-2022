@@ -158,8 +158,8 @@ def add_exercise_text(exercise_id, exercise):
     try:
         question = exercise[2]
         answer = exercise[3]
-        sql = "INSERT INTO exercises_text (exercise_id, question, correct_answer, visible) " \
-              "VALUES (:exercise_id, :question, :answer, TRUE)"
+        sql = "INSERT INTO exercises_text (exercise_id, question, correct_answer) " \
+              "VALUES (:exercise_id, :question, :answer)"
         db.session.execute(sql, {"exercise_id":exercise_id, "question":question, "answer":answer})
         db.session.commit()
         return True
@@ -174,8 +174,8 @@ def add_exercise_mchoice(exercise_id, exercise):
         b = exercise[5]
         c = exercise[6]
 
-        sql = "INSERT INTO exercises_mchoice (exercise_id, question, correct_answer, option_a, option_b, option_c, visible) " \
-              "VALUES (:exercise_id, :question, :answer, :a, :b, :c, TRUE)"
+        sql = "INSERT INTO exercises_mchoice (exercise_id, question, correct_answer, option_a, option_b, option_c) " \
+              "VALUES (:exercise_id, :question, :answer, :a, :b, :c)"
         db.session.execute(sql, {"exercise_id":exercise_id,
                                  "question":question,
                                  "answer":answer,
