@@ -10,6 +10,7 @@ body {
     background-color: var(--tertiary-color);
     margin: 0;
     font-family: 'Arial';
+    color: var(--primary-color);
 }
 
 h1, h1 + h4 {
@@ -17,6 +18,10 @@ h1, h1 + h4 {
     margin-top: 0;
     text-align: center;
     text-decoration: none;
+}
+
+h2, h3 {
+    color: var(--primary-color);
 }
 
 title {
@@ -158,5 +163,28 @@ a:hover {
 .infobox {
     background-color: var(--extra-color);
 }
+
+table {
+    border-collapse: collapse;
+    text-align: center;
+	vertical-align: middle;
+}
+
+caption {
+    font-weight: bold;
+    font-size: 24px;
+    text-align: left;
+    color: var(--primary-color);
+    padding-bottom: 0.4em;
+}
+
+thead {
+    background-color: var(--secondary-color);
+    color: var(--tertiary-color);
+  }
   
+th, td {
+    border: 1px solid var(--primary-color);
+    padding: 0.4em;
+}
   

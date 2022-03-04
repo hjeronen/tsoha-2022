@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block title %}Kurssisivu{% endblock %}
 {% block content %}
+
 <body>
     <div class="container">
         <h2>{{ course_name }}</h2>
@@ -11,19 +12,19 @@
     </div>
     <br></br>
     <div class="extraLinkBar">
-            {% if session.user_role == 'student' %}
-            {% if not enrolled %}
-            <a href="/enroll/{{ id }}">Ilmoittaudu kurssille</a>
-            {% else %}
-            <p>Olet ilmoittautunut kurssille.</p>
-            {% endif %}
-            {% endif %}
+        {% if session.user_role == 'student' %}
+        {% if not enrolled %}
+        <a href="/enroll/{{ id }}">Ilmoittaudu kurssille</a>
+        {% else %}
+        <p>Olet ilmoittautunut kurssille.</p>
+        {% endif %}
+        {% endif %}
 
-            {% if owner %}
-            <a href="/choose_exercise_type/{{ id }}">Lisää harjoitustehtäviä</a>
-            <a href="/add_material/{{ id }}">Lisää tekstimateriaalia</a>
-            <a href="/update_course/{{ id }}">Muokkaa kurssin tietoja</a>
-            <a href="/delete_course/{{ id }}">Poista kurssi</a>
+        {% if owner %}
+        <a href="/choose_exercise_type/{{ id }}">Lisää harjoitustehtäviä</a>
+        <a href="/add_material/{{ id }}">Lisää tekstimateriaalia</a>
+        <a href="/update_course/{{ id }}">Muokkaa kurssin tietoja</a>
+        <a href="/delete_course/{{ id }}">Poista kurssi</a>
         {% endif %}
     </div>
     {% if not enrolled and not owner %}
@@ -50,28 +51,28 @@
     {% endif %}
     {% if owner %}
     <div class="container">
-        <h3>Tehtäväsuoritukset:</h3>
         <table>
-            <tr>
+            <caption>Tehtäväsuoritukset:</caption>
+            <thead>
                 <th>Opiskelijanumero</th>
                 {% for exercise in exercise_list %}
                 <th>{{ exercise.headline }}</th>
                 {% endfor %}
-                {% for student in answers %}
-                    <tr>
-                        <td>{{ student }}</td>
-                        {% for exercise in exercise_list %}
-                        {% if answers[student][exercise.id] %}
-                            <td>1</td>
-                        {% elif exercise.id not in answers[student] %}
-                            <td>-</td>
-                        {% else %}
-                            <td>0</td>
-                        {% endif %}
-                        {% endfor %}
-                    </tr>
+            </thead>
+            {% for student in answers %}
+            <tr>
+                <td>{{ student }}</td>
+                {% for exercise in exercise_list %}
+                {% if answers[student][exercise.id] %}
+                <td>1</td>
+                {% elif exercise.id not in answers[student] %}
+                <td>-</td>
+                {% else %}
+                <td>0</td>
+                {% endif %}
                 {% endfor %}
             </tr>
+            {% endfor %}
         </table>
     </div>
     {% elif enrolled %}
@@ -82,17 +83,17 @@
                 {% for exercise in exercise_list %}
                 <th>{{ exercise.headline }}</th>
                 {% endfor %}
-                <tr>
-                    {% for exercise in exercise_list %}
-                    {% if answers[exercise.id] %}
-                        <td>1</td>
-                    {% elif exercise.id not in answers %}
-                        <td>-</td>
-                    {% else %}
-                        <td>0</td>
-                    {% endif %}
-                    {% endfor %}
-                </tr>
+            <tr>
+                {% for exercise in exercise_list %}
+                {% if answers[exercise.id] %}
+                <td>1</td>
+                {% elif exercise.id not in answers %}
+                <td>-</td>
+                {% else %}
+                <td>0</td>
+                {% endif %}
+                {% endfor %}
+            </tr>
             </tr>
         </table>
     </div>
