@@ -33,7 +33,7 @@ def update_material(course_id, material_id):
                 return redirect("/course_material/" + str(course_id) + "/" + str(material_id))
             return render_template("error.html", message="Kurssimateriaalin päivitys ei onnistunut")
 
-        return render_template("update_material.html", errorMessages=error_messages,
+        return render_template("update_material.html", error_messages=error_messages,
                                                         course_id=course_id,
                                                         material_id=material_id,
                                                         default_headline=headline,
@@ -90,7 +90,7 @@ def add_material(course_id):
                 return redirect("/course_page/" + str(course_id))
             return render_template("error.html", message="Kurssimateriaalin lisäys ei onnistunut")
 
-        return render_template("add_material.html", errorMessages=error_messages,
+        return render_template("add_material.html", error_messages=error_messages,
                                                     course_id=course_id,
                                                     default_headline=headline,
                                                     default_body=body)

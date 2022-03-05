@@ -63,7 +63,7 @@ def update_exercise_mchoice(course_id, exercise_id):
             error_messages.append("Jokaisen vastausvaihtoehdon on oltava 1-200 merkkiä pitkiä.")
 
         if len(error_messages) != 0:
-            return render_template("update_exercise_mchoice.html", errorMessages=error_messages,
+            return render_template("update_exercise_mchoice.html", error_messages=error_messages,
                                                                     course_id=course_id,
                                                                     exercise_id=exercise_id,
                                                                     headline=new_headline,
@@ -103,12 +103,12 @@ def update_exercise_text(course_id, exercise_id):
             error_messages.append("Vastauksen on oltava 1-40 merkkiä.")
 
         if len(error_messages) != 0:
-            return render_template("update_exercise_text.html", course_id=course_id,
+            return render_template("update_exercise_text.html", error_messages=error_messages,
+                                                                course_id=course_id,
                                                                 exercise_id=exercise_id,
                                                                 headline=new_headline,
                                                                 question=question,
-                                                                answer=answer,
-                                                                errorMessages=error_messages)
+                                                                answer=answer)
 
         if exercises.update_exercise_text(exercise_id, new_headline, question, answer):
             return redirect("/show_exercise/" + str(course_id) + "/" + str(exercise_id))
@@ -213,8 +213,8 @@ def add_exercise_mchoice(course_id):
                 return redirect("/course_page/" + str(course_id))
             return render_template("error.html", message="Tehtävän tallennus ei onnistunut.")
 
-        return render_template("add_exercise_mchoice.html", course_id=course_id,
-                                                            errorMessages=error_messages,
+        return render_template("add_exercise_mchoice.html", error_messages=error_messages,
+                                                            course_id=course_id,
                                                             question=question,
                                                             default_a=a, default_b=b, default_c=c)
 
@@ -248,7 +248,7 @@ def add_exercise_text(course_id):
                 return redirect("/course_page/" + str(course_id))
             return render_template("error.html", message="Tehtävän tallennus ei onnistunut.")
 
-        return render_template("add_exercise_text.html", errorMessages = error_messages,
+        return render_template("add_exercise_text.html", error_messages = error_messages,
                                                          course_id=course_id,
                                                          headline=headline,
                                                          question=question,

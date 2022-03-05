@@ -34,7 +34,7 @@ def enroll(course_id):
                 return redirect("/course_page/" + str(course_id))
             return render_template("error.html", message="Ilmoittautuminen epäonnistui.")
 
-        return render_template("error.html", errorMessages=error_messages)
+        return render_template("error.html", error_messages=error_messages)
 
 @app.route("/course_page/<int:course_id>")
 def show_coursepage(course_id):
@@ -98,7 +98,7 @@ def add_course():
                 return redirect("/homepage")
             return render_template("error.html", message="Kurssin lisäys ei onnistunut.")
 
-        return render_template("add_course.html", errorMessages=error_messages,
+        return render_template("add_course.html", error_messages=error_messages,
                                                   name=course_name,
                                                   description=description)
 
@@ -135,7 +135,7 @@ def update_course(course_id):
                 return redirect("/course_page/" + str(course_id))
             return render_template("error.html", message="Kurssin päivitys ei onnistunut.")
 
-        return render_template("update_course.html", errorMessages=error_messages,
+        return render_template("update_course.html", error_messages=error_messages,
                                                      course_id=course_id, course_name=course_name,
                                                      description=description)
 

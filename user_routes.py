@@ -35,9 +35,9 @@ def user_info():
         if len(error_messages) == 0:
             if login_service.save_user_info(firstname, lastname, student_number):
                 return redirect("/homepage")
-            return render_template("homepage.html", errorMessages=["Käyttäjätietojen tallennus ei onnistunut."])
+            return render_template("homepage.html", error_messages=["Käyttäjätietojen tallennus ei onnistunut."])
 
-        return render_template("userinfo.html", errorMessages = error_messages,
+        return render_template("userinfo.html", error_messages = error_messages,
                                                 default_firstname = firstname,
                                                 default_lastname = lastname,
                                                 default_studentnr = student_number)
@@ -71,9 +71,9 @@ def register():
                 error_messages.append("Käyttäjän rekisteröinti epäonnistui.")
             elif not login_success:
                 error_messages.append("Sisäänkirjautuminen epäonnistui.")
-            return render_template("index.html", errorMessages=error_messages)
+            return render_template("index.html", error_messages=error_messages)
 
-        return render_template("register.html", errorMessages=error_messages, username=username)
+        return render_template("register.html", error_messages=error_messages, username=username)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -95,7 +95,7 @@ def login():
                 return redirect("/homepage")
             error_messages.append("Väärä käyttäjänimi tai salasana!")
 
-        return render_template("login.html", errorMessages=error_messages,
+        return render_template("login.html", error_messages=error_messages,
                                                 username=username,
                                                 password=password)
 
