@@ -1,13 +1,13 @@
 {% extends "layout.html" %}
 {% block title %}Lisää harjoitustehtävä{% endblock %}
 {% block content %}
-<form action="/choose_exercise_type/{{ course_id }}" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <body>
+
+<body>
+    <form action="/choose_exercise_type/{{ course_id }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+
         <div class="container">
-            <p>
-                Valitse harjoitustehtävän tyyppi:
-            </p>
+            <h4>Valitse harjoitustehtävän tyyppi:</h4>
             <p>
                 <label for="exercise_type">Tekstikenttä</label>
                 <input type="radio" name="exercise_type" value="0">
@@ -20,9 +20,11 @@
                 <button type="submit">Seuraava</button>
             </p>
         </div>
-        <div class="extraLinkBar">
-            <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
+        <div class="container">
+            <div class="extraLinkBar">
+                <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
+            </div>
         </div>
-    </body>
-</form>
+    </form>
+</body>
 {% endblock %}

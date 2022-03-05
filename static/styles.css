@@ -20,7 +20,14 @@ h1, h1 + h4 {
     text-decoration: none;
 }
 
-h2, h3 {
+h2 {
+    font-size: 24px;
+    text-align: left;
+    color: var(--primary-color);
+    padding-bottom: 0.4em;
+}
+
+h3, h4 {
     color: var(--primary-color);
 }
 
@@ -47,18 +54,6 @@ title {
     background-color: var(--primary-color);
     display: table;
     align: left;
-    padding-left: 1.5em;
-}
-
-.subheadlineBox h2 {
-    display: inline-block;
-    margin: .1em;
-    margin-left: 2em;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-    font-weight: bold;
-    color: var(--tertiary-color);
 }
 
 .topbar {
@@ -101,46 +96,54 @@ a:hover {
 
 .container {
     background-color: var(--tertiary-color);
-    display: table;
-    margin-top: 0;
     margin-left: 3.8em;
 }
 
-.container ul {
+.sidebar ul {
     list-style-type: none;
     text-align: left;
-    margin-top: 0;
-    padding-right: 1em;
-    padding-left: 1em;
+    margin-top: -.05em;
+    padding-top: .05em;
+    background-color: var(--primary-color);
 }
 
-.container ul li {
-    padding-top: .3em;
-    padding-bottom: .3em;
+.sidebar ul h3 {
+    color: var(--tertiary-color);
 }
 
-.container ul li a {
-    display: inline-block;
-    vertical-align: baseline;
-    text-align: center;
-    padding: .5em;
-    text-decoration: none;
+.sidebar ul p {
+    padding: 1em;
+    padding-left: 3em;
+    margin-left: -2.5em;
+    background-color: var(--secondary-color);
+    color: var(--tertiary-color);
     font-weight: bold;
-    color: var(--primary-color);
 }
 
-.container ul li:hover, .extraLinkBar a:hover {
+.sidebar ul li {
+    padding: 1em;
+    padding-left: 3em;
+    margin-left: -2.5em;
     background-color: var(--secondary-color);
 }
 
-.container ul li a:hover, .extraLinkBar a:hover {
+.sidebar ul li a {
+    text-decoration: none;
+    font-weight: bold;
+    color: var(--tertiary-color);
+}
+
+.sidebar ul li:hover, .extraLinkBar a:hover {
+    background-color: var(--primary-color);
+}
+
+.sidebar ul li a:hover, .extraLinkBar a:hover {
     color: var(--tertiary-color);
 }
 
 .extraLinkBar {
     background: var(--tertiary-color);
     overflow: hidden;
-    margin-left: 3.2em;
 }
 
 .extraLinkBar a {
@@ -161,6 +164,7 @@ a:hover {
 }
 
 .infobox {
+    border: 1px solid var(--primary-color);
     background-color: var(--extra-color);
 }
 
@@ -181,10 +185,30 @@ caption {
 thead {
     background-color: var(--secondary-color);
     color: var(--tertiary-color);
-  }
+}
   
 th, td {
     border: 1px solid var(--primary-color);
     padding: 0.4em;
 }
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+}
   
+.flex-item-left {
+    flex: 5%;
+    background-color: var(--primary-color);
+}
+  
+.flex-item-right {
+    flex: 70%;
+}
+  
+/* Responsive layout - makes a one column layout instead of a two-column layout */
+@media (max-width: 800px) {
+    .flex-item-right, .flex-item-left {
+      flex: 100%;
+    }
+}

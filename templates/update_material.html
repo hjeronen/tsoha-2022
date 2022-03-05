@@ -5,8 +5,10 @@
 <body>
     <form action="/update_material/{{ course_id }}/{{ material_id }}" method="POST">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-        <div class="extraLinkBar">
-            <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
+        <div class="container">
+            <div class="extraLinkBar">
+                <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
+            </div>
         </div>
         <div class="container">
             <p>
@@ -17,7 +19,7 @@
                 <label for="body">Kirjoita tai kopioi tekstisi tänne:</label>
             </p>
             <p>
-                <textarea id="body" name="body" rows="40" cols="60" maxlength="50000" >{{ default_body }}</textarea>
+                <textarea id="body" name="body" rows="40" cols="60" maxlength="50000">{{ default_body }}</textarea>
             </p>
             <p class="button">
                 <button type="submit">Tallenna</button>

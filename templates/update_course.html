@@ -1,13 +1,13 @@
 {% extends "layout.html" %}
 {% block title %}Päivitä kurssitietoja{% endblock %}
 {% block content %}
-<form action="/update_course/{{ course_id }}" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <body>
+
+<body>
+    <form action="/update_course/{{ course_id }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+
         <div class="container">
-            <p>
-                Muokkaa kurssisi tietoja:
-            </p>
+            <p>Muokkaa kurssisi tietoja:</p>
             <input type="hidden" id="course_id" name="course_id" value="{{ course_id }}">
             <p>
                 <label for="course_name">Kurssin nimi:</label>
@@ -17,16 +17,19 @@
                 <label for="description">Kurssikuvaus:</label>
             </p>
             <p>
-                <textarea id="description" name="description" rows="10" cols="50" maxlength="2000" >{{ description }}</textarea>
+                <textarea id="description" name="description" rows="10" cols="50"
+                    maxlength="2000">{{ description }}</textarea>
             </p>
             <p class="button">
                 <button type="submit">Päivitä</button>
             </p>
         </div>
-        <div class="extraLinkBar">
-            <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
+        <div class="container">
+            <div class="extraLinkBar">
+                <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
+            </div>
         </div>
-    </body>
-</form>
+    </form>
+</body>
 
 {% endblock %}

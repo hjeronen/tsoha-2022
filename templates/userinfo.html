@@ -7,9 +7,7 @@
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <div class="container">
             {% if session.user_role == 'student' %}
-            <p>
-                Täydennä tietosi, jotta voit ilmoittautua kursseille:
-            </p>
+            <p>Täydennä tietosi, jotta voit ilmoittautua kursseille:</p>
             {% else %}
             <p> Täydennä tietosi, jotta voit kirjata kursseja järjestelmään:</p>
             {% endif %}
@@ -32,8 +30,10 @@
                 <button type="submit">Tallenna</button>
             </p>
         </div>
-        <div class="extraLinkBar">
-            <a href="/homepage">Takaisin kotisivulle</a>
+        <div class="container">
+            <div class="extraLinkBar">
+                <a href="/homepage">Takaisin kotisivulle</a>
+            </div>
         </div>
     </form>
 </body>

@@ -6,18 +6,14 @@
     <form action="/add_exercise_text/{{ course_id }}" method="POST">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <div class="container">
-            <h4>
-                Anna tehtävälle otsikko:
-            </h4>
+            <h4>Anna tehtävälle otsikko:</h4>
             <p>
                 <label for="headline">Otsikko:</label>
             </p>
             <p>
                 <input type="text" id="headline" name="headline" maxlength="20" value="{{ headline }}">
             </p>
-            <h4>
-                Lisää kysymys ja oikea vastaus.
-            </h4>
+            <h4>Lisää kysymys ja oikea vastaus:</h4>
             <p>
                 <label for="question">Tehtäväkysymys:</label>
             </p>
@@ -35,8 +31,10 @@
                 <button type="submit">Lisää tehtävä</button>
             </p>
         </div>
-        <div class="extraLinkBar">
-            <a href="/choose_exercise_type/{{ course_id }}">Takaisin</a>
+        <div class="container">
+            <div class="extraLinkBar">
+                <a href="/choose_exercise_type/{{ course_id }}">Takaisin</a>
+            </div>
         </div>
     </form>
 </body>

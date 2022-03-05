@@ -1,52 +1,68 @@
 {% extends "layout.html" %}
 {% block title %}Käyttäjän {{ session.user_name }} kotisivu{% endblock %}
 {% block content %}
+
 <body>
-    <div class="container">
-        <h2>Käyttäjätiedot:</h2>
-        {% if info %}
-        {% for line in info %}
-        <p>Nimi: {{ line[0] }} {{ line[1] }}</p>
-        {% if session.user_role == 'student' %}
-        <p>Opiskelijanumero: {{ line[2] }}</p>
-        {% endif %}
-        {% endfor %}
-        {% else %}
-        <div class="extraLinkBar">
-            <a href="/userinfo">Täydennä käyttäjätietosi!</a>
+    <div class="flex-container">
+        <div class="flex-item-left">
+            <div class="sidebar">
+                <ul>
+                    <h3>Toiminnot:</h3>
+                    <li><a href="/logout">Kirjaudu ulos</a></li>
+                    <li><a href="/">Takaisin etusivulle</a></li>
+                    <li><a href="/delete_account">Poista käyttäjätili</a></li>
+                    {% if session.user_role == 'student' %}
+                    <h3>Kurssisi:</h3>
+                    {% elif session.user_role == 'teacher' %}
+                    <h3>Opettamasi kurssit:</h3>
+                    {% endif %}
+                    {% if not courses %}
+                    <p>Sinulla ei ole kursseja.</p>
+                    {% else %}
+                    {% for line in courses %}
+                    <li><a href="/course_page/{{ line[0] }}">{{ line.course_name }}</a></li>
+                    {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-        {% endif %}
+        <div class="flex-item-right">
+            <div class="container">
+                <h2>Käyttäjätiedot:</h2>
+                {% if info %}
+                {% for line in info %}
+                <p>Nimi: {{ line[0] }} {{ line[1] }}</p>
+                {% if session.user_role == 'student' %}
+                <p>Opiskelijanumero: {{ line[2] }}</p>
+                {% endif %}
+                {% endfor %}
+                {% else %}
+                <div class="extraLinkBar">
+                    <a href="/userinfo">Täydennä käyttäjätietosi!</a>
+                </div>
+                {% endif %}
+            </div>
+            <br></br>
+            <div class="container">
+                <h3>Näin pääset alkuun:</h3>
+                {% if session.user_role == 'student' %}
+                <p>Täydennä käyttäjätietosi ilmoittautuaksesi kursseille.</p>
+                <p>Vasemmalla näet kurssit, joille olet ilmoittautunut.</p>
+                <p>Etusivulla voit selata kurssivalikoimaa.</p>
+                <div class="extraLinkBar">
+                    <a href="/">Etusivulle</a>
+                </div>
+                {% else %}
+                <p>Täydennä käyttäjätietosi lisätäksesi kursseja.</p>
+                <p>Vasemmalla näet opettamasi kurssit.</p>
+                <p>Voit lisätä kursseja tästä:</p>
+                <div class="extraLinkBar">
+                    <a href="/add_course">Lisää uusi kurssi</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
-    <br></br>
-    <div class="extraLinkBar">
-        <a href="/logout">Kirjaudu ulos</a>
-        <a href="/">Takaisin etusivulle</a>
-        <a href="/delete_account">Poista käyttäjätili</a>
-    </div>
-    <br></br>
-    <div class="container">
-        {% if session.user_role == 'student' %}
-        <h2>Kurssit, joille olet ilmoittautunut:</h2>
-        {% elif session.user_role == 'teacher' %}
-        <h2>Opettamasi kurssit:</h2>
-        {% endif %}
-    </div>
-    <div class="container">
-        <ul>
-            {% if not courses %}
-            <p>Sinulla ei ole kursseja.</p>
-            {% else %}
-            {% for line in courses %}
-            <li><a href="/course_page/{{ line[0] }}">{{ line.course_name }}</a></li>
-            {% endfor %}
-            {% endif %}
-        </ul>
-    </div>
-    {% if session.user_role == 'teacher' %}
-    <div class="extraLinkBar">
-        <a href="/add_course">Lisää uusi kurssi</a>
-    </div>
-    {% endif %}
 </body>
 
 {% endblock %}

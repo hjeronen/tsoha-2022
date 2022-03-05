@@ -1,13 +1,12 @@
 {% extends "layout.html" %}
 {% block title %}Lisää kurssi{% endblock %}
 {% block content %}
-<form action="/add_course" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <body>
+
+<body>
+    <form action="/add_course" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <div class="container">
-            <p>
-                Lisää uusi kurssi järjestelmään:
-            </p>
+            <p>Lisää uusi kurssi järjestelmään:</p>
             <p>
                 <label for="course_name">Kurssin nimi:</label>
             </p>
@@ -18,16 +17,19 @@
                 <label for="description">Kurssikuvaus:</label>
             </p>
             <p>
-                <textarea id="description" name="description" rows="10" cols="50" maxlength="2000" >{{ description }}</textarea>
+                <textarea id="description" name="description" rows="10" cols="50"
+                    maxlength="2000">{{ description }}</textarea>
             </p>
             <p class="button">
                 <button type="submit">Lisää kurssi</button>
             </p>
         </div>
-        <div class="extraLinkBar">
-            <a href="/homepage">Takaisin kotisivulle</a>
+        <div class="container">
+            <div class="extraLinkBar">
+                <a href="/homepage">Takaisin kotisivulle</a>
+            </div>
         </div>
-    </body>
-</form>
+    </form>
+</body>
 
 {% endblock %}

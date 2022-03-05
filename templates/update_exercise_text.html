@@ -1,9 +1,11 @@
 {% extends "layout.html" %}
 {% block title %}Muokkaa tehtävää{% endblock %}
 {% block content %}
-<form action="/update_exercise_text/{{ course_id }}/{{ exercise_id }}" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <body>
+
+<body>
+    <form action="/update_exercise_text/{{ course_id }}/{{ exercise_id }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+
         <div class="container">
             <p>
                 <label for="headline">Otsikko:</label>
@@ -28,10 +30,12 @@
                 <button type="submit">Tallenna muutokset</button>
             </p>
         </div>
-        <div class="extraLinkBar">
-            <a href="/show_exercise/{{ course_id }}/{{ exercise_id }}">Takaisin</a>
+        <div class="container">
+            <div class="extraLinkBar">
+                <a href="/show_exercise/{{ course_id }}/{{ exercise_id }}">Takaisin</a>
+            </div>
         </div>
-    </body>
-</form>
+    </form>
+</body>
 
 {% endblock %}

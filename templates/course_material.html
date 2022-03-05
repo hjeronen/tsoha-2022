@@ -1,25 +1,20 @@
 {% extends "layout.html" %}
 {% block title %}Kurssimateriaali{% endblock %}
 {% block content %}
+
 <body>
-    {% if owner %}
-    <div class="extraLinkBar">
-        <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
-        <a href="/update_material/{{ course_id }}/{{ material_id }}">Muokkaa materiaalia</a>
-        <a href="/delete_material/{{ course_id }}/{{ material_id }}">Poista materiaali</a>
-    </div>
-    {% else %}
-    <div class="extraLinkBar">
-        <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
-    </div>
-    {% endif %}
     <div class="container">
-        <p>
-            <h3>{{ headline }}</h3>
-        </p>
-        <p>
-            {{ body }}
-        </p>
+        <div class="extraLinkBar">
+            <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
+            {% if owner %}
+            <a href="/update_material/{{ course_id }}/{{ material_id }}">Muokkaa materiaalia</a>
+            <a href="/delete_material/{{ course_id }}/{{ material_id }}">Poista materiaali</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="container">
+        <h3>{{ headline }}</h3>
+        <p>{{ body }}</p>
     </div>
 </body>
 {% endblock %}

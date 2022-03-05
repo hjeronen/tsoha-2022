@@ -53,16 +53,18 @@
             </p>
             {% endif %}
         </div>
-        <div class="extraLinkBar">
-            <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
-            {% if owner %}
-            {% if exercise.type == 0 %}
-            <a href="/update_exercise_text/{{ course_id }}/{{ exercise_id }}">Muokkaa tehtävää</a>
-            {% else %}
-            <a href="/update_exercise_mchoice/{{ course_id }}/{{ exercise_id }}">Muokkaa tehtävää</a>
-            {% endif %}
-            <a href="/delete_exercise/{{ course_id }}/{{ exercise_id }}">Poista tehtävä</a>
-            {% endif %}
+        <div class="container">
+            <div class="extraLinkBar">
+                <a href="/course_page/{{ course_id }}">Takaisin kurssisivulle</a>
+                {% if owner %}
+                {% if exercise.type == 0 %}
+                <a href="/update_exercise_text/{{ course_id }}/{{ exercise_id }}">Muokkaa tehtävää</a>
+                {% else %}
+                <a href="/update_exercise_mchoice/{{ course_id }}/{{ exercise_id }}">Muokkaa tehtävää</a>
+                {% endif %}
+                <a href="/delete_exercise/{{ course_id }}/{{ exercise_id }}">Poista tehtävä</a>
+                {% endif %}
+            </div>
         </div>
     </form>
 </body>

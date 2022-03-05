@@ -3,101 +3,105 @@
 {% block content %}
 
 <body>
-    <div class="container">
-        <h2>{{ course_name }}</h2>
-        <h3>Kurssikuvaus:</h3>
-        <p>{{ description }}</p>
-        <h3>Kurssin opettaja:</h3>
-        <p>{{ teacher }}</p>
+    <div class="flex-container">
+        <div class="flex-item-left">
+            <div class="sidebar">
+                <ul>
+                    {% if not enrolled and not owner %}
+                    <p>Vain kurssille ilmoittautuneet voivat tarkastella kurssimateriaalia ja tehtäviä.</p>
+                    {% endif %}
+                    {% if owner %}
+                    <h3>Toiminnot:</h3>
+                    <li><a href="/choose_exercise_type/{{ id }}">Lisää harjoitustehtäviä</a></li>
+                    <li><a href="/add_material/{{ id }}">Lisää tekstimateriaalia</a></li>
+                    <li><a href="/update_course/{{ id }}">Muokkaa kurssin tietoja</a></li>
+                    <li><a href="/delete_course/{{ id }}">Poista kurssi</a></li>
+                    {% endif %}
+                    {% if enrolled or owner %}
+                    <h3>Kurssimateriaali:</h3>
+                    {% for item in materials %}
+                    <li><a href="/course_material/{{ id }}/{{ item.id }}">{{ item.headline }}</a></li>
+                    {% endfor %}
+                    <h3>Tehtävät:</h3>
+                    {% for exercise in exercise_list %}
+                    <li><a href="/show_exercise/{{ id }}/{{ exercise.id }}">{{ exercise.headline }}</a></li>
+                    {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div class="flex-item-right">
+            <div class="container">
+                <h2>{{ course_name }}</h2>
+                <h3>Kurssikuvaus:</h3>
+                <p>{{ description }}</p>
+                <h3>Kurssin opettaja:</h3>
+                <p>{{ teacher }}</p>
+            </div>
+            <br></br>
+            <div class="container">
+                <div class="extraLinkBar">
+                    {% if session.user_role == 'student' %}
+                    {% if not enrolled %}
+                    <a href="/enroll/{{ id }}">Ilmoittaudu kurssille</a>
+                    {% else %}
+                    <p>Olet ilmoittautunut kurssille.</p>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            <br></br>
+            {% if owner %}
+            <div class="container">
+                <table>
+                    <caption>Tehtäväsuoritukset:</caption>
+                    <thead>
+                        <th>Opiskelijanumero</th>
+                        {% for exercise in exercise_list %}
+                        <th>{{ exercise.headline }}</th>
+                        {% endfor %}
+                    </thead>
+                    {% for student in answers %}
+                    <tr>
+                        <td>{{ student }}</td>
+                        {% for exercise in exercise_list %}
+                        {% if answers[student][exercise.id] %}
+                        <td>1</td>
+                        {% elif exercise.id not in answers[student] %}
+                        <td>-</td>
+                        {% else %}
+                        <td>0</td>
+                        {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            {% elif enrolled %}
+            <div class="container">
+                <table>
+                    <caption>Tekemäsi tehtävät:</caption>
+                    <thead>
+                        {% for exercise in exercise_list %}
+                        <th>{{ exercise.headline }}</th>
+                        {% endfor %}
+                    </thead>
+                    <tr>
+                        {% for exercise in exercise_list %}
+                        {% if answers[exercise.id] %}
+                        <td>1</td>
+                        {% elif exercise.id not in answers %}
+                        <td>-</td>
+                        {% else %}
+                        <td>0</td>
+                        {% endif %}
+                        {% endfor %}
+                    </tr>
+                </table>
+            </div>
+            {% endif %}
+        </div>
     </div>
-    <br></br>
-    <div class="extraLinkBar">
-        {% if session.user_role == 'student' %}
-        {% if not enrolled %}
-        <a href="/enroll/{{ id }}">Ilmoittaudu kurssille</a>
-        {% else %}
-        <p>Olet ilmoittautunut kurssille.</p>
-        {% endif %}
-        {% endif %}
-
-        {% if owner %}
-        <a href="/choose_exercise_type/{{ id }}">Lisää harjoitustehtäviä</a>
-        <a href="/add_material/{{ id }}">Lisää tekstimateriaalia</a>
-        <a href="/update_course/{{ id }}">Muokkaa kurssin tietoja</a>
-        <a href="/delete_course/{{ id }}">Poista kurssi</a>
-        {% endif %}
-    </div>
-    {% if not enrolled and not owner %}
-    <div class="container">
-        <p>Ilmoittaudu kurssille tarkastellaksesi kurssin tehtäviä.</p>
-    </div>
-    {% elif enrolled or owner %}
-    <div class="container">
-        <h3>Kurssimateriaali</h3>
-        <ul>
-            {% for item in materials %}
-            <li><a href="/course_material/{{ id }}/{{ item.id }}">{{ item.headline }}</a></li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="container">
-        <h3>Tehtävät:</h3>
-        <ul>
-            {% for exercise in exercise_list %}
-            <li><a href="/show_exercise/{{ id }}/{{ exercise.id }}">{{ exercise.headline }}</a></li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
-    {% if owner %}
-    <div class="container">
-        <table>
-            <caption>Tehtäväsuoritukset:</caption>
-            <thead>
-                <th>Opiskelijanumero</th>
-                {% for exercise in exercise_list %}
-                <th>{{ exercise.headline }}</th>
-                {% endfor %}
-            </thead>
-            {% for student in answers %}
-            <tr>
-                <td>{{ student }}</td>
-                {% for exercise in exercise_list %}
-                {% if answers[student][exercise.id] %}
-                <td>1</td>
-                {% elif exercise.id not in answers[student] %}
-                <td>-</td>
-                {% else %}
-                <td>0</td>
-                {% endif %}
-                {% endfor %}
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-    {% elif enrolled %}
-    <div class="container">
-        <table>
-            <caption>Tekemäsi tehtävät:</caption>
-            <thead>
-                {% for exercise in exercise_list %}
-                <th>{{ exercise.headline }}</th>
-                {% endfor %}
-            </thead>
-            <tr>
-                {% for exercise in exercise_list %}
-                {% if answers[exercise.id] %}
-                <td>1</td>
-                {% elif exercise.id not in answers %}
-                <td>-</td>
-                {% else %}
-                <td>0</td>
-                {% endif %}
-                {% endfor %}
-            </tr>
-        </table>
-    </div>
-    {% endif %}
 </body>
 
 {% endblock %}
