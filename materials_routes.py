@@ -1,12 +1,12 @@
 from app import app
 from flask import render_template, request, redirect
-import login_service
+import users
 import courses
 import materials
 
 @app.route("/update_material/<int:course_id>/<int:material_id>", methods=["GET", "POST"])
 def update_material(course_id, material_id):
-    user_id = login_service.get_user_id()
+    user_id = users.get_user_id()
     if not courses.check_if_owner(user_id, course_id):
         return render_template("error.html", message="Vain kurssin opettaja voi muokata materiaalia.")
 
@@ -18,7 +18,7 @@ def update_material(course_id, material_id):
                                                         default_body=content.body)
 
     if request.method == "POST":
-        login_service.check_csrf()
+        users.check_csrf()
         headline = request.form["headline"]
         text = request.form["body"]
         error_messages = []
@@ -41,7 +41,7 @@ def update_material(course_id, material_id):
 
 @app.route("/delete_material/<int:course_id>/<int:material_id>")
 def delete_material(course_id, material_id):
-    user_id = login_service.get_user_id()
+    user_id = users.get_user_id()
     if not courses.check_if_owner(user_id, course_id):
         return render_template("error.html", message="Vain kurssin opettaja voi poistaa kurssimateriaalia.")
 
@@ -51,7 +51,7 @@ def delete_material(course_id, material_id):
 
 @app.route("/course_material/<int:course_id>/<int:material_id>")
 def course_material(course_id, material_id):
-    user_id = login_service.get_user_id()
+    user_id = users.get_user_id()
     owner = courses.check_if_owner(user_id, course_id)
     enrolled = courses.check_if_student_is_enrolled(course_id, user_id)
 
@@ -67,7 +67,7 @@ def course_material(course_id, material_id):
 
 @app.route("/add_material/<int:course_id>", methods=["GET", "POST"])
 def add_material(course_id):
-    user_id = login_service.get_user_id()
+    user_id = users.get_user_id()
     if not courses.check_if_owner(user_id, course_id):
         return render_template("error.html", message="Vain kurssin opettaja voi lisätä materiaalia.")
 
@@ -75,7 +75,7 @@ def add_material(course_id):
         return render_template("add_material.html", course_id=course_id)
 
     if request.method == "POST":
-        login_service.check_csrf()
+        users.check_csrf()
         headline = request.form["headline"]
         body = request.form["body"]
         error_messages = []

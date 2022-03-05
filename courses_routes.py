@@ -1,6 +1,6 @@
 from app import app
 from flask import render_template, request, redirect
-import login_service
+import users
 import courses
 import exercises
 import materials
@@ -15,15 +15,15 @@ def enroll(course_id):
         return render_template("enroll.html", course_id=course_id, course_name=course[1])
 
     if request.method == "POST":
-        login_service.check_csrf()
-        student_id = login_service.get_user_id()
+        users.check_csrf()
+        student_id = users.get_user_id()
         error_messages = []
-        user_role = login_service.get_user_role()
+        user_role = users.get_user_role()
 
         if user_role == "teacher":
             error_messages.append("Opettajat eivät voi ilmoittautua kursseille.")
 
-        if not login_service.has_userinfo():
+        if not users.has_userinfo():
             error_messages.append("Täydennä ensin käyttäjätietosi!")
 
         if courses.check_if_student_is_enrolled(course_id, student_id):
@@ -48,7 +48,7 @@ def show_coursepage(course_id):
         course_exercises = exercises.get_exercises(course_id)
         exercise_answers = []
         course_materials = materials.get_course_materials(course_id)
-        user_id = login_service.get_user_id()
+        user_id = users.get_user_id()
 
         if user_id != 0:
             owner = courses.check_if_owner(user_id, course_id)
@@ -73,19 +73,19 @@ def show_coursepage(course_id):
 
 @app.route("/add_course", methods=["GET", "POST"])
 def add_course():
-    if login_service.get_user_role() != "teacher":
+    if users.get_user_role() != "teacher":
         return render_template("error.html", message="Vain opettajat voivat lisätä kursseja!")
 
     if request.method == "GET":
-        if not login_service.has_userinfo():
+        if not users.has_userinfo():
             return render_template("error.html", message="Täydennä ensin käyttäjätietosi!")
         return render_template("add_course.html")
 
     if request.method == "POST":
-        login_service.check_csrf()
+        users.check_csrf()
         course_name = request.form["course_name"]
         description = request.form["description"]
-        user_id = login_service.get_user_id()
+        user_id = users.get_user_id()
         error_messages = []
 
         if len(course_name) < 3 or len(course_name) > 100:
@@ -104,7 +104,7 @@ def add_course():
 
 @app.route("/update_course/<int:course_id>", methods=["GET", "POST"])
 def update_course(course_id):
-    user_id = login_service.get_user_id()
+    user_id = users.get_user_id()
     if not courses.check_if_owner(user_id, course_id):
         return render_template("error.html", message="Vain kurssin opettaja voi muokata kurssitietoja!")
 
@@ -120,7 +120,7 @@ def update_course(course_id):
             return render_template("error.html", message="Kurssia {{ course_id }} ei löytynyt tietokannasta")
 
     if request.method == "POST":
-        login_service.check_csrf()
+        users.check_csrf()
         course_name = request.form["course_name"]
         description = request.form["description"]
         error_messages = []
@@ -141,7 +141,7 @@ def update_course(course_id):
 
 @app.route("/delete_course/<int:course_id>")
 def delete_course(course_id):
-    user_id = login_service.get_user_id()
+    user_id = users.get_user_id()
     if not courses.check_if_owner(user_id, course_id):
         return render_template("error.html", message="Vain kurssin opettaja voi poistaa kurssin!")
 

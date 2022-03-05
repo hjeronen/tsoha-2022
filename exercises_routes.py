@@ -1,12 +1,12 @@
 from app import app
 from flask import render_template, request, redirect
-import login_service
+import users
 import courses
 import exercises
 
 @app.route("/delete_exercise/<int:course_id>/<int:exercise_id>")
 def delete_exercise(course_id, exercise_id):
-    user_id = login_service.get_user_id()
+    user_id = users.get_user_id()
     if not courses.check_if_owner(user_id, course_id):
         return render_template("error.html", message="Vain kurssin opettaja voi poistaa tehtävän.")
 
@@ -17,7 +17,7 @@ def delete_exercise(course_id, exercise_id):
 
 @app.route("/update_exercise_mchoice/<int:course_id>/<int:exercise_id>", methods=["GET", "POST"])
 def update_exercise_mchoice(course_id, exercise_id):
-    user_id = login_service.get_user_id()
+    user_id = users.get_user_id()
     if not courses.check_if_owner(user_id, course_id):
         return render_template("error.html", message="Vain kurssin opettaja voi muokata tehtäviä.")
 
@@ -34,7 +34,7 @@ def update_exercise_mchoice(course_id, exercise_id):
                                                                 c=exercise.option_c)
 
     if request.method == "POST":
-        login_service.check_csrf()
+        users.check_csrf()
         new_headline = request.form["headline"]
         question = request.form["question"]
         answer = request.form["answer"]
@@ -76,7 +76,7 @@ def update_exercise_mchoice(course_id, exercise_id):
 
 @app.route("/update_exercise_text/<int:course_id>/<int:exercise_id>", methods=["GET", "POST"])
 def update_exercise_text(course_id, exercise_id):
-    user_id = login_service.get_user_id()
+    user_id = users.get_user_id()
     if not courses.check_if_owner(user_id, course_id):
         return render_template("error.html", message="Vain kurssin opettaja voi muokata tehtäviä.")
     exercise = exercises.get_exercise(exercise_id)
@@ -89,7 +89,7 @@ def update_exercise_text(course_id, exercise_id):
                                                                 answer=exercise.correct_answer)
 
     if request.method == "POST":
-        login_service.check_csrf()
+        users.check_csrf()
         new_headline = request.form["headline"]
         question = request.form["question"]
         answer = request.form["answer"]
@@ -118,12 +118,12 @@ def update_exercise_text(course_id, exercise_id):
 @app.route("/show_exercise/<int:course_id>/<int:exercise_id>", methods=["GET", "POST"])
 def show_exercise(course_id, exercise_id):
     exercise = exercises.get_exercise(exercise_id)
-    user_id = login_service.get_user_id()
+    user_id = users.get_user_id()
     answer = exercises.get_answer(user_id, exercise_id)
     owner = courses.check_if_owner(user_id, course_id)
 
     if request.method == "GET":
-        if not owner and login_service.get_user_role() != "student":
+        if not owner and users.get_user_role() != "student":
             return render_template("error.html", message="Vain opiskelijat voivat vastata tehtäviin.")
         if answer:
             answer = answer[0]
@@ -145,8 +145,8 @@ def show_exercise(course_id, exercise_id):
                                                     owner=owner)
 
     if request.method == "POST":
-        login_service.check_csrf()
-        if login_service.get_user_role() != "student":
+        users.check_csrf()
+        if users.get_user_role() != "student":
             return render_template("error.html", message="Vain opiskelijat voivat vastata tehtäviin.")
 
         test_correct = exercise.correct_answer.lower()
@@ -170,7 +170,7 @@ def show_exercise(course_id, exercise_id):
 
 @app.route("/add_exercise_mchoice/<int:course_id>", methods=["GET", "POST"])
 def add_exercise_mchoice(course_id):
-    user_id = login_service.get_user_id()
+    user_id = users.get_user_id()
     if not courses.check_if_owner(user_id, course_id):
         return render_template("error.html", message="Vain kurssin opettaja voi lisätä harjoitustehtäviä.")
 
@@ -178,7 +178,7 @@ def add_exercise_mchoice(course_id):
         return render_template("add_exercise_mchoice.html", course_id=course_id)
 
     if request.method == "POST":
-        login_service.check_csrf()
+        users.check_csrf()
         exercise_type = 1
         headline = request.form["headline"]
         question = request.form["question"]
@@ -220,7 +220,7 @@ def add_exercise_mchoice(course_id):
 
 @app.route("/add_exercise_text/<int:course_id>", methods=["GET", "POST"])
 def add_exercise_text(course_id):
-    user_id = login_service.get_user_id()
+    user_id = users.get_user_id()
     if not courses.check_if_owner(user_id, course_id):
         return render_template("error.html", message="Vain kurssin opettaja voi lisätä harjoitustehtäviä.")
 
@@ -228,7 +228,7 @@ def add_exercise_text(course_id):
         return render_template("add_exercise_text.html", course_id=course_id)
 
     if request.method == "POST":
-        login_service.check_csrf()
+        users.check_csrf()
         exercise_type = 0
         headline = request.form["headline"]
         question = request.form["question"]
@@ -256,7 +256,7 @@ def add_exercise_text(course_id):
 
 @app.route("/choose_exercise_type/<int:course_id>", methods=["GET", "POST"])
 def choose_exercise_type(course_id):
-    user_id = login_service.get_user_id()
+    user_id = users.get_user_id()
     if not courses.check_if_owner(user_id, course_id):
         return render_template("error.html", message="Vain kurssin opettaja voi lisätä harjoitustehtäviä.")
 
@@ -264,7 +264,7 @@ def choose_exercise_type(course_id):
         return render_template("choose_exercise_type.html", course_id=course_id)
 
     if request.method == "POST":
-        login_service.check_csrf()
+        users.check_csrf()
         exercise_type = int(request.form["exercise_type"])
         if exercise_type == 0:
             return redirect("/add_exercise_text/" + str(course_id))
