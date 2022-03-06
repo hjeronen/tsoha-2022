@@ -99,6 +99,14 @@ a:hover {
     margin-left: 3.8em;
 }
 
+.text_container {
+    background-color: var(--tertiary-color);
+    margin-left: 3.8em;
+    text-align: justify;
+    width: 50em;
+    white-space: pre-wrap;
+}
+
 .sidebar ul {
     list-style-type: none;
     text-align: left;
