@@ -225,8 +225,9 @@ def add_exercise_mchoice(course_id):
 
         return render_template("add_exercise_mchoice.html", error_messages=error_messages,
                                                             course_id=course_id,
+                                                            headline=headline,
                                                             question=question,
-                                                            default_a=a, default_b=b, default_c=c)
+                                                            a=a, b=b, c=c)
 
 @app.route("/add_exercise_text/<int:course_id>", methods=["GET", "POST"])
 def add_exercise_text(course_id):
