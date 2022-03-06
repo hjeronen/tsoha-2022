@@ -91,10 +91,10 @@ def get_userinfo():
     if session["user_role"] == 'student':
         sql = "SELECT S.firstname, S.lastname, S.student_number " \
               "FROM students S WHERE S.user_id=:user_id"
-        return db.session.execute(sql, {"user_id":user_id}).fetchone()
+        return db.session.execute(sql, {"user_id":user_id}).fetchall()
     if session["user_role"] == 'teacher':
         sql = "SELECT T.firstname, T.lastname FROM teachers T WHERE T.user_id=:user_id"
-        return db.session.execute(sql, {"user_id":user_id}).fetchone()
+        return db.session.execute(sql, {"user_id":user_id}).fetchall()
     return False
 
 def get_user_role():
