@@ -20,8 +20,8 @@ def enroll(course_id):
         error_messages = []
         user_role = users.get_user_role()
 
-        if user_role == "teacher":
-            error_messages.append("Opettajat eivät voi ilmoittautua kursseille.")
+        if user_role != "student":
+            error_messages.append("Vain opiskelijat voivat ilmoittautua kursseille.")
 
         if not users.has_userinfo():
             error_messages.append("Täydennä ensin käyttäjätietosi!")
@@ -119,8 +119,8 @@ def update_course(course_id):
             return render_template("update_course.html", course_id=course_id,
                                                          course_name=course_name,
                                                          description=description)
-        else:
-            return render_template("error.html", message="Kurssia {{ course_id }} ei löytynyt tietokannasta")
+
+        return render_template("error.html", message="Kurssia ei löytynyt tietokannasta")
 
     if request.method == "POST":
         users.check_csrf()
@@ -139,7 +139,8 @@ def update_course(course_id):
             return render_template("error.html", message="Kurssin päivitys ei onnistunut.")
 
         return render_template("update_course.html", error_messages=error_messages,
-                                                     course_id=course_id, course_name=course_name,
+                                                     course_id=course_id,
+                                                     course_name=course_name,
                                                      description=description)
 
 @app.route("/delete_course/<int:course_id>")

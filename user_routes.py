@@ -5,7 +5,9 @@ import courses
 
 @app.route("/homepage")
 def homepage():
-    user_id = users.get_user_id()
+    user_id = users.logged_in()
+    if user_id == 0:
+        return redirect("/")
     users_courses = courses.get_users_courses(user_id, users.get_user_role())
     users_info = users.get_userinfo()
     return render_template("homepage.html", courses=users_courses, info=users_info)
@@ -68,10 +70,10 @@ def register():
                 return redirect("/homepage")
 
             if not register_success:
-                error_messages.append("Käyttäjän rekisteröinti epäonnistui.")
+                error_messages.append("Käyttäjän rekisteröinti epäonnistui. Todennäköisesti käyttäjätunnus on varattu.")
             elif not login_success:
                 error_messages.append("Sisäänkirjautuminen epäonnistui.")
-            return render_template("index.html", error_messages=error_messages)
+            return render_template("register.html", error_messages=error_messages, username=username)
 
         return render_template("register.html", error_messages=error_messages, username=username)
 

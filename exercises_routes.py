@@ -59,8 +59,14 @@ def update_exercise_mchoice(course_id, exercise_id):
         min_length = 1
         max_length = 200
 
-        if len(a) < min_length or len(a) > max_length or len(b) < min_length or len(b) > max_length or len(c) < min_length or len(c) > max_length:
-            error_messages.append("Jokaisen vastausvaihtoehdon on oltava 1-200 merkkiä pitkiä.")
+        if len(a) < min_length or len(a) > max_length:
+            error_messages.append("Jokaisen vastausvaihtoehdon on oltava 1-200 merkkiä pitkä - korjaa kohta a.")
+
+        if len(b) < min_length or len(b) > max_length:
+            error_messages.append("Jokaisen vastausvaihtoehdon on oltava 1-200 merkkiä pitkä - korjaa kohta b.")
+
+        if len(c) < min_length or len(c) > max_length:
+            error_messages.append("Jokaisen vastausvaihtoehdon on oltava 1-200 merkkiä pitkä - korjaa kohta c.")
 
         if len(error_messages) != 0:
             return render_template("update_exercise_mchoice.html", error_messages=error_messages,
@@ -126,10 +132,8 @@ def show_exercise(course_id, exercise_id):
         if not owner and users.get_user_role() != "student":
             return render_template("error.html", message="Vain opiskelijat voivat vastata tehtäviin.")
         if answer:
-            answer = answer[0]
-            test_answer = answer.lower()
-            test_correct = exercise.correct_answer.lower()
-            answer_is_correct = (test_answer == test_correct)
+            answer_is_correct = answer.correct
+            answer = answer.answer
             return render_template("show_exercise.html", course_id=course_id,
                                                         exercise_id=exercise_id,
                                                         exercise=exercise,
@@ -149,17 +153,17 @@ def show_exercise(course_id, exercise_id):
         if users.get_user_role() != "student":
             return render_template("error.html", message="Vain opiskelijat voivat vastata tehtäviin.")
 
-        test_correct = exercise.correct_answer.lower()
         if not answer:
             answer = request.form["answer"]
             if len(answer) == 0:
                 answer = "ei vastausta"
-            test_answer = answer.lower()
+            test_answer = answer.lower().strip(",.?!@#£$%&=")
+            test_correct = exercise.correct_answer.lower().strip(",.?!@#£$%&=")
             answer_is_correct = (test_answer == test_correct)
             exercises.save_answer(user_id, exercise_id, answer, answer_is_correct)
         else:
-            test_answer = answer.lower()
-            answer_is_correct = (test_answer == test_correct)
+            answer_is_correct = answer.correct
+            answer = answer.answer
         return render_template("show_exercise.html", course_id=course_id,
                                                     exercise_id=exercise_id,
                                                     exercise=exercise,
@@ -204,8 +208,14 @@ def add_exercise_mchoice(course_id):
         min_length = 1
         max_length = 200
 
-        if len(a) < min_length or len(a) > max_length or len(b) < min_length or len(b) > max_length or len(c) < min_length or len(c) > max_length:
-            error_messages.append("Jokaisen vastausvaihtoehdon on oltava 1-200 merkkiä pitkiä.")
+        if len(a) < min_length or len(a) > max_length:
+            error_messages.append("Jokaisen vastausvaihtoehdon on oltava 1-200 merkkiä pitkä - korjaa kohta a.")
+
+        if len(b) < min_length or len(b) > max_length:
+            error_messages.append("Jokaisen vastausvaihtoehdon on oltava 1-200 merkkiä pitkä - korjaa kohta b.")
+
+        if len(c) < min_length or len(c) > max_length:
+            error_messages.append("Jokaisen vastausvaihtoehdon on oltava 1-200 merkkiä pitkä - korjaa kohta c.")
 
         if len(error_messages) == 0:
             exercise = (exercise_type, headline, question, answer, a, b, c)

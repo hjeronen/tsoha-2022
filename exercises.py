@@ -89,7 +89,7 @@ def get_correct_answers(user_id, course_id):
     return db.session.execute(sql, {"course_id":course_id, "user_id":user_id}).fetchone()[0]
 
 def get_answer(user_id, exercise_id):
-    sql = "SELECT answer FROM answers WHERE user_id=:user_id AND exercise_id=:exercise_id"
+    sql = "SELECT answer, correct FROM answers WHERE user_id=:user_id AND exercise_id=:exercise_id"
     return db.session.execute(sql, {"user_id":user_id, "exercise_id":exercise_id}).fetchone()
 
 def save_answer(user_id, exercise_id, answer, status):
@@ -115,14 +115,14 @@ def get_exercise(exercise_id):
 
     if exercise_type == 0:
         sql = "SELECT headline, type, question, correct_answer " \
-              "FROM exercises E, exercises_text T " \
-              "WHERE E.id=:exercise_id AND T.exercise_id=E.id AND E.visible=TRUE"
+              "FROM exercises e, exercises_text t " \
+              "WHERE e.id=:exercise_id AND t.exercise_id=e.id AND e.visible=TRUE"
         return db.session.execute(sql, {"exercise_id": exercise_id}).fetchone()
 
     if exercise_type == 1:
         sql = "SELECT headline, type, question, correct_answer, option_a, option_b, option_c " \
-              "FROM exercises E, exercises_mchoice M " \
-              "WHERE E.id=:exercise_id AND M.exercise_id=E.id AND E.visible=TRUE"
+              "FROM exercises e, exercises_mchoice m " \
+              "WHERE e.id=:exercise_id AND m.exercise_id=e.id AND e.visible=TRUE"
         return db.session.execute(sql, {"exercise_id": exercise_id}).fetchone()
 
     return False

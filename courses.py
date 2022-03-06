@@ -61,8 +61,8 @@ def enroll_on_course(course_id, student_id):
 
 def get_users_courses(user_id, user_role):
     if user_role == 'student':
-        sql = "SELECT C.id, C.course_name FROM courses C, course_attendances A " \
-              "WHERE A.student_id=:id AND A.course_id=C.id AND C.visible=TRUE ORDER BY C.id"
+        sql = "SELECT c.id, c.course_name FROM courses c, course_attendances a " \
+              "WHERE a.student_id=:id AND a.course_id=c.id AND c.visible=TRUE ORDER BY c.id"
         return db.session.execute(sql, {"id":user_id}).fetchall()
 
     if user_role == 'teacher':
@@ -72,11 +72,11 @@ def get_users_courses(user_id, user_role):
     return False
 
 def get_course(course_id):
-    sql = "SELECT C.id, C.course_name, C.description, C.teacher_id, T.firstname, T.lastname " \
-          "FROM courses C, teachers T " \
-          "WHERE C.id=:course_id AND C.teacher_id=T.user_id"
+    sql = "SELECT c.id, c.course_name, c.description, c.teacher_id, t.firstname, t.lastname " \
+          "FROM courses c, teachers t " \
+          "WHERE c.id=:course_id AND c.teacher_id=t.user_id AND c.visible=TRUE"
     return db.session.execute(sql, {"course_id":course_id}).fetchone()
 
 def get_all_courses():
-    sql = "SELECT id, course_name FROM courses WHERE visible=true ORDER BY id"
+    sql = "SELECT id, course_name FROM courses WHERE visible=TRUE ORDER BY id"
     return db.session.execute(sql).fetchall()

@@ -9,7 +9,7 @@
                 <ul>
                     <h3>Kaikki kurssit:</h3>
                     {% if not list %}
-                    <li>Järjestelmässä ei ole vielä yhtään kurssia.</li>
+                    <p>Järjestelmässä ei ole vielä yhtään kurssia.</p>
                     {% else %}
                     {% for line in list %}
                     <li><a href="/course_page/{{ line[0] }}">{{ line.course_name }}</a></li>
@@ -20,7 +20,7 @@
         </div>
         <div class="flex-item-right">
             <div class="container">
-                <h2>Tervetuloa kurssikantaan!</h2>
+                <h2>Tervetuloa Kurssikantaan!</h2>
                 {% if session.user_id %}
                 <p>Olet kirjautunut sisään nimellä {{ session.user_name }}.</p>
                 {% else %}
