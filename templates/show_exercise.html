@@ -9,7 +9,7 @@
         <div class="container">
             <h2>{{ exercise.headline }}</h2>
             <h3>Kysymys:</h3>
-            <p>{{ exercise.question }}</p>
+            <p class="text_container">{{ exercise.question }}</p>
             <h3>Vastaus:</h3>
             {% if owner or answered %}
             {% if exercise.type == 1 %}

@@ -97,11 +97,11 @@ a:hover {
 .container {
     background-color: var(--tertiary-color);
     margin-left: 3.8em;
+    margin-right: 3.8em;
 }
 
 .text_container {
     background-color: var(--tertiary-color);
-    margin-left: 3.8em;
     text-align: justify;
     width: 50em;
     white-space: pre-wrap;
@@ -171,11 +171,6 @@ a:hover {
     color: green;
 }
 
-.infobox {
-    border: 1px solid var(--primary-color);
-    background-color: var(--extra-color);
-}
-
 table {
     border-collapse: collapse;
     text-align: center;
@@ -218,8 +213,7 @@ th, td {
 .flex-item-right {
     flex: 70%;
 }
-  
-/* Responsive layout - makes a one column layout instead of a two-column layout */
+
 @media (max-width: 800px) {
     .flex-item-right, .flex-item-left {
       flex: 100%;
