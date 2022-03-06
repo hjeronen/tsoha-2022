@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 def register(username, password, role):
     hash_value = generate_password_hash(password)
     try:
-        sql = "INSERT INTO users (username, password, role) VALUES (:name, :password, :role)"
+        sql = "INSERT INTO users (username, password, role, visible) VALUES (:name, :password, :role, TRUE)"
         db.session.execute(sql, {"name":username, "password":hash_value, "role":role})
         db.session.commit()
         return True
@@ -16,7 +16,7 @@ def register(username, password, role):
 
 def login(username, password):
     try:
-        sql = "SELECT id, password, role FROM users WHERE username=:username"
+        sql = "SELECT id, password, role FROM users WHERE username=:username AND visible=TRUE"
         result = db.session.execute(sql, {"username":username})
         user = result.fetchone()
         if not user:
@@ -49,7 +49,7 @@ def has_userinfo():
 def delete_account():
     user_id = session["user_id"]
     try:
-        sql = "DELETE FROM users WHERE id=:userid"
+        sql = "UPDATE users SET visible=FALSE WHERE id=:userid"
         db.session.execute(sql, {"userid":user_id})
         db.session.commit()
         logout()
@@ -91,10 +91,10 @@ def get_userinfo():
     if session["user_role"] == 'student':
         sql = "SELECT S.firstname, S.lastname, S.student_number " \
               "FROM students S WHERE S.user_id=:user_id"
-        return db.session.execute(sql, {"user_id":user_id}).fetchall()
+        return db.session.execute(sql, {"user_id":user_id}).fetchone()
     if session["user_role"] == 'teacher':
         sql = "SELECT T.firstname, T.lastname FROM teachers T WHERE T.user_id=:user_id"
-        return db.session.execute(sql, {"user_id":user_id}).fetchall()
+        return db.session.execute(sql, {"user_id":user_id}).fetchone()
     return False
 
 def get_user_role():

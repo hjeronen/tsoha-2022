@@ -1,14 +1,5 @@
 from db import db
 
-def delete_exercise(exercise_id):
-    try:
-        sql = "UPDATE exercises SET visible=FALSE WHERE id=:exercise_id"
-        db.session.execute(sql, {"exercise_id":exercise_id})
-        db.session.commit()
-        return True
-    except:
-        return False
-
 def update_exercise_mchoice(exercise_id, headline, question, correct_answer, a, b, c):
     try:
         sql = "UPDATE exercises_mchoice " \

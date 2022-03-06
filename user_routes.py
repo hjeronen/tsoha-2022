@@ -14,6 +14,13 @@ def homepage():
 
 @app.route("/userinfo", methods=["GET", "POST"])
 def user_info():
+    user_id = users.logged_in()
+    if user_id == 0:
+        return redirect("/")
+    
+    if users.get_userinfo():
+        return render_template("error.html", message="Olet jo lisännyt käyttäjätietosi.")
+    
     if request.method == "GET":
         return render_template("userinfo.html")
 

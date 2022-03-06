@@ -3,12 +3,13 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username TEXT UNIQUE,
     password TEXT,
-    role TEXT
+    role TEXT,
+    visible BOOLEAN
 );
 
 CREATE TABLE students (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users ON DELETE NO ACTION,
     firstname TEXT,
     lastname TEXT,
     student_number TEXT
@@ -16,7 +17,7 @@ CREATE TABLE students (
 
 CREATE TABLE teachers (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users ON DELETE NO ACTION,
     firstname TEXT,
     lastname TEXT
 );
@@ -24,7 +25,7 @@ CREATE TABLE teachers (
 CREATE TABLE courses (
     id SERIAL PRIMARY KEY,
     course_name TEXT,
-    teacher_id INTEGER REFERENCES users ON DELETE SET NULL,
+    teacher_id INTEGER REFERENCES users ON DELETE NO ACTION,
     description TEXT,
     visible BOOLEAN
 );
@@ -32,7 +33,7 @@ CREATE TABLE courses (
 CREATE TABLE course_attendances (
     id SERIAL PRIMARY KEY,
     course_id INTEGER REFERENCES courses,
-    student_id INTEGER REFERENCES users ON DELETE CASCADE
+    student_id INTEGER REFERENCES users ON DELETE NO ACTION
 );
 
 CREATE TABLE exercises (
@@ -62,7 +63,7 @@ CREATE TABLE exercises_mchoice (
 
 CREATE TABLE answers (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users ON DELETE NO ACTION,
     exercise_id INTEGER REFERENCES exercises,
     answer TEXT,
     correct BOOLEAN
