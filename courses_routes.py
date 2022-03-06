@@ -49,6 +49,7 @@ def show_coursepage(course_id):
         exercise_answers = []
         course_materials = materials.get_course_materials(course_id)
         user_id = users.get_user_id()
+        points = 0
 
         if user_id != 0:
             owner = courses.check_if_owner(user_id, course_id)
@@ -58,6 +59,7 @@ def show_coursepage(course_id):
             enrolled = courses.check_if_student_is_enrolled(course_id, user_id)
             if enrolled:
                 exercise_answers = exercises.get_students_course_exercise_answers(user_id, course_id)
+                points = exercises.get_correct_answers(user_id, course_id)
 
         return render_template("course_page.html", id=course_id,
                                                 course_name=course_name,
@@ -67,6 +69,7 @@ def show_coursepage(course_id):
                                                 owner=owner,
                                                 exercise_list=course_exercises,
                                                 answers=exercise_answers,
+                                                points = points,
                                                 materials=course_materials)
 
     return render_template("error.html", message="Kurssitietoja ei löytynyt.")

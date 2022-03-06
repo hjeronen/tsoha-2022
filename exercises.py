@@ -85,13 +85,8 @@ def get_all_course_exercise_answers(course_id):
 def get_correct_answers(user_id, course_id):
     sql = "SELECT COUNT(*) FROM answers a, exercises e " \
           "WHERE e.course_id=:course_id " \
-          "AND a.exercise_id=e.id AND a.user_id=:user_id AND a.correct=TRUE"
-    return db.session.execute(sql, {"course_id":course_id, "user_id":user_id}).fetchall()
-
-def get_done_exercises(user_id, course_id):
-    sql = "SELECT COUNT(*) FROM answers a, exercises e " \
-          "WHERE e.course_id=:course_id AND a.exercise_id=e.id AND a.user_id=:user_id"
-    return db.session.execute(sql, {"course_id":course_id, "user_id":user_id}).fetchall()
+          "AND a.exercise_id=e.id AND a.user_id=:user_id AND a.correct=TRUE AND e.visible=TRUE"
+    return db.session.execute(sql, {"course_id":course_id, "user_id":user_id}).fetchone()[0]
 
 def get_answer(user_id, exercise_id):
     sql = "SELECT answer FROM answers WHERE user_id=:user_id AND exercise_id=:exercise_id"

@@ -85,6 +85,7 @@
                         {% for exercise in exercise_list %}
                         <th>{{ exercise.headline }}</th>
                         {% endfor %}
+                        <th class="points">Yht. pisteitä:</th>
                     </thead>
                     <tr>
                         {% for exercise in exercise_list %}
@@ -96,6 +97,7 @@
                         <td>0</td>
                         {% endif %}
                         {% endfor %}
+                        <td class="points">{{ points }}</td>
                     </tr>
                 </table>
             </div>
