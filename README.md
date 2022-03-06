@@ -13,6 +13,3 @@ Sovelluksen ominaisuuksia:
 * Opettaja pystyy näkemään kurssistaan tilaston, keitä opiskelijoita on kurssilla ja mitkä kurssin tehtävät kukin on ratkonut.
 
 Sovellusta voi testata Herokussa osoitteessa [https://kurssikanta.herokuapp.com/](https://kurssikanta.herokuapp.com/). Huomaa, että lisätäksesi kursseja (opettaja) tai ilmoittautuaksesi kursseille (opiskelija), on käyttäjätietoihin lisättävä nimi ja opiskelijoilla myös opiskelijanumero.
-
-## Sovelluksen tilanne
-Kaikki sovelluksen perustoiminnallisuus on periaatteessa toteutettu. Vielä pitäisi kohentaa ulkonäköä, siistiä koodia, parantaa tietoturvaa ja korjata joitain satunnaisia "ominaisuuksia".
